@@ -1,0 +1,54 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# macOS
+.DS_Store
+
+# Ignore all files in the src/assets/fonts directory
+src/assets/fonts/*
+
+# Except for the jgs-main directory
+!src/assets/fonts/jgs-main/
+
+# Ignore all files in the jgs-main/fonts directory
+src/assets/fonts/jgs-main/fonts/*
+
+# Except for the webfonts directory
+!src/assets/fonts/jgs-main/fonts/webfonts/
+
+# Ignore all files in the webfonts directory
+src/assets/fonts/jgs-main/fonts/webfonts/*
+
+# Except for the jgs9 files
+!src/assets/fonts/jgs-main/fonts/webfonts/jgs9.woff
+!src/assets/fonts/jgs-main/fonts/webfonts/jgs9.woff2

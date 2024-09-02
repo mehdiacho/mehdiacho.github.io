@@ -1,0 +1,45 @@
+/* Repeat for other font weights or styles if necessary */
+@font-face {
+    font-family: 'jgs7';
+    src: url('src/assets/fonts/jgs-main/fonts/webfonts/jgs7.woff2') format('woff2'),
+        url('src/assets/fonts/jgs-main/fonts/webfonts/jgs7.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'jgs5';
+    src: url('src/assets/fonts/jgs-main/fonts/webfonts/jgs5.woff2') format('woff2'),
+        url('src/assets/fonts/jgs-main/fonts/webfonts/jgs5.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'jgs9';
+    src: url('src/assets/fonts/jgs-main/fonts/webfonts/jgs9.woff2') format('woff2'),
+        url('src/assets/fonts/jgs-main/fonts/webfonts/jgs9.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'jgs';
+    src: url('src/assets/fonts/jgs-main/fonts/jgs_Font.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Lithops-Regular';
+    src: url('src/assets/fonts/lithops-main/fonts/webfonts/Lithops-Regular.woff') format('woff'),
+    url('src/assets/fonts/lithops-main/fonts/webfonts/Lithops-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+

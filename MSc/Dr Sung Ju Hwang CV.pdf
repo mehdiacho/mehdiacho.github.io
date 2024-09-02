@@ -1,0 +1,857 @@
+Sung Ju Hwang
+Contact KAIST
+Information Mobile: +82-10-4923-9661
+E-mail: sjhwang82@kaist.ac.kr
+Homepage: http://www.sungjuhwang.com
+Address: 291 Daehak-ro, E3-1 1427, Yuseong-gu, Daejeon, Korea, 34141
+Research My research interest mainly focuses on developing novel models and algorithms for
+Interests tackling practical challenges in deploying artificial intelligent systems to various realworld application domains. I am currently interested in the following topics:
+• Low-resource learning: meta-learning, network pruning & quantization, few-shot
+classification & generation, self-supervised and semi-supervised learning.
+• On-device learning: network compression (pruning, quantization, and knowledge
+distillation), continual learning, federated learning.
+• Safe and secure learning: uncertainty modeling & quantification, robustness to
+distributional shifts, defense against adversarial attacks.
+• Large-scale learning: meta-learning, neural architecture search, distributed optimization and federated learning.
+The application domains of interests include but are not limited to visual recognition
+(real-time vision, few-shot image classification and generation), natural language understanding (low-resource language models, question answering/generation, dialogue
+agents), speech recognition & synthesis, automatic drug/material discovery, healthcare
+and finance.
+Professional KAIST
+Experience
+KAIST Endowed Chair Professor 03/01/2022 - Current
+Associate Professor 03/01/2020 - Current
+Assistant Professor 01/01/2018 - 02/29/2020
+UNIST
+Assistant Professor 08/26/2014 - 12/31/2017
+Disney Research
+Postdoctoral Research Associate 09/16/2013 - 08/24/2014
+Education The University of Texas at Austin, Austin, Texas USA
+Ph.D., Computer Science, Aug 2013
+• Thesis: Discriminative Object Categorization with External Semantic Knowledge
+• Advisor: Professor Kristen L. Grauman
+• Area of Study: Machine Learning and Computer Vision
+M.A., Computer Science, May 2010
+1 of 21
+• Thesis: Reading Between the Lines: Object Localization Using Implicit Cues from
+Image Tags
+• Advisor: Professor Kristen L. Grauman
+• Area of Study: Computer Vision
+Seoul National University, Seoul, Korea
+B.S., Computer Science and Engineering, February 2008
+• Magna Cum Laude, With Honors in Engineering
+Professional Area Chair
+Services • 2020, 2021, 2022, 2023 International Conference on Machine Learning (ICML)
+• 2021, 2022, 2023 Conference on Neural Information Processing Systems (NeurIPS)
+• 2021, 2022, 2023 International Conference on Learning Representations (ICLR)
+• 2022, 2023 AAAI Conference on Artificial Intelligence (AAAI)
+• 2021 International Joint Conference on Artificial Intelligence (IJCAI)
+• 2020 Asian Conference on Machine Learning (ACML)
+Senior Program Committee
+• 2020, 2021 AAAI Conference on Artificial Intelligence (AAAI)
+• 2020 International Joint Conference on Artificial Intelligence (IJCAI)
+Organizing Committee
+• Second Conference on Lifelong Learning Agents (CoLLAs)
+• 2019 ICCV Workshop on Interpreting and Explaining Visual Artificial Intelligence
+Models (VXAI)
+• 2017, 2018 Korean Conference on Computer Vision (KCCV)
+Journal
+Publications
+[j3] Learning the Compositional Domains for Generalized Zero-shot Learning, H. Dong, Y. Fu, S. J. Hwang, L. Sigal and X. Xue, Computer Vision and Image
+Understanding (CVIU), May 2022
+[j2] Learning the Relative Importance of Objects from Tagged Images for
+Retrieval and Cross-Modal Search, S. J. Hwang and K. Grauman
+International Journal of Computer Vision (IJCV) (IF=5.428), Oct 2011.
+[j1] Reading Between the Lines: Object Localization Using Implicit Cues
+from Image Tags, S. J. Hwang and K. Grauman,
+IEEE Transaction on Pattern Analysis and Machine Intelligence (TPAMI) (IF=6.085),
+Jun 2012.
+Conference
+Publications
+[c118] Learning to Verify Knowledge-Augmented Language Models, J. Baek,
+S. Jeong, M. Kang, J. C. Park and S. J. Hwang
+Conference on Empirical Methods in Natural Language Processing (EMNLP) 2023,
+Singapore
+[c117] Co-training and Co-distillation for Quality Improvement and Compression of Language Models, H. Lee, R. Hou, J. Kim, D. Liang, H. Zhang, S. J.
+Hwang and A. Min
+Findings of the Empirical Methods in Natural Language Processing (Findings of
+EMNLP) 2023, Singapore
+2 of 21
+[c116] Test-Time Self-Adaptive Small Language Models for Question Answering, S. Jeong, J. Baek, S. Cho, S. J. Hwang and J. C. Park
+Findings of the Empirical Methods in Natural Language Processing (Findings of
+EMNLP) 2023, Singapore
+[c115] Knowledge-Augmented Reasoning Distillation for Small Language
+Models in Knowledge-Intensive Tasks, M. Kang, S. Lee, J. Baek, K. Kawaguchi
+and S. J. Hwang
+Conference on Neural Information Processing Systems (NeurIPS) 2023, New Orleans, LA
+[c114] Generalizable Lightweight Proxy for Robust NAS against Diverse Perturbations, H. Ha, M. Kim and S. J. Hwang
+Conference on Neural Information Processing Systems (NeurIPS) 2023, New Orleans, LA
+[c113] Effective Targeted Attacks for Adversarial Self-Supervised Learning,
+M. Kim, H. Ha, S. Son and S. J. Hwang
+Conference on Neural Information Processing Systems (NeurIPS) 2023, New Orleans, LA
+[c112] STXD: Structural and Temporal Cross-Modal Distillation for MultiView 3D Object Detection, S. Jang, D. U. Jo, S. J. Hwang, D. Lee and D. Ji
+Conference on Neural Information Processing Systems (NeurIPS) 2023, New Orleans, LA
+[c111] Text-Conditioned Sampling Framework for Text-to-Image Generation
+with Masked Generative Models, J. Lee, S. Jang, J. Jo, J. Yoon, Y. Kim, J-H.
+Kim, J-W. Ha, and S. J. Hwang
+International Conference on Computer Vision (ICCV), 2023, Paris, France
+[c110] ZET-Speech: Zero-shot adaptive Emotion-controllable Text-to-Speech
+Synthesis with Diffusion and Style-based Models, M. Kang, W. Han, S. J.
+Hwang, and E. Yang
+Interspeech 2023, Dublin, Ireland
+[c109] Direct Fact Retrieval from Knowledge Graphs without Entity Linking, J. Baek, A. F. Aji, J. Lehmann, and S. J. Hwang
+Association for Computational Linguistics (ACL), 2023 (long paper), Toronto,
+Canada
+[c108] Language Detoxification with Attribute-Discriminative Latent Space,
+J. Kwak, M. Kim, and S. J. Hwang
+Association for Computational Linguistics (ACL), 2023 (long paper), Toronto,
+Canada
+[107] A Study on Knowledge Distillation from Weak Teacher for Scaling Up
+Pre-trained Language Model, H. Lee, R. Hou, J. Kim, D. Liang, S. J. Hwang,
+3 of 21
+and A. Min
+Findings of Association for Computational Linguistics 2023, Toronto, Canada
+[c106] Phrase Retrieval for Open Domain Conversational Question Answering with Conversational Dependency Modeling via Contrastive Learning,
+S. Jeong, J. Baek, S. J. Hwang, and J. C. Park
+Findings of Association for Computational Linguistics 2023, Toronto, Canada
+[c105] Exploring Chemical Space with Score-based Out-of-distribution Generation, S. Lee, J. Jo, and S. J. Hwang
+International Conference on Machine Learning (ICML), 2023, Honolulu, HI
+[c104] Scalable Set Encoding with Universal Mini-Batch Consistency and
+Unbiased Full Set Gradient Approximation, J. Willette, S. Lee, B. Andreis, K.
+Kawaguchi, J. Lee, and S. J. Hwang
+International Conference on Machine Learning (ICML), 2023, Honolulu, HI
+[c103] Personalized Subgraph Federated Learning, J. Baek, W. Jeong, J. Jin, J.
+Yoon, and S. J. Hwang
+International Conference on Machine Learning (ICML), 2023, Honolulu, HI
+[c102] Margin-based Neural Network Watermarking, B. Kim, S. Lee, S. Lee, S.
+Son, and S. J. Hwang
+International Conference on Machine Learning (ICML), 2023, Honolulu, HI
+[c101] Continual Learners are Incremental Model Generalizers, J. Yoon, S. J.
+Hwang, and Y. Cao
+International Conference on Machine Learning (ICML), 2023, Honolulu, HI
+[c100] DAPPER: Label-Free Performance Estimation after Personalization
+for Heterogeneous Mobile Sensing, T. Gong, Y. Kim, A. Orzikulova, Y. Liu,
+and S. J. Hwang
+UbiComp (IMWUT) 2023, Cancun, Mexico
+[c99] The Devil is in the Points: Weakly Semi-Supervised Instance Segmentation via Point-Guided Mask Representation, B. Kim, J. Jeong, D. Han, and
+S. J. Hwang
+IEEE Conference on Computer Vision and Pattern Recognition (CVPR) 2023, Vancouver, Canada
+[c98] Any-speaker Adaptive Text-To-Speech Synthesis with Diffusion Models, M. Kang, D. Min, and S. J. Hwang
+(ICASSP) 2023, Rhodes Island, Greece
+[c97] Realistic Conversational Question Answering with Answer Selection
+based on Calibrated Confidence and Uncertainty Measurement, S. Jeong,
+J. Baek, S. J. Hwang, and J. C. Park
+(EACL) 2023, Dubrovnik, Croatia
+4 of 21
+[c96] Meta-prediction Model for Distillation-Aware NAS on Unseen Datasets,
+H. Lee, S. An, M. Kim, and S. J. Hwang
+(ICLR) 2023, Kigali, Rwanda
+(spotlight presentation)
+[c95] Self-Distillation for Further Pre-training of Transformers, S. Lee, M.
+Kang, J. Lee, S. J. Hwang and K. Kawaguchi
+International Conference on Learning Representations (ICLR) 2023, Kigali, Rwanda
+[c94] Sparse Token Transformers with Attention Back Tracking, H. Lee, M.
+Kang, Y. Lee and S. J. Hwang
+International Conference on Learning Representations (ICLR) 2023, Kigali, Rwanda
+[c93] Self-Supervised Set Representation Learning for Unsupervised MetaLearning, D. B. Lee, S. Lee, K. Kawaguchi, Y. Kim, J. Bang, J.-W. Ha and S. J.
+Hwang
+International Conference on Learning Representations (ICLR) 2023, Kigali, Rwanda
+[c92] Exploring the Role of Mean Teacher in Self-supervised Masked AutoEncoders, Y. Lee, J. R. Willete, J. Kim, J. Lee and S. J. Hwang
+International Conference on Learning Representations (ICLR) 2023, Kigali, Rwanda
+[c91] On the Soft-Subnetwork for Few-Shot Class Incremental Learning, H.
+Kang, J. Yoon, S. Rizky, H. Madjid, S. J. Hwang and C. D. Yoo
+International Conference on Learning Representations (ICLR) 2023, Kigali, Rwanda
+[c90] Rethinking the Entropy of Instance in Adversarial Training, M. Kim, J.
+Tack, J. Shin, and S. J. Hwang
+Workshop on Security and Trust in Machine Learning (SaTML) 2023, Toronto,
+Canada
+[c89] Graph Self-supervised Learning with Accurate Discrepancy Learning,
+D. Kim, J. Baek and S. J. Hwang
+Conference on Neural Information Processing Systems (NeurIPS) 2022, New Orleans, LA
+[c88] Set-based Meta-Interpolation for Few-Task Meta-Learning, S. Lee, B.
+Andries, K. Kawaguchi, J. Lee and S. J. Hwang
+Conference on Neural Information Processing Systems (NeurIPS) 2022, New Orleans, LA
+[c87] Factorized-FL: Personalized Federated Learning with Parameter Factorization & Similarity Matching, W. Jeong and S. J. Hwang
+Conference on Neural Information Processing Systems (NeurIPS, 2022), New Orleans, LA
+[c86] Learning to Generate Inversion-Resistant Model Explanations, H. Jeong,
+S. Lee, S. J. Hwang and S. Son
+5 of 21
+Conference on Neural Information Processing Systems (NeurIPS) 2022, New Orleans, LA
+[c85] Score-based Generative Modeling of Graphs via the System of Stochastic Differential Equations, J. Jo, S. Lee and S. J. Hwang
+International Conference on Machine Learning (ICML) 2022, Baltimore, MD
+[c84] Bitwidth Heterogeneous Federated Learning with Progressive Weight
+Dequantization, J. Yoon, G. Park, W. Jeong and S. J. Hwang
+International Conference on Machine Learning (ICML) 2022, Baltimore, MD
+[c83] Set Based Stochastic Subsampling, B. Andries, S. Lee, A. T. Nguyen, J. Lee,
+E. Yang and S. J. Hwang
+International Conference on Machine Learning (ICML) 2022, Baltimore, MD
+[c82] Forgetting-free Continual Learning with Winning Subnetworks, H. Kang,
+R. J. L. Mina, S. R. H. Madjid, J. Yoon, C. D. Yoo, S. J. Hwang and M. HasegawaJohnson
+International Conference on Machine Learning (ICML) 2022, Baltimore, MD
+[c81] KALA: Knowledge-Augmented Language Model Adaptation, M. Kang,
+J. Baek, and S. J. Hwang
+Conference of the North American Chapter of the Association for Computational
+Linguistics (NAACL) 2022, Virtual
+(oral presentation)
+[c80] MPViT : Multi-Path Vision Transformer for Dense Prediction, Y. Lee,
+J. Kim, J. Willette, and S. J. Hwang
+Conference on Computer Vision and Pattern Recognition (CVPR) 2022, New Orleans, USA
+[c79] Augmenting Document Representations for Dense Retrieval with Interpolation and Perturbation, S. Jeong, J. Baek, S. Cho, S. J. Hwang, and J.
+C. Park
+Association for Computational Linguistics (ACL) 2022, Dublin, Ireland
+(short paper)
+[c78] Rethinking the Representational Continuity: Towards Unsupervised
+Continual Learning, D. Madaan, J. Yoon, Y. Li, Y. Liu, and S. J. Hwang
+International Conference on Learning Representations (ICLR), 2022, Virtual
+(oral presentation)
+[c77] Online Hyperparameter Meta-Learning with Hypergradient Distillation, H. B. Lee, H. Lee, J. Shin, E. Yang, T. Hospedales, and S. J. Hwang
+International Conference on Learning Representations (ICLR) 2022, Virtual
+(spotlight)
+[c76] Model-augmented Prioritized Experience Replay, Y. Oh, J. Shin, E. Yang,
+and S. J. Hwang
+International Conference on Learning Representations (ICLR) 2022, Virtual
+[c75] Online Coreset Selection for Rehearsal-based Continual Learning, J.
+Yoon, D. Madaan, E. Yang, and S. J. Hwang
+International Conference on Learning Representations (ICLR) 2022, Virtual
+6 of 21
+[c74] Meta Learning Low Rank Covariance Factors for Energy Based Deterministic Uncertainty, J. Willette, H. B. Lee, J. Lee, and S. J. Hwang
+International Conference on Learning Representations (ICLR) 2022, Virtual
+[c73] Sequential Reptile: Inter-Task Gradient Alignment for Multilingual
+Learning, S. Lee, H. B. Lee, J. Lee, and S. J. Hwang
+International Conference on Learning Representations (ICLR) 2022, Virtual
+[c72] Skill-based Meta-Reinforcement Learning, T. Nam, S. H. Sun, K. Pertsch,
+S. J. Hwang, and J. J. Lim
+International Conference on Learning Representations (ICLR) 2022, Virtual
+[c71] Consistency Regularization for Adversarial Robustness, J. Tack, S. Yu,
+J. Jeong, M. Kim, S. J. Hwang and J. Shin
+AAAI Conference on Artificial Intelligence (AAAI) 2022, Virtual
+(acceptance rate = 14.96%)
+[c70] Saliency Grafting: Innocuous Attribution-Guided Mixup with Calibrated Label Mixing, J. Park, J. Y. Yang, J. Shin, S. J. Hwang and E. Yang
+AAAI Conference on Artificial Intelligence (AAAI) 2022, Virtual
+(acceptance rate = 14.96%)
+[c69] Task-Adaptive Neural Network Search with Meta-Contrastive Learning, W. Jeong, H. Lee, G. Park, E. Hyung, J. Baek and S. J. Hwang
+Conference on Neural Information Processing System (NeurIPS) 2021, Virtual
+(spotlight presentation) (acceptance rate <3.0%)
+[c68] Hardware-adaptive Efficient Latency Prediction for NAS via MetaLearning, H. Lee, S. Lee, S. Chong and S. J. Hwang
+Conference on Neural Information Processing System (NeurIPS) 2021, Virtual
+(spotlight presentation) (acceptance rate <3.0%)
+[c67] Mini-Batch Consistent Slot Set Encoder for Scalable Set Encoding,
+A. Bruno, J. R. Willette, J. Lee and S. J. Hwang
+Conference on Neural Information Processing System (NeurIPS) 2021, Virtual
+(acceptance rate = 25.7%)
+[c66] Edge Representation Learning with Hypergraphs,
+J. Jo, J. Baek, S. Lee, D. Kim, M. Kang and S. J. Hwang
+Conference on Neural Information Processing System (NeurIPS) 2021, Virtual
+(acceptance rate = 25.7%)
+[c65] Hit and Lead Discovery with Explorative RL and Fragment-based
+Molecule Generation,
+S. Yang D. Hwang, S. Lee. S. Ryu and S. J. Hwang
+Conference on Neural Information Processing System (NeurIPS) 2021, Virtual
+(acceptance rate = 25.7%)
+[c64] Cluster-Promoting Quantization with Bit-Drop for Minimizing Network Quantization Loss,
+J. H. Lee, S. J. Hwang and E. Yang
+International Conference on Computer Vision (ICCV) 2021, Virtual
+(acceptance rate = 25.9%)
+[c63] Multi-domain Knowledge Distillation via Uncertainty-Matching for
+End-to-End ASR Models,
+H. G. Kim, M. J. Lee, H. Lee, T. G. Kang, J. Lee, E. Yang and S. J. Hwang
+International Conference on Machine Learning (Interspeech) 2021, Brno, Czech
+7 of 21
+Republic
+(acceptance rate = 48.4%)
+[c62] Federated Continual Learning with Weighted Inter-client Transfer,
+J. Yoon, W. Jeong, G. Lee and S. J. Hwang
+International Conference on Machine Learning (ICML) 2021, Virtual
+(acceptance rate = 21.5%)
+[c61] Learning to Generate Noise for Multi-Attack Robustness,
+D. Maadan, J. Shin and S. J. Hwang
+International Conference on Machine Learning (ICML) 2021, Virtual
+(acceptance rate = 21.5%)
+[c60] Meta-StyleSpeech : Multi-Style Adaptive Text-to-Speech Generation,
+D. Min, D. B. Lee, E. Yang and S. J. Hwang
+International Conference on Machine Learning (ICML) 2021, Virtual
+(acceptance rate = 21.5%)
+[c59] Large-Scale Meta-Learning with Continual Trajectory Shifting,
+J. Shin, H. B. Lee, B. Gong and S. J. Hwang
+International Conference on Machine Learning (ICML) 2021, Virtual
+(acceptance rate = 21.5%)
+[c58] Adversarial Purification with Score-based Generative Models,
+J. Yoon, S. J. Hwang and J. Lee
+International Conference on Machine Learning (ICML) 2021, Virtual
+(acceptance rate = 21.5%)
+[c57] Learning to Perturb Word Embeddings for Out-of-distribution QA,
+S. Lee, M. Kang, J. Lee and S. J. Hwang,
+Conference for Association for Computational Linguistics (ACL), 2020, Virtual
+(long paper) (acceptance rate = 21.3%)
+[c56] RetCL: A Selection-based Approach for Retrosynthesis via Contrastive
+Learning, H. Lee, S. Ahn, S. W. Seo, Y. Y. Song, E. Yang, S. J. Hwang and Jinwoo Shin, International Joint Conference on Artificial Intelligence, (IJCAI), 2021,
+Virtual
+(acceptance rate = 13.9%)
+[c55] Meta-GMVAE: Mixture of Gaussian VAE for Unsupervised MetaLearning, D. B. Lee, D. Min, S. Lee and S. J. Hwang,
+International Conference on Learning Representation (ICLR), 2021, Virtual
+(spotlight presentation) (acceptance rate = 3.8%)
+[c54] Accurate Learning of Graph Representations with Graph Multiset
+Pooling, J. Baek, M. Kang, and S. J. Hwang,
+International Conference on Learning Representation (ICLR), 2021, Virtual
+(acceptance rate = 28.7%)
+[c53] Rapid Neural Architecture Search by Learning to Generate Graphs
+from Datasets, H. Lee, E. Hyung and S. J. Hwang,
+International Conference on Learning Representation (ICLR), 2021, Virtual
+(acceptance rate = 28.7%)
+[c52] Contrastive Learning with Adversarial Perturbations for Conditional
+Text Generation, S. Lee, D. B. Lee and S. J. Hwang,
+International Conference on Learning Representation (ICLR), 2021, Virtual
+(acceptance rate = 28.7%)
+8 of 21
+[c51] Federated Semi-Supervised Learning with Inter-Client Consistency &
+Disjoint Learning, W. Jeong, J. Yoon, E. Yang and S. J. Hwang,
+International Conference on Learning Representation (ICLR), 2021, Virtual
+(acceptance rate = 28.7%)
+[c50] Learning to Sample with Local and Global Contexts from Experience
+Replay Buffers, Y. Oh, K. Lee, J. Shin, E. Yang, and S. J. Hwang,
+International Conference on Learning Representation (ICLR), 2021, Virtual
+(acceptance rate = 28.7%)
+[c49] FedMix: Approximation of Mixup under Mean Augmented Federated
+Learning, T. Yoon, H. Jeong, E. Yang and S. J. Hwang,
+International Conference on Learning Representation (ICLR), 2021, Virtual
+(acceptance rate = 28.7%)
+[c48] Clinical Risk Prediction with Temporal Probabilistic Asymmetric MultiTask Learning, T. Nguyen, H. Jeong, E. Yang and S. J. Hwang,
+AAAI Conference on Artificial Intelligence (AAAI), 2021, Virtual
+(acceptance rate = 21.4%)
+[c47] GTA: Graph Truncated Attention for Retrosynthesis,
+S. Seo, Y. Y. Song, J. Y. Yang, S. Bae, H. Lee, J. Shin, S. J. Hwang and E. Yang,
+AAAI Conference on Artificial Intelligence (AAAI), 2021, Virtual
+(acceptance rate = 21.4%)
+[c46] MetaPerturb: Transferable Regularizer for Heterogeneous Tasks and
+Architectures, J. U. Ryu, J. Shin, H. B. Lee and S. J. Hwang,
+Conference on Neural Information Processing System (NeurIPS) 2020, Virtual
+(spotlight presentation) (acceptance rate = 4.1%)
+[c45] Learning to Extrapolate Knowledge: Transductive Few-shot Out-ofGraph Link Prediction, J. Baek, D. B. Lee and S. J. Hwang,
+Conference on Neural Information Processing System (NeurIPS) 2020, Virtual
+(acceptance rate = 20.1%)
+[c44] Adversarial Self-Supervised Contrastive Learning,
+M. Kim, J. Tack and S. J. Hwang,
+Conference on Neural Information Processing System (NeurIPS) 2020, Virtual
+(acceptance rate = 20.1%)
+[c43] Time-Reversal Symmetric ODE Network,
+I. Huh, E. Yang, S. J. Hwang and J. Shin,
+Conference on Neural Information Processing System (NeurIPS) 2020, Virtual
+(acceptance rate = 20.1%)
+[c42] Bootstrapping Neural Processes,
+J. Lee, Y. Lee, J. Kim, E. Yang, S. J. Hwang and Y. W. Teh,
+Conference on Neural Information Processing System (NeurIPS) 2020, Virtual
+(acceptance rate = 20.1%)
+[c41] Few-shot Visual Reasoning with Meta-Analogical Contrastive Learning,
+Y. Kim, J. Shin, E. Yang and S. J. Hwang,
+Conference on Neural Information Processing System (NeurIPS) 2020, Virtual
+(acceptance rate = 20.1%)
+[c40] Neural Complexity Measures,
+Y. Lee, J. Lee, S. J. Hwang, E. Yang and S. Choi, Conference on Neural Information
+Processing System (NeurIPS) 2020, Virtual
+(acceptance rate = 20.1%)
+9 of 21
+[c39] Attribution Preservation in Network Compression for Reliable Network
+Interpretation, G. Park, J. Y. Yang, S. J. Hwang and E. Yang,
+Conference on Neural Information Processing System (NeurIPS) 2020, Virtual
+(acceptance rate = 20.1%)
+[c38] Distribution Aligning Refinery of Pseudo-label for Imbalanced Semisupervised Learning, J. Kim, Y. Hur, S. Park, E. Yang, S. J. Hwang and J. Shin,
+Conference on Neural Information Processing System (NeurIPS) 2020, Virtual
+(acceptance rate = 20.1%)
+[c37] Neural Mask Generator: Learning to Generate Adaptive Word Maskings for Language Model Adaptation, M. Kang, M. Han and S. J. Hwang,
+Conference on Empirical Methods in Natural Language Processing (EMNLP) 2020,
+Virtual (long paper) (acceptance rate = 22.4%)
+[c36] Meta-Learning for Short Utterance Speaker Recognition with Imbalance Length Pairs, S. M. Kye, Y. Jung, H. B. Lee, S. J. Hwang and Hoirin Kim,
+Conference of the International Speech Communication Association (InterSpeech)
+2020, Virtual (acceptance rate = 47%)
+[c35] Adversarial Neural Pruning with Latent Vulnerability Suppression,
+D. Madaan, J. Shin and S. J. Hwang,
+International Conference on Machine Learning (ICML) 2020, Virtual
+(acceptance rate = 21.8%)
+[c34] Cost-effective Interactive Attention Learning with Neural Attention
+Processes, J. Heo, J. Park, H. Jeong, K. J. Kim, J. Lee, E. Yang, and S. J. Hwang,
+International Conference on Machine Learning (ICML) 2020, Virtual
+(acceptance rate = 21.8%)
+[c33] Meta Variance Transfer: Learning to Augment from the Others, S. J.
+Park, S. Han, J. Baek, I. Kim, J. Song, H. B. Lee, J. Han and S. J. Hwang,
+International Conference on Machine Learning (ICML) 2020, Virtual
+(acceptance rate = 21.8%)
+[c32] Self-supervised Label Augmentation via Input Transformations,
+H. Lee, S. J. Hwang and J. Shin,
+In Proceedings of the International Conference on Machine Learning (ICML) 2020,
+Virtual (acceptance rate = 21.8%)
+[c31] Generating Diverse and Consistent QA pairs from Contexts with InformationMaximizing Hierarchical Conditional VAEs,
+D. B. Lee, S. Lee, W. T. Jeong, D. Kim, and S. J. Hwang,
+Conference for Association for Computational Linguistics (ACL), 2020, Virtual
+(long paper) (acceptance rate = 25.2%)
+[c30] Segmenting 2K-Videos at 36.5 FPS with 24.3 GFLOPs: Accurate and
+Lightweight Realtime Semantic Segmentation Networks,
+D. Oh, D. Ji, C. Jang, Y. Hyun, H. S. Bae, S. J. Hwang,
+International Conference on Robotics and Automation (ICRA) 2020, Virtual
+(acceptance rate = 42%)
+[c29] Learning to Balance: Bayesian Meta-Learning for Imbalanced and Outof-distribution Tasks,
+H. B. Lee, H. Lee, D. Na, S. Kim, M. Park, E. Yang and S. J. Hwang,
+International Conference on Learning (ICLR) 2020, Virtual
+(oral presentation) (acceptance rate = 1.9%)
+10 of 21
+[c28] Meta Dropout: Learning to Perturb Latent Features for Generalization,
+H. B. Lee, T. Nam, E. Yang and S. J. Hwang,
+International Conference on Learning (ICLR) 2020, Virtual
+(acceptance rate = 26.5%)
+[c27] Scalable and Order-robust Continual Learning with Additive Parameter Decomposition, J. Yoon, S. Kim, E. Yang and S. J. Hwang,
+International Conference on Learning (ICLR) 2020, Virtual
+(acceptance rate = 26.5%)
+[c26] Why Not to Use Zero Imputation? Correcting Sparsity Bias in Training
+Neural Networks, J. Yi, J. Lee, S. J. Hwang and E. Yang,
+International Conference on Learning (ICLR) 2020, Virtual
+(acceptance rate = 26.5%)
+[c25] Deep Mixed Effect Model using Gaussian Processes: A Personalized
+and Reliable Prediction for Healthcare,
+I. Chung, S. Kim. J. Lee, S. J. Hwang and E. Yang,
+AAAI Conference on Artificial Intelligence (AAAI) 2020, New York, USA
+(acceptance rate = 20.6%)
+[c24] Episodic Memory Reader: Learning What to Remember for Question
+Answering from Streaming Data, M. Han, M. Kang, H. Jung, S. J. Hwang,
+Conference for Association for Computational Linguistics (ACL) 2019, Florence,
+Italy. (long paper, oral presentation) (acceptance rate = 22.7%)
+[c23] Learning What and Where to Transfer
+Y. Jang, H. Lee, S. J. Hwang and J. Shin,
+International Conference on Machine Learning (ICML) 2019, Long Beach, USA.
+(acceptance rate = 22.6%)
+[c22] Learning to Quantize Deep Networks by Optimizing Quantization Intervals with Task Loss,
+S. Jung, C. Son, S. Lee, J. Son, J. J. Han, Y, Kwak, S. J. Hwang, and C. Choi,
+IEEE Conference on Computer Vision and Pattern Recognition (CVPR) 2019, Long
+Beach, USA. (oral presentation) (acceptance rate = 5.6%)
+[c21] Learning to Propagate Labels: Transductive Propagation Networks for
+Few-shot Learning,
+Y. Liu, J. Lee, M. Park, S. Kim, E. Yang, S. J. Hwang, and Y. Yang,
+International Conference on Learning Representations (ICLR) 2019, New Orleans,
+USA. (acceptance rate = 31.4%)
+[c20] Dropmax: Adaptive Variational Softmax,
+H. Lee, J. Lee, S. Kim, E. Yang and S. J. Hwang,
+Conference on Neural Information Processing System (NeurIPS) 2018, Montreal,
+Canada. (acceptance rate = 20.8%)
+[c19] Uncertainty-Aware Attention for Reliable Interpretation and Prediction, J. Heo, H. Lee, S. Kim, J. Lee, K. Kim, E. Yang and S. J. Hwang,
+Conference on Neural Information Processing System (NeurIPS) 2018, Montreal,
+Canada. (acceptance rate = 20.8%)
+[c18] Joint Active Feature Acquisition and Classification with Variable-Size
+Set Encoding, H. Shim, S. J. Hwang, and E. Yang,
+Conference on Neural Information Processing System (NeurIPS) 2018, Montreal,
+Canada. (acceptance rate = 20.8%)
+11 of 21
+[c17] Deep Asymmetric Multitask Feature Learning,
+H. Lee, E. Yang and S. J. Hwang,
+International Conference on Machine Learning (ICML) 2018, Stockholm, Sweden.
+(acceptance rate = 25.0%)
+[c16] Lifelong Learning with Dynamically Expandable Networks,
+J. Yoon, E. Yang, J. Lee and S. J. Hwang,
+International Conference on Learning Representations (ICLR) 2018, Vancouver,
+Canada. (acceptance rate = 33.7%)
+[c15] SplitNet: Learning to Semantically Split Deep Networks for Parameter
+Reduction and Model Parallelization,
+J. Kim, Y. Park, G. Kim and S. J. Hwang,
+International Conference on Machine Learning (ICML) 2017, Sydney, Australia.
+(acceptane rate = 25.5%)
+[c14] Combined Group and Exclusive Sparsity for Deep Neural Networks,
+J. Yoon and S. J. Hwang,
+International Conference on Machine Learning (ICML) 2017, Sydney, Australia.
+(acceptance rate = 25.5%)
+[c13] Taxonomy-Regularized Semantic Deep Convolutional Neural Networks,
+W. Goo, J. Kim, G. Kim and S. J. Hwang,
+European Conference on Computer Vision (ECCV) 2016, Amsterdam, Netherland.
+(acceptance rate = 26.6%)
+[c12] Asymmetric Multi-task Learning Based on Task Relatedness and Loss,
+G. Lee, E. Yang, and S. J. Hwang,
+International Conference on Machine Learning (ICML) 2016, New York City, NY.
+(acceptance rate = 24%)
+[c11] Knowledge Transfer with Interactive Learning of Semantic Relationships, J. Choi, S. J. Hwang, L. Sigal, and L. S. Davis,
+AAAI Conference on Artificial Intelligence (AAAI) 2016, Phoenix.
+(oral presentation) (acceptance rate = 26%)
+[c10] Exploiting View-Specific Appearance Similarities Across Classes for
+Zero-shot Pose Prediction: A Metric Learning Approach,
+A. Kuznetsova, S. J. Hwang, B. Rosenhahn, and L. Sigal,
+AAAI Conference on Artificial Intelligence (AAAI) 2016, Phoenix, AZ.
+(acceptance rate = 26%)
+[c9] Expanding Object Detector’s Horizon: Incremental Learning Framework for Object Detection in Video,
+A. Kuznetsova, S. J. Hwang, B. Rosenhahn, and L. Sigal,
+IEEE Conference on Computer Vision and Pattern Recognition (CVPR) 2015,
+Boston, MA. (acceptance rate = 25%)
+[c8] A Unified Semantic Embedding: Relating Taxonomies with Attributes,
+S. J. Hwang and L. Sigal,
+Conference on Neural Information Processing System (NeurIPS) 2014, Montreal,
+Canada. (acceptance rate = 25%)
+[c7] Analogy-preserving Semantic Embedding for Visual Object Categorization, S. J. Hwang, K. Grauman, and F. Sha,
+International Conference on Machine Learning (ICML) 2013, Atlanta, GA. (acceptance rate = 24%)
+12 of 21
+[c6] Semantic Kernel Forests from Multiple Taxonomies,
+S. J. Hwang, K. Grauman, and F. Sha,
+Conference on Neural Information Processing System (NeurIPS) 2012, Lake Tahoe,
+NV. (acceptance rate = 25%)
+[c5] Context-Based Automatic Local Image Enhancement,
+S. J. Hwang, A. Kapoor, and S. B. Kang,
+European Conference on Computer Vision (ECCV) 2012, Firenze, Italy
+(acceptance rate = 25%)
+[c4] Learning a Tree of Metrics with Disjoint Visual Features,
+S. J. Hwang, K. Grauman, and F. Sha,
+Conference on Neural Information Processing System (NeurIPS) 2011, Granada,
+Spain. (acceptance rate = 22%)
+[c3] Sharing Features Between Objects and Their Attributes,
+S. J. Hwang, F. Sha and K. Grauman,
+IEEE Conference on Computer Vision and Pattern Recognition (CVPR) 2011, Colorado Springs, CO. (acceptance rate = 22.5%)
+[c2] Accounting for the Relative Importance of Objects in Image Retrieval,
+S. J. Hwang and K. Grauman,
+British Machine Vision Conference (BMVC) 2011, Aberystwyth, UK.
+(oral presentation) (acceptance rate = 8.4%)
+[c1] Reading Between the Lines: Object Localization Using Implicit Cues
+from Image Tags, S. J. Hwang and K. Grauman,
+IEEE Conference on Computer Vision and Pattern Recognition (CVPR) 2010, San
+Francisco, CA. (oral presentation) (acceptance rate = 4.5%)
+Workshop
+Publications
+[w11] Federated Semi-Supervised Learning with Inter-Client Consistency,
+W. Jeong, J. Yoon, E. Yang, and S. J. Hwang,
+ICML Workshop in Federated Learning, 2020, Online,
+(long presentation) (best student paper award)
+[w10] Federated Continual Learning with Weighted Inter-Client Transfer, J.
+Yoon, W. Jeong, G. Lee, E Yang, and S. J. Hwang,
+ICML Workshop in Lifelong Learning, 2020, Online
+[w9] Adversarial Neural Pruning, D. Maadan and S. J. Hwang,
+NeurIPS Workshop on Safety and Robustness in Decision Making, 2019,
+Vancouver, CA
+[w8] Uncertainty-Aware Deep Temporal Asymmetric Multi-task Learning,
+H. Jeong, T. A. Nguyen, E. Yang and S. J. Hwang,
+Women in Machine Learning Workshop, NeurIPS 2019, Vancouver, CA
+[w7] Cost-Effective Interactive Attention Learning for Action Recognition,
+J. Heo, J. Park, H. Jeong, W. Shin, K. J. Kim, and S. J. Hwang,
+ICCV Workshop on Interpreting and Explaining Visual Artificial Intelligence Models, 2019, Seoul, Korea
+[w6]A Metric Learning Approach for Multi-View Object Recognition and
+Zero-shot Pose Estimation,
+A. Kuznetsova, S. J. Hwang, B. Rosenhahn and L. Sigal,
+ICCV Workshop on Object Understanding for Interaction, ICCV 2015,
+Santiago, Chile, Dec 2015.
+13 of 21
+[w5] Interactive Semantics for Knowledge Transfer,
+J. Choi, S. J. Hwang, L. Sigal and L. S. Davis,
+ICML Active Learning Workshop, 2015, Lillle, France, July 2015.
+[w4] A Unified Semantic Embedding: Relating Taxonomies and Attributes,
+S. J. Hwang and L. Sigal and L. S. Davis,
+AAAI Spring Symposium on Knowledge Representation and Reasoning (KRR),
+2015, Stanford, CA.
+[w3] A Unified Semantic Embedding: Relating Taxonomies and Attributes,
+S. J. Hwang and L. Sigal and L. S. Davis,
+NIPS Workshop on Learning Semantics, NIPS 2014, Montreal, Canada.
+[w2] Semantic Kernel Forests from Multiple Taxonomies,
+S. J. Hwang, F. Sha, and K. Grauman,
+International Workshop on Large Scale Visual Recognition and Retrieval (BigVision), NIPS, 2012, Lake Tahoe, NV, Dec 2012. (oral presentation)
+[w1] Sharing Features Between Visual Tasks at Different Levels of Granularity, S. J. Hwang, F. Sha, and K. Grauman,
+Fine-Grained Visual Categorization Workshop (FGVC), CVPR 2011, Colorado
+Springs, CO.
+Preprints [i10] Model-Augmented Q-Learning,
+Y. Oh, J. Shin, E. Yang, and S. J. Hwang,
+arXiv:2102.03866, Feb 2021.
+[i9] Large-Scale Meta-Learning with Continual Trajectory Shifting,
+J. Shin, H. B. Lee, B. Gong, and S. J. Hwang,
+arXiv:2102.07215, Feb 2021.
+[i8] Improving Uncertainty Calibration via Prior Augmented Data,
+J. Willette, J. Lee, and S. J. Hwang,
+arXiv:2102.10803, Feb 2021.
+[i7] Semi-Relaxed Quantization with DropBits: Training Low-Bit Neural
+Networks via Bit-wise Regularization,
+J. Lee, J. Yun. S. J. Hwang, and E. Yang
+arXiv:1911.12990, Nov 2019
+[i6] Learning to Disentangle Robust and Vulnerable Features for Adversarial
+Detection, B. Joe, S. J. Hwang and I. Shin,
+arXiv:1909.04311, Sep 2019
+[i5] H. Lee, D. Na, H. Lee and S. J. Hwang, Learning to Generalize to Unseen
+Tasks with Bilevel Optimization,
+arXiv:1908.01457, Aug 2019
+[i4] Reliable Estimation of Individual Treatment Effect with Causal Information Bottleneck S. Kim, Y. Baek, S. J. Hwang and E. Yang,
+arXiv:1906.03118, Jun 2019
+[i3] Adaptive Network Sparsification with Dependent Beta-Bernoulli Dropout,
+J. Lee, S. Kim, J. Yoon, H. Lee, E. Yang, and S. J. Hwang,
+arXiv:1805.10896, May 2018
+[i2] Learning to Separate Domains in Generalized Zero-Shot and Open Set
+Learning: a Probabilistic Perspective, H. Dong, Y. Fu, Y. Jiang, W. Liu, S. J.
+Hwang, L. Sigal, and X. Xue,
+arXiv:1810.07368, May 2018
+14 of 21
+[i1] Hierarchical Maximum-Margin Clustering, G. Zhou, S. J. Hwang, M.
+Schmidt, L. Sigal and G. Mori,
+arXiv:1502.01827, Feb 2015
+Patents [p3] Incremental Learning Framework for Object Detection in Videos,
+A. Kuznetsova, S. J. Hwang and L. Sigal,
+US Patent 9,805,264, Oct 2017
+[p2] Incremental Category Embedding for Categorization,
+S. J. Hwang and L. Sigal,
+US 9317782 B2, Apr 2016
+[p1] Object Classification Through Semantic Mapping,
+S. J. Hwang, J. Choi and L. Sigal,
+US 20160292538 A1, Mar 2015
+Reviewer Program Committee
+Services • 2015, 2016, 2017, 2018, 2019 International Conference on Machine Learning (ICML)
+• 2016, 2017, 2019 AAAI Conference on Artificial Intelligence (AAAI)
+• 2016, 2018, 2019 International Joint Conference on Artificial Intelligence (IJCAI)
+Reviewer
+• 2012, 2013, 2014, 2017, 2018, 2019, 2020 Neural Information Processing System
+(NeurIPS, NIPS), Top 10% Reviewer (NeurIPS 2020)
+• 2013, 2014, 2015, 2019, 2020 IEEE Conference on Computer Vision and Pattern
+Recognition (CVPR)
+• 2013, 2017, 2019 International Conference on Computer Vision (ICCV)
+• 2012, 2014, 2020 European Conference on Computer Vision (ECCV)
+• 2019, 2020, 2021 Annual Meeting of the Association for Computational Linguistics
+(ACL)
+• 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)
+• 2017, 2020 International Conference on Artificial Intelligence and Statistics (AISTATS)
+• 2012, 2014, 2018 Asian Conference on Computer Vision (ACCV)
+• 2012, 2013 IEEE Transaction on Multimedia
+• 2014 ACM SIGGRAPH
+• 2014 ACM SIGGRAPH Asia
+• 2014 CVPR Workshop on Egocentric Vision (EgoVision)
+• 2014 ECCV Workshop on Storytelling with Images and Videos (VisStory)
+• 2016 Eurographics (EG)
+Awards
+• Engineering School Technology Innovation Award, KAIST, 2020
+• Best Student Paper Award, International Workshop on Federated Learning for User
+Privacy and Data Confidentiality, 2020
+• Google AI Focused Research Award, Google, 2018
+• Dean’s Excellence Award from the College of Natural Sciences, University of Texas
+at Austin, 2010
+15 of 21
+Grants Have secured ₩8.48B ($7.53M USD) research funding in total.
+• Deep Learning Based AI Learning and Inference Technology for Drones (4/2020-
+12/2023) ₩280M, ETRI
+• Deep Knowledge Infence from Large-Scale Text (11/2019-10/2020) ₩200M, Samsung Electronics
+• Penetration Security Testing of ML Model Vulnerabilities and Defense (co-PI) (4/2020-
+12/2027) ₩1.35B, Institute for Information & Communication Technology Planning & Evaluation
+• Center for Applied Research in AI (co-PI) (12/2019-12/2022) ₩371M, Agency for
+Defense Development
+• Fixed-Point Adaptive Personalized Federated Learning (co-PI) (12/2020-12/2022)
+₩320M, Samsung Electronics
+• Specialized Deep Learning Models for Automated Inspection Process (PI) (4/2020-
+12/2020) ₩120M, LG CNS
+• Explainable AI-based Interactive Satellite Image Analysis and Deep Learning Acceleration (PI) (11/2019-10/2022) ₩300M, SI
+• Human-Inspired Large Scale Visual Recognition System (12/2015-02/2020) (PI),
+₩1.1B, Samsung Research Funding Center of Samsung Electronics
+• Improving Generalization and Reliability of Any Deep Neural Networks (10/2018-
+10/2021) (PI) $150K, Google
+• Exploiting Temporal Locality in CNN-RNN Architectures (09/2018-06/2020), ₩200M,
+Samsung Electronics
+• Affective Conversational Agents (5/2017-4/2018) (PI), ₩200M, Naver
+• Deep Learning-Based Survivor Detection System for Unmanned Aerial Vehicles
+(09/2016-05/2018) (PI), ₩260M, National Research Foundation
+• Semantic-Based Interactive Learning System for Visual Recognition (11/2015-10/2018)
+(PI), ₩150M, National Research Foundation
+• Massive Machine Learning - KAIST MARS AI Integrated Research Center (08/2018-
+02/2024) (co-PI), ₩125M per year, National Research Foundation
+• Efficient Large-Scale Deep Learning – Neural Research Processing Center (11/2017-
+10/2020) (Co-PI), ₩150M per year, Samsung Electronics
+• Explainable Artificial Intelligence – Next Generation Artificial Intelligence (08/2017
+07/2021) (Co-PI), ₩200M per year, Institution for Information & Communications & Technology Promotion
+• Adaptive Machine Learning Technology Development for Intelligent Autonomous
+Digital Companion (01/2018-08/2020) (Co-PI), ₩150M per year, Institution for
+Information & Communications & Technology Promotion
+• Petaflop-Scale Machine Learning Framework - Next Generation High-Performance
+Computing (11/2016-07/2021) (Co-PI), ₩100M per year, National Research Foundation
+• Multitask Deep Learning Models for Disease Prediction from Electronic Health
+Records (04/2017-09/2017) (PI), ₩70M, AITrics
+• Semantic and Contextual Dialogue Generation Using Generative Adversarial Networks (04/2017-12/2017) (PI), ₩80M, SKT
+• Incremental Learning for Object Detection, Pose Estimation, and Object Trajectory
+Estimation (09/2016-08/2017) (PI), ₩72.25M, Hyundai Motor Company
+• Automatic Vibration Analysis using Deep Learning (07/2016-03/2017) (PI), ₩55M,
+Hyundai Motor Company
+• Simultaneous Object/Scene Recognition and Learning from Driving Videos (12/2015-
+5/2016) (PI), ₩30M, Hyundai NGV
+• Hazard/Accident Prediction and Evasion System Leveraging Big Data (12/2015-
+5/2016) (PI), ₩30M, Hyundai NGV
+16 of 21
+Invited Talks
+AI for the Real-World
+• Korean Artificial Intelligence Association Summer Conference, Online, 2020
+• Seoul National University, Seoul, Korea, 2020
+• Samsung Advanced Institute of Technology, Suwon, Korea, 2020
+Low-Resource Deep Learning
+• Workshop on Low-Resource Learning, Beijing, China, 2019
+Learning to Balance: Bayesian Meta-Learning
+for Imbalanced and Out-of-distribution Tasks
+• 2019 International Conference on Data Science, Shanghai, China, 2019
+• AI Korea 2019, Seoul, Korea 2019
+Beyond Explainable AI - Reliable AI
+• Korean Society of Artificial Intelligence in Medicine, Seoul, Korea, 2019
+Explainable AI vs. Unexplainable AI
+• Patent Court of Korea, Daejeon, Korea, 2018
+Models and Algorithms for Large-scale Deep Learning
+• Naver AI Colloquium 2018, Seoul, Korea, 2018
+• Samsung Electronics (DS), Suwon, Korea, 2018
+• Samsung Research, Seoul, Korea, 2018
+• Seoul National University, Seoul, Korea, 2018
+• KAIST, Daejeon, Korea, 2018
+• Postech, Pohang, Korea, 2018
+Machine Learning for Healthcare
+• Korean Society of AI for Law, 2018
+• 2018 AI Summer School, Seoul, Korea, 2018
+• Samsung Research, Seoul, Korea, 2018
+• Samsung SW Center Seoul R&D Forum, Seoul, Korea, 2018
+• Postech, Pohang, Korea, 2018
+Real-time Sports Commentary Generation with Deep Learning
+• AI Worldcup 2018, Daejeon, Korea, 2018
+• AI Worldcup 2017, Daejeon, Korea, 2017
+Dynamically Expandable Networks
+• Pangyo Future Forum, Pangyo, Korea
+• AI Korea 2018, Seoul, Korea, 2018
+Advances in Deep Learning
+• The AI Korea 2018, Seoul, Korea, 2018
+Deep Asymmetric Multitask Feature Learning
+• 2018 Korean Conference on Computer Vision, Seoul, Korea, 2018
+SplitNet: Learning to Semantically Split Deep Networks for Parameter Reduction and
+Model Parallelization
+• 2017 International Workshop on Highly Efficient Neural Network Design (HENND),
+Seoul, Korea, 2017
+17 of 21
+• 2017 Asian Conference on Machine Learning, AI Society Workshop, Seoul, Korea,
+2017
+• 2017 Korean Conference on Computer Vision, Seoul, Korea, 2017
+Human-Inspired Extremely Large Scale Visual Recognition System
+• Samsung Advanced Institute of Technology, Suwon, Korea, 2017
+• Software Convergence Symposium 2017 (SWCS 2017), Seoul, Korea, 2017
+• The 6th Winter School on Image Understanding, Gangwon, Korea, 2017
+• Ulsan National Institute of Science and Technology, Ulsan, Korea, 2017
+Extreme-Scale Deep Learning Framework for Petaflop-Scale Supercomputers
+• Computer System Society Winter School, Gangwon, Korea, 2016
+Deep Learning Methods for Object Detection on UAVs
+• The 13th Short Course on UAV Technology: Guidance, Navigation, and Control,
+Seoul, Korea, 2016
+Learning a Semantic Space for Recognition and Inference
+• Postech, Pohang, Korea, 2016
+• Chonnam National University, Gwangju, Korea, 2016
+Exploiting View-Specific Appearance Similarities Across Classes for Zero-shot Pose Prediction
+• 2015 Korean Conference on Computer Vision, Seoul, Korea, 2015
+A Unified Semantic Embedding: Relating Taxonomies with Attributes
+• 2014 Korean Conference on Computer Vision, Seoul, Korea, 2014
+Discriminative Object Categorization with External Semantic Knowledge
+• VASC Seminar, Carnegie Mellon University, Pittsburgh, PA, 2013
+• Ulsan National Institute of Science and Technology, Ulsan, Korea, 2013
+• Chonnam National University, Gwangju, Korea, 2013
+• Chungbuk National University, Cheongju, Korea, 2013
+Research KAIST
+Experience
+Assistant/Associate Professor 01/01/2018-Current
+• Conducting research on deep learning, with specific focus on generalization, efficiency, and robustness of deep neural networks, to enhance its real-world applicability to diverse application areas such as visual recognition, natural language
+understanding, speech recognition & synthesis, healthcare, and finance.
+UNIST
+Assistant Professor 08/26/2014-12/31/2017
+• Conducted research on deep learning for visual recognition, healthcare, and natural language understanding.
+Disney Research
+Postdoctoral Research Associate 09/16/2013-08/24/2014
+• Conducted research on feature learning and categorization model learning for
+large-scale and fine-grained categorization.
+18 of 21
+• Mentor: Leonid Sigal, Senior Research Scientist (Now Professor at UBC)
+Microsoft Research
+Research Intern 06/06/2011-09/02/2011
+• Researched and developed an automatic image enhancement system, which finds
+an optimal enhancement map for a given image, with coarse-to-fine search for the
+optimal pixelwise enhancement operators using localized hashing on the learned
+metrics, followed by a Gaussian process smoothing step (ECCV 2012).
+• Mentors:
+Sing Bing Kang, Principal Researcher
+Ashish Kapoor, Principal Researcher
+The University of Texas at Austin
+Research Assistant 08/16/2009-08/16/2013
+• Performed research on solving various computer vision tasks (object detection,
+image retrieval, automatic image annotation, object categorization) with machine
+learning approaches (multi-view learning, multitask learning, metric learning,
+multiple kernel learning, manifold/embedding learning).
+Advising
+Activity
+Students’ Degrees Completed Under My Supervision
+• Ahra Jo, Ph.D., 08/2019
+(Thesis: “Visual Recognition for Autonomous Vehicles”)
+• Jeong Un Ryoo, M.S., 02/2021 (Thesis: “MetaPerturb: Transferable Regularizer
+for Heterogeneous Tasks and Architectures”)
+• Hyewon Jeong, M.S. 02/2021 (Thesis: “Clinical Risk Prediction with Temporal
+Probabilistic Asymmetric Multi-Task Learning”)
+• Tuan Nguyen, M.S., 08/2020 (Thesis: “Stochastic Subset Selection”)
+• Bruno Andries, M.S., 02/2020
+(Thesis: “Video Object Detection and Segmentation”)
+• Dong Hyun Na, M.S., 08/2019 (Thesis: “Learning to Balance: Bayesian MetaLearning for Imbalanced and Out-of-distribution Tasks”)
+• Jay Heo, M.S., 02/2019 (Thesis: “Uncertainty-Aware Attention for Reliable Interpretation and Prediction”)
+• Moonsu Han, M.S., 02/2019 (Thesis: “Episodic Memory Reader: Learning What
+to Remember for Question Answering from Streaming Data”)
+• Hae Beom Lee, M.S., 02/2018
+(Thesis: “DropMax: Adaptive Variational Softmax”)
+• Jaehong Yoon, M.S., 02/2018
+(Thesis: “Lifelong Learning with Dynamically Expandable Networks”)
+Current Student Advisees
+• Hae Beom Lee, Ph.D. student, 08/2018 - 02/2022 (Expected)
+• Jaehong Yoon, Ph.D. student, 08/2018 - 02/2022 (Expected)
+• Jay Heo, Ph.D. student, 02/2019 - 02/2022 (Expected)
+• Hayeon Lee, Ph.D. student, 02/2018 -
+• Jinmyung Kwak, Ph.D. student, 02/2019 -
+• Taewook Nam, Ph.D. student, 03/2020 -
+• Minseon Kim, Ph.D. student, 03/2020 -
+19 of 21
+• Bruno Andries, Ph.D. student, 03/2020 -
+• Junhyun Park, M.S. student, 08/2018 -
+• Minki Kang, M.S. student, 03/2020 -
+• Dongbok Lee, M.S. student, 09/2019 -
+• Divyam Madaan, M.S. student, 09/2019 -
+• Jeff Willette, M.S. student, 09/2019 -
+• Eunyoung Hyung, M.S. student, 09/2019 -
+• Jaewoong Shin, M.S. student, 09/2019 -
+• Wongyong Jeong, M.S. student, 03/2020 -
+• Jinheon Baek, M.S. student, 03/2020 -
+• Minyoung Song, M.S. student, 03/2020 -
+• Seanie Lee, M.S. student, 03/2020 -
+• Dongchan Min, M.S. student, 09/2020 -
+• Seul Lee, M.S. student, 09/2020 -
+Teaching KAIST
+Experience Undergraduate Courses
+• Special Topics in Computer Science: Deep Learning (Spring 2018)
+Graduate Courses
+• Advanced Deep Learning (Spring 2020, Fall 2020)
+• Machine Learning for Artificial Intelligence (Fall 2019)
+• Advanced Machine Learning (Spring 2019)
+• Advanced Machine Learning (Fall 2018)
+UNIST
+Undergraduate Courses
+• Introduction to Algorithm (Fall 2017)
+• Special Topics in Computer Science: Deep Learning (Spring 2017)
+• Theory of Computation (Fall 2016)
+• Machine Learning (Spring 2016)
+• Engineering Programming (Fall 2015, Fall 2014)
+• Special Topics in Computer Science: Visual Recognition (Spring 2015)
+Graduate Courses
+• Machine Learning for Healthcare (Fall 2017)
+• Advanced Machine Learning (Fall 2016)
+Professional Samsung Advanced Institute of Technology (SAIT), Suwon, South Korea
+Experience Research Advisor 8/1/2018-Current
+• Led the Fundamental AI TF Team which focus on tackling fundamental machine
+learning problems with special focus on material development and industrial AI,
+along with Prof. Eunho Yang and Jinwoo Shin.
+• Published seven papers to top-tier ML/AI conferences (ICML, NeurIPS, ICLR,
+and AAAI).
+AITRICS, Seoul, South Korea
+Research Advisor 12/1/2016-Current
+• Led the research on machine learning for healthcare, speech recognition/synthesis,
+dialogue agents, drug discovery and AutoML platform.
+20 of 21
+SK Communications (EMPAS), Seoul, South Korea
+Lead Staff, System Programmer - Search Departement 07/16/2005-01/11/2007
+• Served as a system programmer for the search development team.
+• Performed periodic experiments on disk and DB peformance, built search logging
+tools, conducted search log analysis, and reported results.
+Comin Information Systems, Gwangju, South Korea
+Programmer & Researcher - R&D Department 02/24/2004-07/15/2005
+• Served as a researcher and programmer for several mission-critical projects, including development of a license plate recognition parking system, medical imaging simulator, and 3D graphics engine.
+References
+• Kristen Grauman (grauman@utexas.edu)
+• Fei Sha (feisha@usc.edu)
+• Sing Bing Kang (sbkang@microsoft.com)
+• Ashish Kapoor (akapoor@microsoft.com)
+• Leonid Sigal (lsigal@disneyresearch.com)
+• Byoung-Tak Zhang (btzhang@bi.snu.ac.kr)
+• Seong-Whan Lee (sw.lee@korea.ac.kr)
+Citizenship
+• Republic of Korea
+Date of Birth
+• February 15th, 1982
+21 of 21

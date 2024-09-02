@@ -1,0 +1,277 @@
+:root {
+  /* Primary colors */
+  --color-primary: #6EB00B;
+  --color-primary-light: #ADFF2F;
+  --color-primary-mid: #B0FA41;
+  
+  /* Secondary colors */
+  --color-secondary: #190933;
+  --color-secondary-light: #320678;
+  
+  /* Text colors */
+  --color-text: var(--color-primary-light);
+  --color-text-highlight: var(--color-primary);
+  --color-text-muted: var(--color-primary-mid);
+  
+  /* Background colors */
+  --color-bg: var(--color-secondary);
+  --color-bg-light: var(--color-secondary-light);
+  
+  /* Accent colors */
+  --color-accent: var(--color-primary-mid);
+  
+  /* Button colors */
+  --color-btn-bg: var(--color-primary);
+  --color-btn-text: var(--color-secondary);
+  --color-btn-hover-bg: var(--color-primary-mid);
+  --color-btn-hover-text: var(--color-secondary);
+  
+  /* Font */
+  --font-primary: 'jgs9';
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-primary);
+}
+
+.portfolio {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-primary);
+}
+
+.hero {
+  background-image: linear-gradient(to bottom, 
+                    rgba(25, 9, 51, 0.9) 0%, 
+                    rgba(25, 9, 51, 0.7) 30%,
+                    rgba(25, 9, 51, 0.3) 60%,
+                    rgba(25, 9, 51, 0.1) 100%), 
+                    url('./assets/images/mehdisquare.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(50, 6, 120, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.hero-text {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero-text h1 {
+  color: var(--color-text-highlight);
+}
+
+.hero-text h2 {
+  color: var(--color-text-muted);
+}
+
+.social-links a {
+  margin: 0 10px;
+  color: var(--color-text);
+}
+
+.social-links a:hover {
+  color: var(--color-accent);
+}
+
+.navbar {
+  background-color: var(--color-bg-light);
+}
+
+.navbar-brand, .nav-link {
+  color: var(--color-text) !important;
+}
+
+.nav-link:hover {
+  color: var(--color-accent) !important;
+}
+
+.btn-primary {
+  background-color: var(--color-btn-bg);
+  border-color: var(--color-btn-bg);
+  color: var(--color-btn-text);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-btn-hover-bg);
+  border-color: var(--color-btn-hover-bg);
+  color: var(--color-btn-hover-text);
+}
+
+section {
+  padding: 4rem 0;
+  background-color: var(--color-bg);
+}
+
+section h2 {
+  color: var(--color-text-highlight);
+}
+
+.card {
+  background-color: var(--color-bg-light);
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.card-title {
+  color: var(--color-text-highlight);
+}
+
+.card-text {
+  color: var(--color-text);
+}
+
+footer {
+  background-color: var(--color-bg-light);
+  color: var(--color-text);
+}
+
+/* Add these styles to your existing App.css */
+
+.skills .card {
+    transition: transform 0.3s ease-in-out;
+    background-color: var(--color-bg-light);
+    border-color: var(--color-accent);
+}
+
+.skills .card:hover {
+    transform: translateY(-5px);
+}
+
+.skills .card-title {
+    color: var(--color-text-highlight);
+}
+
+.skills .badge {
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    font-size: 0.9em;
+    padding: 0.5em 0.7em;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.skills .btn-primary {
+    margin-top: 1rem;
+    background-color: var(--color-btn-bg);
+    border-color: var(--color-btn-bg);
+    color: var(--color-btn-text);
+}
+
+.skills .btn-primary:hover {
+    background-color: var(--color-btn-hover-bg);
+    border-color: var(--color-btn-hover-bg);
+    color: var(--color-btn-hover-text);
+}
+
+/* Ensure consistent text color in skill cards */
+.skills .card-body {
+    color: var(--color-text);
+}
+
+/* Add some spacing between skill categories */
+.skills .col-md-6 {
+    margin-bottom: 1.5rem;
+}
+
+/* Add this to your existing App.css */
+.skills .text-muted {
+    font-size: 0.8em;
+    color: var(--color-text-muted) !important;
+}
+
+/* Add these styles to your existing App.css */
+
+:root {
+  --color-primary: #6EB00B;
+  --color-primary-light: #ADFF2F;
+  --color-primary-mid: #B0FA41;
+  --color-secondary: #190933;
+  --color-secondary-light: #320678;
+  --color-text: var(--color-primary-light);
+  --color-text-highlight: var(--color-primary);
+  --color-text-muted: var(--color-primary-mid);
+  --color-bg: var(--color-secondary);
+  --color-bg-light: var(--color-secondary-light);
+  --color-accent: var(--color-primary-mid);
+  --color-btn-bg: var(--color-primary);
+  --color-btn-text: var(--color-secondary);
+  --color-btn-hover-bg: var(--color-primary-mid);
+  --color-btn-hover-text: var(--color-secondary);
+}
+
+.card {
+  background-color: var(--color-bg-light);
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.card-title {
+  color: var(--color-text-highlight);
+}
+
+.btn-primary {
+  background-color: var(--color-btn-bg);
+  border-color: var(--color-btn-bg);
+  color: var(--color-btn-text);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-btn-hover-bg);
+  border-color: var(--color-btn-hover-bg);
+  color: var(--color-btn-hover-text);
+}
+
+.file-list-card {
+  border-width: 0 0 1px 0;
+}
+
+.btn-delete, .btn-upload {
+  font-size: 16px;
+  transition: all 0.5s;
+}
+
+.btn-upload:hover, .btn-upload:focus, .btn-delete:hover, .btn-delete:focus {
+  transform: scale(1.1);
+  transition: all 0.3s;
+}
+
+.upload-box {
+  border: 1px dashed var(--color-accent);
+  border-radius: 15px;
+  padding: 20px;
+  cursor: pointer;
+}
+
+.light-purple {
+  background-color: #dbdeff;
+}
+
+.lighter-purple {
+  background-color: #e8e7ff;
+}
