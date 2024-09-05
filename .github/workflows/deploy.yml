@@ -20,3 +20,4 @@ jobs:
         with:
           branch: gh-pages
           folder: dist
+          token: ${{ secrets.DEPLOY_TOKEN }}  # Use the secret here
