@@ -1,9 +1,10 @@
 {
   "name": "portfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
-  "scripts": {
+  "homepage": "https://mehdiacho.github.io",
+    "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
