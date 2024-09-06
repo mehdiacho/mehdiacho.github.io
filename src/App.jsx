@@ -15,7 +15,7 @@ function App() {
               <Route path="/3d" element={<View />}/>
               <Route path="/rszr" element={<ImageResizer />}/>
               <Route path="/movie" element={<Movie />}/>
-              <Route index element={<Portfolio />}/>
+              <Route index path="/" element={<Portfolio />}/>
           </Routes>
   )
 }
