@@ -147,7 +147,7 @@ const UnderConstruction = () => {
         left: 0, 
         right: 0, 
         bottom: 0, 
-        filter: isBlurred ? 'blur(10px)' : 'none',
+        filter: isLoading || isBlurred ? 'blur(10px)' : 'none',
         transition: 'filter 0.5s ease-in-out, opacity 0.5s ease-in-out',
         opacity: isDimmed ? 0.5 : 1,
       }}>
