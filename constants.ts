@@ -7,7 +7,7 @@ export const PROFILE = {
   coordinates: "24.6282° S, 25.9231° E",
   status: "ONLINE",
   statusSub: "OPEN_TO_WORK",
-  bio: "Deep Learning Researcher based in Gaborone. Currently investigating if Graph Neural Networks (GNNs) can outperform standard CNNs in EEG-based speech imagery tasks. I build software for money, for fun, and for the future.",
+  bio: "Deep Learning Researcher based in Gaborone. I do research. I build software. For money.\n For fun.\n For the future.",
   email: "mehdiacho@gmail.com",
   socials: {
     linkedin: "https://linkedin.com/in/mehdiacho",
