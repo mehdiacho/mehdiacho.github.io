@@ -1,94 +1,81 @@
 <div align="center">
 
-# TERMINAL-U // PORTFOLIO SYSTEM v2.0
-### ADVANCED INTERFACE FOR DEEP LEARNING RESEARCHER: MEHDI ACHO
+  <h1><code>TERMINAL-U // PORTFOLIO_V2</code></h1>
+  
+  <p>
+    <strong>A Cyber-Industrial Single Page Application for Deep Learning Research.</strong>
+    <br />
+    <i>"Bloomberg Terminal meets Cyberpunk Logistics."</i>
+  </p>
 
-![React](https://img.shields.io/badge/CORE-REACT_19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/LANG-TYPESCRIPT-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Tailwind](https://img.shields.io/badge/STYLE-TAILWIND_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![Framer](https://img.shields.io/badge/MOTION-FRAMER-0055FF?style=for-the-badge&logo=framer&logoColor=white)
+  <p>
+    <a href="https://react.dev/">
+      <img src="https://img.shields.io/badge/CORE-REACT-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
+    </a>
+    <a href="https://tailwindcss.com/">
+      <img src="https://img.shields.io/badge/STYLE-TAILWIND_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=black" alt="Tailwind" />
+    </a>
+    <a href="https://vitejs.dev/">
+      <img src="https://img.shields.io/badge/BUNDLER-VITE-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+    </a>
+  </p>
 
+  <h3>
+    <a href="https://mehdiacho.github.io">🟢 INITIATE SYSTEM (LIVE DEMO)</a>
+  </h3>
 </div>
 
----
+<br />
 
-## 1.0 // SYSTEM OVERVIEW
+## 📂 01_SYSTEM_OVERVIEW
+This repository contains the source code for **Mehdi Acho's** personal portfolio. It abandons traditional "web design" in favor of a utilitarian, data-dense interface designed to reflect the aesthetic of high-stakes engineering and deep learning research.
 
-**Terminal-U** is a cyber-industrial portfolio interface designed to maximize information density while maintaining high aesthetic standards. It serves as the primary digital access point for Mehdi Acho's research in Deep Learning and GNN architectures.
+The UI follows the **Terminal-U v2.0** design language:
+* **Palette:** Zinc-950 (Background) & Cyan-500 (Active State).
+* **Typography:** Fira Code (Data) & Inter (Human Interface).
+* **UX:** Keyboard-accessible CLI and "Glassmorphic" panels.
 
-Unlike standard web deployments, Terminal-U prioritizes:
-- **Utilitarian Aesthetics:** Zinc-950 backgrounds with high-contrast data visualization.
-- **Interactive CLI:** A functional command line interface for advanced navigation.
-- **Data Density:** "Bloomberg Terminal" inspired layouts for skill diagnostics and project manifests.
+## 🛠 02_TECH_STACK
+| MODULE | TECHNOLOGY | PURPOSE |
+| :--- | :--- | :--- |
+| **Core** | React 18 + Vite | Component architecture & build tool. |
+| **Styling** | Tailwind CSS | Utility-first styling for "Cyber-Industrial" look. |
+| **Motion** | Framer Motion | "Typewriter" effects and smooth panel transitions. |
+| **Icons** | Lucide React | Vector system icons. |
 
----
+## 📟 03_INSTALLATION_PROTOCOL
+To deploy this system locally on your machine, execute the following command sequence:
 
-## 2.0 // TECHNICAL SPECIFICATIONS
-
-| COMPONENT | SPECIFICATION |
-|-----------|---------------|
-| **Core Framework** | React 19 (Strict Mode) |
-| **Language** | TypeScript (Strong Typing) |
-| **Styling Engine** | Tailwind CSS (Utility-First) |
-| **Animation Physics** | Framer Motion (Spring-based) |
-| **Iconography** | Lucide React (Vector System) |
-| **Font Stack** | Fira Code (Monospace) / Inter (Sans) |
-
----
-
-## 3.0 // DEPLOYMENT PROTOCOLS
-
-To initialize this system on a local machine, execute the following command sequence in your terminal.
-
-### 3.1 Clone Repository
 ```bash
-git clone https://github.com/mehdiacho/terminal-u.git
-cd terminal-u
-```
+# Clone the repository
+git clone [https://github.com/mehdiacho/portfolio-v2.git](https://github.com/mehdiacho/portfolio-v2.git)
 
-### 3.2 Install Dependencies
-```bash
+# Enter the directory
+cd portfolio-v2
+
+# Install dependencies
 npm install
-# Installing core modules...
-# Verifying integrity...
-# Done.
-```
 
-### 3.3 Initialize Local Server
-```bash
+# Initialize development server
 npm run dev
-# > System online at http://localhost:5173
 ```
 
----
+## ⌨️ 04_FEATURE_SET
+### A. The Command Line Interface (CLI)
+The footer houses a functional terminal. Users can interact with the portfolio via text commands.
+* `help`: Lists available protocols.
+* `projects`: Loads the project module manifest.
+* `status`: Displays system uptime (calculated from birthdate).
 
-## 4.0 // FEATURE MANIFEST
+### B. Dynamic Uptime
+The "System Status" panel calculates the user's age in real-time format:
+`UPTIME: 23Y 260D 14H`
 
-### [A] SYSTEM_STATUS PANEL
-Located at the top viewport, this module calculates the biological "Uptime" of the user in real-time based on `2002-03-18` epoch. It also displays current geolocation coordinates and connection stability.
+### C. The "Dream" Protocol (Easter Egg)
+Hidden logic exists within the CLI.
+> *Hint: Sometimes you need `sudo` privileges to see the real vision.*
 
-### [B] TERMINAL_CLI (Command Line Interface)
-A toggleable drawer located at the bottom of the viewport. Supports keyboard input and specific system commands.
-- **Input:** Standard alphanumeric text.
-- **Response:** JSON-like data output or text streams.
-
-### [C] DIAGNOSTIC_GRID
-Skill proficiency is visualized not as arbitrary bars, but as system resource allocation (Memory/Threads/Temperature), fitting the industrial theme.
-
----
-
-## 5.0 // CLASSIFIED PROTOCOLS
-
-The CLI supports standard navigation commands (`help`, `status`, `projects`).
-
-However, the system contains encrypted logs regarding the user's true motivations and downtime activities.
-> **HINT:** Check the `help` menu carefully. Anomalous signals detected near keyword: `dream`.
-
----
-
-<div align="center">
-
-**END OF FILE**
-&copy; 2025 Mehdi Acho. All Rights Reserved.
-
-</div>
+## 📜 05_LICENSE
+**MIT License** | System is Open Source. 
+<br />
+*Built by [Mehdi Acho](https://github.com/mehdiacho). Deep Learning Researcher. Gaborone, Botswana.*
