@@ -7,7 +7,9 @@ export const PROFILE = {
   coordinates: "24.6282° S, 25.9231° E",
   status: "ONLINE",
   statusSub: "OPEN_TO_WORK",
-  bio: "Deep Learning Researcher based in Gaborone. I do research. I build software. For money.\n For fun.\n For the future.",
+  bio: "Deep Learning Researcher based in Gaborone.",
+  bioSub: "Investigating high-dimensional signal processing.",
+  mission: "I do research. I build software. For money. For fun. For the future.",
   email: "mehdiacho@gmail.com",
   socials: {
     linkedin: "https://linkedin.com/in/mehdiacho",
