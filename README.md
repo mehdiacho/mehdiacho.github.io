@@ -20,8 +20,14 @@
     </a>
   </p>
 
+<p>
+    <a href="https://github.com/mehdiacho/mehdiacho.github.io/actions/workflows/Initialize%20Build.yml">
+      <img src="https://github.com/mehdiacho/mehdiacho.github.io/actions/workflows/Initialize%20Build.yml/badge.svg" alt="Deploy static content to Pages" />
+    </a>
+  </p>
+
   <h3>
-    <a href="https://mehdiacho.github.io">🟢 INITIATE SYSTEM (LIVE DEMO)</a>
+    <a href="https://mehdiacho.tech">🟢 INITIATE SYSTEM (LIVE DEMO)</a>
   </h3>
 </div>
 
