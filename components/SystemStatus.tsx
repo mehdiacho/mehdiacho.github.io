@@ -23,7 +23,7 @@ const SystemStatus: React.FC = () => {
     setUptime(calculateUptime());
     const interval = setInterval(() => {
       setUptime(calculateUptime());
-    }, 60000); // Update every minute
+    }, 1000); // Update every second
 
     return () => clearInterval(interval);
   }, []);
