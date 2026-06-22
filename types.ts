@@ -1,3 +1,5 @@
+export type ProjectStatus = 'live' | 'wip' | 'concept';
+
 export interface Project {
   id: string;
   title: string;
@@ -6,6 +8,13 @@ export interface Project {
   image: string;
   link?: string;
   github?: string;
+  /**
+   * Honest build state. Drives the badge shown on the card.
+   * 'live'    - shipped, has a real demo/source
+   * 'wip'     - actively being built
+   * 'concept' - idea / not started yet (placeholder)
+   */
+  status: ProjectStatus;
 }
 
 export interface Experience {

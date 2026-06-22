@@ -39,3 +39,43 @@ body {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+
+/* ---- CRT / SCANLINE EFFECT (used by the boot intro) ---- */
+.crt-scanlines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.35) 3px,
+    rgba(0, 0, 0, 0.35) 4px
+  );
+  z-index: 1;
+}
+
+.crt-scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(0, 255, 200, 0.03) 0%, rgba(0, 0, 0, 0.45) 100%);
+  z-index: 1;
+}
+
+.crt-flicker {
+  animation: crt-flicker 4s infinite steps(1);
+}
+
+@keyframes crt-flicker {
+  0%, 96%, 100% { opacity: 1; }
+  97% { opacity: 0.92; }
+  98% { opacity: 0.98; }
+  99% { opacity: 0.9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crt-flicker { animation: none; }
+}

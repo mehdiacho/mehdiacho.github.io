@@ -2,6 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Github, ExternalLink, Cpu } from 'lucide-react';
 import { PROJECTS } from '../constants';
+import { ProjectStatus } from '../types';
+
+const STATUS_META: Record<ProjectStatus, { label: string; dot: string; text: string; border: string }> = {
+  live: { label: 'LIVE', dot: 'bg-green-500', text: 'text-green-400', border: 'border-green-900/60' },
+  wip: { label: 'WIP', dot: 'bg-amber-500 animate-pulse', text: 'text-amber-400', border: 'border-amber-900/60' },
+  concept: { label: 'CONCEPT', dot: 'bg-zinc-500', text: 'text-zinc-400', border: 'border-zinc-700' },
+};
 
 const Projects: React.FC = () => {
   return (
@@ -26,10 +33,14 @@ const Projects: React.FC = () => {
                     <Cpu size={14} className="text-zinc-500" />
                     <span className="font-mono text-xs text-zinc-400 uppercase">{project.id}</span>
                 </div>
-                <div className="flex gap-1">
-                    <div className="w-2 h-2 rounded-full bg-zinc-800 group-hover:bg-cyan-500/50 transition-colors"></div>
-                    <div className="w-2 h-2 rounded-full bg-zinc-800"></div>
-                </div>
+                {/* Honest build status */}
+                <span
+                    className={`flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 border ${STATUS_META[project.status].border} ${STATUS_META[project.status].text}`}
+                    title={`Build status: ${STATUS_META[project.status].label}`}
+                >
+                    <span className={`w-1.5 h-1.5 rounded-full ${STATUS_META[project.status].dot}`}></span>
+                    {STATUS_META[project.status].label}
+                </span>
             </div>
 
             {/* Image Placeholder */}
@@ -71,6 +82,12 @@ const Projects: React.FC = () => {
                             <ExternalLink size={14} />
                             <span>DEPLOY</span>
                         </a>
+                    )}
+                    {!project.github && !project.link && (
+                        <span className="flex items-center gap-2 text-xs font-mono text-zinc-600 italic">
+                            <span className="w-2 h-2 border border-zinc-700"></span>
+                            QUEUED // SEE_BACKLOG
+                        </span>
                     )}
                 </div>
             </div>
