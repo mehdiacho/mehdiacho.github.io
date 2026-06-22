@@ -62,26 +62,71 @@ cd portfolio-v2
 # Install dependencies
 npm install
 
+# (Optional) configure Firebase Analytics
+cp .env.example .env   # then fill in your VITE_FIREBASE_* values
+
 # Initialize development server
 npm run dev
 ```
 
+> Analytics is optional for local dev — the Firebase SDK loads lazily and
+> **no-ops when `.env` is unset**, so the site runs fine without it.
+
 ## ⌨️ 04_FEATURE_SET
 ### A. The Command Line Interface (CLI)
-The footer houses a functional terminal. Users can interact with the portfolio via text commands.
-* `help`: Lists available protocols.
-* `projects`: Loads the project module manifest.
-* `status`: Displays system uptime (calculated from birthdate).
+The footer houses a functional terminal with **command history (↑/↓)** and
+**Tab completion**. Available protocols:
+* `help` — Lists available protocols.
+* `status` — System diagnostics + uptime.
+* `projects` — Project manifest with live build status.
+* `skills` / `timeline` / `whoami` / `contact` — Section readouts.
+* `ls` / `cat <name>` — Browse sections (`cat about`, `cat P1`, …).
+* `neofetch` — System summary card.
+* `trace` (alias `whois`) — **Visitor recon.** Resolves the current visitor's
+  approximate location/ISP client-side via a keyless geo API. Nothing is
+  stored — it just shows *you* what the web sees.
+* `clear`, `date`, `echo`.
 
-### B. Dynamic Uptime
+### B. Honest Project Status
+Each project card carries a `status` badge — **`LIVE` / `WIP` / `CONCEPT`** —
+driven by `Project.status` in `constants.ts`. Placeholders are labelled
+`CONCEPT` (and `QUEUED // SEE_BACKLOG`) instead of faking links. Flip to
+`LIVE` as each tracked project ships.
+
+### C. Boot Sequence
+A short CRT/scanline boot animation plays on first load (skippable by click or
+keypress, with a "don't show again" toggle persisted to `localStorage`).
+Respects `prefers-reduced-motion`.
+
+### D. Dynamic Uptime
 The "System Status" panel calculates the user's age in real-time format:
 `UPTIME: 23Y 260D 14H`
 
-### C. The "Dream" Protocol (Easter Egg)
+### E. The "Dream" Protocol (Easter Egg)
 Hidden logic exists within the CLI.
 > *Hint: Sometimes you need `sudo` privileges to see the real vision.*
 
-## 📜 05_LICENSE
+## 📡 05_HOSTING_&_ANALYTICS
+The site currently ships to **GitHub Pages** (`Initialize Build.yml`). A
+**Firebase Hosting + Analytics** path is scaffolded for migration:
+
+| Artifact | Purpose |
+| :--- | :--- |
+| `lib/firebase.ts` | Lazy-loaded Analytics init (no-ops when unconfigured). |
+| `firebase.json` / `.firebaserc` | Hosting config + SPA rewrites. |
+| `.env.example` | The `VITE_FIREBASE_*` config keys. |
+| `.github/workflows/Deploy to Firebase.yml` | Manual deploy workflow. |
+
+**To migrate to Firebase:**
+1. Create a Firebase project, enable **Analytics** (Google Analytics).
+2. Copy the web app config into `.env` (and add the same keys + a deploy
+   service account as **GitHub Actions secrets**).
+3. Put your project id in `.firebaserc`.
+4. Run the **"Deploy to Firebase Hosting"** workflow (or `firebase deploy`).
+5. Point the `mehdiacho.tech` DNS at Firebase and **disable the Pages
+   workflow** so the two don't fight over deploys.
+
+## 📜 06_LICENSE
 **MIT License** | System is Open Source. 
 <br />
 *Built by [Mehdi Acho](https://github.com/mehdiacho). Deep Learning Researcher. Gaborone, Botswana.*

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Github, Linkedin, Mail, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -7,11 +7,18 @@ import Timeline from './components/Timeline';
 import Projects from './components/Projects';
 import Terminal from './components/Terminal';
 import Skills from './components/Skills';
+import BootSequence from './components/BootSequence';
 import { PROFILE } from './constants';
 
 const App: React.FC = () => {
+  // Show the boot intro unless the visitor opted out of it previously.
+  const [booting, setBooting] = useState<boolean>(() => {
+    try { return localStorage.getItem('tu_boot_dismissed') !== '1'; } catch { return true; }
+  });
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-200 font-sans selection:bg-cyan-900 selection:text-white pb-40">
+      {booting && <BootSequence onComplete={() => setBooting(false)} />}
       <SystemStatus />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 lg:grid-cols-12 gap-10">

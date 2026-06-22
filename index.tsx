@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
+import { initAnalytics } from './lib/firebase';
+
+// Fire-and-forget; never blocks render and no-ops when unconfigured.
+initAnalytics();
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
