@@ -25,8 +25,8 @@ export const PROJECTS: Project[] = [
     pitch: "Real-time EEG signal visualization using WebGL and Python.",
     stack: ["React", "Three.js", "Python"],
     image: "https://picsum.photos/400/250?grayscale&blur=2",
-    github: "#",
-    link: "#"
+    status: "concept"
+    // TODO(#1): on completion -> status: "live", real image + github + link
   },
   {
     id: "P2",
@@ -34,7 +34,8 @@ export const PROJECTS: Project[] = [
     pitch: "Autonomous discord bot for server administration and anomaly detection.",
     stack: ["Node.js", "Discord.js", "TensorFlow"],
     image: "https://picsum.photos/400/251?grayscale&blur=2",
-    github: "#"
+    status: "concept"
+    // TODO(#2): on completion -> status: "live", real image + github + link
   },
   {
     id: "P3",
@@ -42,7 +43,8 @@ export const PROJECTS: Project[] = [
     pitch: "Computer vision model for optimizing local traffic light patterns.",
     stack: ["OpenCV", "PyTorch", "Flutter"],
     image: "https://picsum.photos/400/252?grayscale&blur=2",
-    link: "#"
+    status: "concept"
+    // TODO(#3): on completion -> status: "live", real image + github + link
   }
 ];
 
