@@ -1,27 +1,37 @@
 /**
  * Firebase initialization + Analytics.
  *
- * Config is read from Vite env vars (VITE_FIREBASE_*) so nothing secret is
- * committed. Firebase web config values are technically public, but keeping
- * them in env keeps the repo clean and lets the build run without them.
+ * The Firebase web config below is public by design (Google ships it in client
+ * code) — security comes from Firebase rules / App Check, not from hiding these
+ * values. They're set as fallback defaults so Analytics works on any host
+ * (incl. the current GitHub Pages deploy) without extra setup. The matching
+ * VITE_FIREBASE_* env vars still override them if present (see .env.example).
  *
  * The Firebase SDK is loaded via dynamic import() so it lands in its own async
- * chunk and never blocks first paint. If config is missing (e.g. local dev with
- * no .env), this module no-ops instead of throwing, so the site always renders.
- *
- * Setup: copy .env.example -> .env and fill in the values from your Firebase
- * project settings (Project settings -> General -> Your apps -> SDK setup).
+ * chunk and never blocks first paint, and init is wrapped so analytics can
+ * never break the page.
  */
 import type { Analytics } from 'firebase/analytics';
 
+// Project: mehdi-00. Public web config — safe to commit.
+const DEFAULT_CONFIG = {
+  apiKey: 'AIzaSyBABhCSUEqUlX998QaAYICFsIP9eUKkcBc',
+  authDomain: 'mehdi-00.firebaseapp.com',
+  projectId: 'mehdi-00',
+  storageBucket: 'mehdi-00.firebasestorage.app',
+  messagingSenderId: '857525867185',
+  appId: '1:857525867185:web:562abddbe8ea24b9db8890',
+  measurementId: 'G-N70BVPZ6JP',
+};
+
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? DEFAULT_CONFIG.apiKey,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN ?? DEFAULT_CONFIG.authDomain,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID ?? DEFAULT_CONFIG.projectId,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET ?? DEFAULT_CONFIG.storageBucket,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID ?? DEFAULT_CONFIG.messagingSenderId,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID ?? DEFAULT_CONFIG.appId,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID ?? DEFAULT_CONFIG.measurementId,
 };
 
 const isConfigured = Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
