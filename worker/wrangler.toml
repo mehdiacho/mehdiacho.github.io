@@ -1,0 +1,17 @@
+# SECURE_VAULT Worker — deploy with `wrangler deploy` from this directory.
+#
+# First-time setup:
+#   1) wrangler login
+#   2) wrangler kv namespace create VAULT   # paste the returned id below
+#   3) wrangler deploy                      # note the *.workers.dev URL, then
+#      set it as DEFAULT_VAULT_API in ../lib/vault-api.ts (and/or VITE_VAULT_API_URL)
+name = "mehdi-vault"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+
+[observability]
+enabled = true
+
+[[kv_namespaces]]
+binding = "VAULT"
+id = "c7c747ec8845400b856c29a5e2d7f928"

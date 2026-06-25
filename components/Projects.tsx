@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, ExternalLink, Cpu } from 'lucide-react';
+import { Github, ExternalLink, Cpu, Lock } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { ProjectStatus } from '../types';
 
@@ -71,6 +71,15 @@ const Projects: React.FC = () => {
                 </p>
 
                 <div className="flex gap-4 mt-auto">
+                    {project.action === 'vault' && (
+                        <button
+                            onClick={() => window.dispatchEvent(new CustomEvent('vault:open', { detail: { tab: 'send' } }))}
+                            className="flex items-center gap-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors"
+                        >
+                            <Lock size={14} />
+                            <span>LAUNCH</span>
+                        </button>
+                    )}
                     {project.github && (
                         <a href={project.github} className="flex items-center gap-2 text-xs font-mono text-zinc-500 hover:text-zinc-200 transition-colors">
                             <Github size={14} />
@@ -83,7 +92,7 @@ const Projects: React.FC = () => {
                             <span>DEPLOY</span>
                         </a>
                     )}
-                    {!project.github && !project.link && (
+                    {!project.github && !project.link && !project.action && (
                         <span className="flex items-center gap-2 text-xs font-mono text-zinc-600 italic">
                             <span className="w-2 h-2 border border-zinc-700"></span>
                             QUEUED // SEE_BACKLOG
