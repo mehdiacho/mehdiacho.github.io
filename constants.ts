@@ -20,6 +20,15 @@ export const PROFILE = {
 
 export const PROJECTS: Project[] = [
   {
+    id: "P0",
+    title: "SECURE_VAULT",
+    pitch: "Zero-knowledge secret sharing. Encrypts files & .env vars in your browser, then mints a one-time access key + link with view limits and auto-expiry. Cloudflare Workers + KV.",
+    stack: ["React", "WebCrypto", "Cloudflare"],
+    image: "https://picsum.photos/seed/securevault/400/250?grayscale&blur=2",
+    status: "live",
+    action: "vault"
+  },
+  {
     id: "P1",
     title: "NEURO_VIS_V1",
     pitch: "Real-time EEG signal visualization using WebGL and Python.",

@@ -10,7 +10,7 @@ type TerminalState = 'CLOSED' | 'PEEK' | 'OPEN';
 const COMMANDS = [
   'help', 'status', 'projects', 'skills', 'timeline', 'whoami', 'contact',
   'neofetch', 'trace', 'whois', 'ls', 'cat', 'date', 'echo', 'clear',
-  'sudo dream', 'manhuascan',
+  'vault', 'sudo dream', 'manhuascan',
 ] as const;
 
 const ageYears = (): number =>
@@ -118,6 +118,12 @@ const Terminal: React.FC = () => {
 
     // Special handlers (async / stateful).
     if (cmd === 'clear') { setTimeout(() => setLines([]), 50); return; }
+    if (cmd === 'vault') {
+      const tab = arg === 'receive' || arg === 'open' || arg === 'get' ? 'receive' : 'send';
+      window.dispatchEvent(new CustomEvent('vault:open', { detail: { tab } }));
+      print({ type: 'system', content: `SECURE_VAULT // opening encrypted channel [${tab.toUpperCase()}] ...` });
+      return;
+    }
     if (lower === 'sudo dream' || cmd === 'manhuascan') { await typeWriterEffect(DREAM_LOG); return; }
     if (cmd === 'trace' || cmd === 'whois') { await runTrace(); return; }
 
@@ -137,6 +143,7 @@ const Terminal: React.FC = () => {
   ls          - List sections
   cat <name>  - Read a section (e.g. cat about, cat P1)
   neofetch    - System summary
+  vault       - Open SECURE_VAULT (share/receive encrypted secrets)
   trace       - Recon the current visitor (you)
   date        - Current system time
   echo <txt>  - Repeat input

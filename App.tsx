@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Github, Linkedin, Mail, MapPin } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Github, Linkedin, Mail, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import SystemStatus from './components/SystemStatus';
@@ -8,6 +8,8 @@ import Projects from './components/Projects';
 import Terminal from './components/Terminal';
 import Skills from './components/Skills';
 import BootSequence from './components/BootSequence';
+import Vault from './components/Vault';
+import { normalizeCode } from './lib/vault-crypto';
 import { PROFILE } from './constants';
 
 const App: React.FC = () => {
@@ -15,6 +17,34 @@ const App: React.FC = () => {
   const [booting, setBooting] = useState<boolean>(() => {
     try { return localStorage.getItem('tu_boot_dismissed') !== '1'; } catch { return true; }
   });
+
+  // SECURE_VAULT modal. Opens via the hero button, the `vault` terminal command,
+  // the project card, or automatically when arriving on a #vault=<token> link.
+  const [vaultOpen, setVaultOpen] = useState(false);
+  const [vaultTab, setVaultTab] = useState<'send' | 'receive'>('send');
+  const [vaultToken, setVaultToken] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    // Deep link: someone opened a share link — jump straight into RECEIVE.
+    const hash = window.location.hash;
+    if (hash.startsWith('#vault=')) {
+      setVaultToken(normalizeCode(hash));
+      setVaultTab('receive');
+      setVaultOpen(true);
+      // Strip the secret from the URL so it isn't left lying in the address bar.
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+
+    // Any component can request the vault via a window event (no prop drilling).
+    const onOpen = (e: Event) => {
+      const detail = (e as CustomEvent<{ tab?: 'send' | 'receive' }>).detail;
+      setVaultToken(undefined);
+      setVaultTab(detail?.tab ?? 'send');
+      setVaultOpen(true);
+    };
+    window.addEventListener('vault:open', onOpen as EventListener);
+    return () => window.removeEventListener('vault:open', onOpen as EventListener);
+  }, []);
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-200 font-sans selection:bg-cyan-900 selection:text-white pb-40">
@@ -60,6 +90,13 @@ const App: React.FC = () => {
 
             {/* Social Actions */}
             <div className="flex flex-col gap-3">
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent('vault:open', { detail: { tab: 'send' } }))}
+                className="flex items-center justify-between px-4 py-3 bg-cyan-950/30 border border-cyan-800/60 text-cyan-300 hover:border-cyan-500 hover:bg-cyan-900/30 transition-all group"
+              >
+                <span className="font-mono text-xs uppercase tracking-wider">Secure_Vault // Pass_Secrets</span>
+                <Lock size={16} className="text-cyan-600 group-hover:text-cyan-400" />
+              </button>
               <a href={`mailto:${PROFILE.email}`} className="flex items-center justify-between px-4 py-3 bg-zinc-950 border border-zinc-800 hover:border-cyan-500/50 hover:text-cyan-400 transition-all group">
                 <span className="font-mono text-xs uppercase">Init_Contact</span>
                 <Mail size={16} className="text-zinc-600 group-hover:text-cyan-500" />
@@ -98,6 +135,14 @@ const App: React.FC = () => {
 
       {/* Floating CLI Terminal */}
       <Terminal />
+
+      {/* SECURE_VAULT — zero-knowledge secret sharing */}
+      <Vault
+        open={vaultOpen}
+        initialTab={vaultTab}
+        initialToken={vaultToken}
+        onClose={() => setVaultOpen(false)}
+      />
     </div>
   );
 };

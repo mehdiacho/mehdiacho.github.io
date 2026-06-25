@@ -8,6 +8,8 @@ export interface Project {
   image: string;
   link?: string;
   github?: string;
+  /** In-site action instead of an external link. 'vault' opens SECURE_VAULT. */
+  action?: 'vault';
   /**
    * Honest build state. Drives the badge shown on the card.
    * 'live'    - shipped, has a real demo/source
