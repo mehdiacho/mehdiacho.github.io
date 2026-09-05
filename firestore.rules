@@ -1,0 +1,61 @@
+rules_version = '2';
+
+/**
+ * mehdi-00 — portfolio content.
+ *
+ * The portfolio is a static SPA with no server of its own, so the browser talks
+ * to Firestore directly and the rules ARE the API. Two facts shape everything
+ * below:
+ *
+ *   1. Anyone on the internet can read published content. That's the point —
+ *      it's a public portfolio.
+ *   2. Only Mehdi can write, ever. There is no other writer, no roles, no
+ *      invitations. So the write rule is a single identity check rather than a
+ *      permissions model that would only be more surface to get wrong.
+ *
+ * Ownership is checked on the verified Google identity rather than a uid
+ * constant, so the rules stay readable and survive an account being re-created.
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner() {
+      return request.auth != null
+          && request.auth.token.email_verified == true
+          && request.auth.token.email == 'mehdiacho@gmail.com';
+    }
+
+    // A document is publishable only if it carries the fields the site needs to
+    // render a card. Checked on write so a malformed document can never reach
+    // the public read path in the first place.
+    function validProject() {
+      let d = request.resource.data;
+      return d.title is string && d.title.size() > 0 && d.title.size() <= 60
+          && d.pitch is string && d.pitch.size() > 0 && d.pitch.size() <= 600
+          && d.status in ['live', 'wip', 'concept']
+          && d.stack is list && d.stack.size() <= 4;
+    }
+
+    match /projects/{projectId} {
+      // Drafts stay private; everything else is world-readable.
+      // `.get('draft', false)` rather than `.draft` — reading a field that a
+      // document doesn't have raises an error in rules and denies the read,
+      // which would take every project without the field down with it.
+      allow read: if isOwner() || resource.data.get('draft', false) != true;
+      allow create, update: if isOwner() && validProject();
+      allow delete: if isOwner();
+    }
+
+    // Reserved for the blog the redesign adds. Same shape, so the admin can
+    // grow into it without another rules change.
+    match /posts/{postId} {
+      allow read: if isOwner() || resource.data.get('draft', false) != true;
+      allow write: if isOwner();
+    }
+
+    // Anything not named above is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

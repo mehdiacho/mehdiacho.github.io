@@ -37,6 +37,140 @@ function rng(seed) {
 // ---------------------------------------------------------------- motifs ---
 
 const motifs = {
+  /** Spoken waveform resolving into ruled, structured lines. */
+  voice(r) {
+    let out = '';
+    const cx = 250;
+    for (let i = 0; i < 46; i++) {
+      const x = 96 + i * 6.6;
+      const h = (14 + r() * 96) * (1 - Math.abs(x - cx) / 460);
+      out += `<rect x="${x.toFixed(1)}" y="${(200 - h).toFixed(1)}" width="3" height="${(h * 2).toFixed(1)}" fill="${i % 7 === 0 ? ACCENT : DIM}" opacity="${i % 7 === 0 ? 0.9 : 0.45}"/>`;
+    }
+    out += `<path d="M 430 200 L 476 200 M 462 189 L 476 200 L 462 211" fill="none" stroke="${INK}" stroke-width="1.5" opacity="0.7"/>`;
+    for (let i = 0; i < 5; i++) {
+      const y = 128 + i * 32;
+      const w = i === 0 ? 150 : 96 + r() * 106;
+      out += `<rect x="516" y="${y}" width="${w.toFixed(0)}" height="7" fill="${i === 0 ? ACCENT : DIM}" opacity="${i === 0 ? 0.85 : 0.5}"/>`;
+      if (i > 1) out += `<rect x="500" y="${y - 1}" width="9" height="9" fill="none" stroke="${ACCENT}" stroke-width="1.4" opacity="0.7"/>`;
+    }
+    return out;
+  },
+
+  /** Hex battlefield with facing arcs — the tactics grid. */
+  hexfield(r) {
+    let out = '';
+    const R = 34;
+    const hex = (cx, cy) => {
+      const p = [];
+      for (let k = 0; k < 6; k++) {
+        const a = (Math.PI / 180) * (60 * k - 30);
+        p.push(`${(cx + R * Math.cos(a)).toFixed(1)},${(cy + R * Math.sin(a)).toFixed(1)}`);
+      }
+      return p.join(' ');
+    };
+    for (let row = 0; row < 5; row++) {
+      for (let col = 0; col < 9; col++) {
+        const cx = 120 + col * 59 + (row % 2 ? 29.5 : 0);
+        const cy = 92 + row * 51;
+        const hot = r() > 0.84;
+        out += `<polygon points="${hex(cx, cy)}" fill="${hot ? ACCENT : 'none'}" fill-opacity="${hot ? 0.14 : 0}" stroke="${hot ? ACCENT : DIM}" stroke-width="${hot ? 1.7 : 1}" opacity="${hot ? 0.95 : 0.42}"/>`;
+      }
+    }
+    out += `<circle cx="297" cy="194" r="15" fill="${BG}" stroke="${ACCENT}" stroke-width="2.2"/>`;
+    out += `<path d="M 297 194 L 356 194 M 344 184 L 356 194 L 344 204" fill="none" stroke="${ACCENT}" stroke-width="2" opacity="0.85"/>`;
+    out += `<path d="M 268 165 A 42 42 0 0 1 268 223" fill="none" stroke="${INK}" stroke-width="1.4" opacity="0.55" stroke-dasharray="4 4"/>`;
+    return out;
+  },
+
+  /** A drawing sheet: title block, dimension line, section marks. */
+  sheet(r) {
+    let out = `<rect x="96" y="76" width="608" height="248" fill="none" stroke="${DIM}" stroke-width="1.4" opacity="0.75"/>`;
+    out += `<rect x="110" y="90" width="580" height="220" fill="none" stroke="${DIM}" stroke-width="1" opacity="0.4"/>`;
+    // title block, bottom right
+    out += `<rect x="506" y="238" width="184" height="72" fill="none" stroke="${ACCENT}" stroke-width="1.5" opacity="0.85"/>`;
+    for (let i = 1; i < 4; i++) out += `<line x1="506" y1="${238 + i * 18}" x2="690" y2="${238 + i * 18}" stroke="${ACCENT}" stroke-width="0.9" opacity="0.5"/>`;
+    out += `<line x1="586" y1="238" x2="586" y2="310" stroke="${ACCENT}" stroke-width="0.9" opacity="0.5"/>`;
+    // plan geometry
+    out += `<rect x="150" y="126" width="150" height="96" fill="none" stroke="${INK}" stroke-width="1.6" opacity="0.8"/>`;
+    out += `<rect x="176" y="152" width="98" height="44" fill="none" stroke="${DIM}" stroke-width="1" opacity="0.6"/>`;
+    for (let i = 0; i < 6; i++) {
+      const x = 330 + i * 26;
+      out += `<line x1="${x}" y1="${120 + r() * 10}" x2="${x}" y2="${212 - r() * 10}" stroke="${DIM}" stroke-width="1" opacity="0.45"/>`;
+    }
+    // dimension line with ticks
+    out += `<line x1="150" y1="248" x2="300" y2="248" stroke="${ACCENT}" stroke-width="1.2" opacity="0.9"/>`;
+    out += `<path d="M 150 242 l 0 12 M 300 242 l 0 12" stroke="${ACCENT}" stroke-width="1.2" opacity="0.9"/>`;
+    out += `<circle cx="126" cy="106" r="9" fill="none" stroke="${ACCENT}" stroke-width="1.4" opacity="0.8"/>`;
+    return out;
+  },
+
+  /** Two stores with an arrow pulling one way — the missing direction. */
+  pull(r) {
+    let out = '';
+    const stack = (x, label) => {
+      let s = '';
+      for (let i = 0; i < 4; i++) {
+        s += `<rect x="${x}" y="${118 + i * 34}" width="140" height="24" fill="none" stroke="${DIM}" stroke-width="1.2" opacity="0.6"/>`;
+        s += `<rect x="${x + 8}" y="${125 + i * 34}" width="${(40 + r() * 78).toFixed(0)}" height="6" fill="${DIM}" opacity="0.5"/>`;
+      }
+      return s;
+    };
+    out += stack(112);
+    out += stack(548);
+    // the greyed-out push, and the accented pull this project adds
+    out += `<path d="M 268 148 L 536 148" fill="none" stroke="${DIM}" stroke-width="1.4" opacity="0.35" stroke-dasharray="5 5"/>`;
+    out += `<path d="M 524 140 L 536 148 L 524 156" fill="none" stroke="${DIM}" stroke-width="1.4" opacity="0.35"/>`;
+    out += `<path d="M 536 236 L 268 236" fill="none" stroke="${ACCENT}" stroke-width="2.4"/>`;
+    out += `<path d="M 280 227 L 268 236 L 280 245" fill="none" stroke="${ACCENT}" stroke-width="2.4"/>`;
+    out += `<circle cx="402" cy="236" r="17" fill="${BG}" stroke="${ACCENT}" stroke-width="1.8"/>`;
+    out += `<path d="M 402 228 L 402 244 M 395 238 L 402 245 L 409 238" fill="none" stroke="${ACCENT}" stroke-width="1.8"/>`;
+    return out;
+  },
+
+  /** Seats around a ring, credit flowing between them. */
+  seats(r) {
+    let out = '';
+    const cx = 400, cy = 200, rad = 108;
+    const n = 12;
+    const pts = [];
+    for (let i = 0; i < n; i++) {
+      const a = (Math.PI * 2 * i) / n - Math.PI / 2;
+      pts.push([cx + rad * Math.cos(a), cy + rad * Math.sin(a)]);
+    }
+    out += `<circle cx="${cx}" cy="${cy}" r="${rad}" fill="none" stroke="${DIM}" stroke-width="1" opacity="0.4" stroke-dasharray="3 6"/>`;
+    for (const [i, [x, y]] of pts.entries()) {
+      const filled = r() > 0.35;
+      out += `<rect x="${(x - 11).toFixed(1)}" y="${(y - 11).toFixed(1)}" width="22" height="22" fill="${filled ? ACCENT : BG}" fill-opacity="${filled ? 0.2 : 1}" stroke="${filled ? ACCENT : DIM}" stroke-width="1.5" opacity="${filled ? 1 : 0.5}"/>`;
+      if (filled) out += `<path d="M ${(x - 5).toFixed(1)} ${y.toFixed(1)} l 4 5 l 7 -9" fill="none" stroke="${ACCENT}" stroke-width="1.7"/>`;
+      const to = pts[(i + 5) % n];
+      if (r() > 0.68) out += `<line x1="${x.toFixed(1)}" y1="${y.toFixed(1)}" x2="${to[0].toFixed(1)}" y2="${to[1].toFixed(1)}" stroke="${ACCENT}" stroke-width="0.9" opacity="0.28"/>`;
+    }
+    out += `<text x="${cx}" y="${cy + 7}" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="21" fill="${INK}" opacity="0.75">14d</text>`;
+    return out;
+  },
+
+  /** Basket totals resolving into a forecast that runs past them. */
+  forecast(r) {
+    let out = '';
+    const base = 292;
+    const vals = [];
+    for (let i = 0; i < 9; i++) vals.push(46 + r() * 96);
+    for (const [i, v] of vals.entries()) {
+      const x = 108 + i * 40;
+      out += `<rect x="${x}" y="${(base - v).toFixed(1)}" width="22" height="${v.toFixed(1)}" fill="${DIM}" opacity="0.42"/>`;
+      out += `<rect x="${x}" y="${(base - v).toFixed(1)}" width="22" height="4" fill="${ACCENT}" opacity="0.75"/>`;
+    }
+    out += `<line x1="96" y1="${base}" x2="704" y2="${base}" stroke="${DIM}" stroke-width="1.2" opacity="0.6"/>`;
+    // the projection: dashed, climbing past the measured bars
+    let d = `M 119 ${(base - vals[0]).toFixed(1)}`;
+    for (let i = 1; i < 9; i++) d += ` L ${119 + i * 40} ${(base - vals[i]).toFixed(1)}`;
+    d += ` L 588 132 L 668 104`;
+    out += `<path d="${d}" fill="none" stroke="${ACCENT}" stroke-width="2" opacity="0.9" stroke-dasharray="0 0"/>`;
+    out += `<path d="M 508 ${(base - vals[8]).toFixed(1)} L 668 104" fill="none" stroke="${ACCENT}" stroke-width="2" opacity="0.5" stroke-dasharray="5 5"/>`;
+    out += `<circle cx="668" cy="104" r="6" fill="${BG}" stroke="${ACCENT}" stroke-width="2"/>`;
+    return out;
+  },
+
   /** EEG traces collapsing into a graph. */
   wave(r) {
     let out = '';
@@ -308,20 +442,26 @@ function cover({ slug, id, label, motif }) {
 // Order and ids must match `PROJECTS` in `constants.ts` — the id is baked into
 // the artwork, so reordering the cards means re-running this script.
 const COVERS = [
-  { slug: 'grids-to-graphs', id: 'P01', label: 'GRIDS_TO_GRAPHS', motif: 'wave' },
+  { slug: 'yap',             id: 'P01', label: 'YAP',             motif: 'voice' },
   { slug: 'tether',          id: 'P02', label: 'TETHER',          motif: 'handshake' },
   { slug: 'dither',          id: 'P03', label: 'DITHER',          motif: 'dither' },
-  { slug: 'mmila',           id: 'P04', label: 'MMILA',           motif: 'chain' },
-  { slug: 'fish-player',     id: 'P05', label: 'FISH_PLAYER',     motif: 'relay' },
+  { slug: 'machine-strike',  id: 'P04', label: 'MACHINE_STRIKE',  motif: 'hexfield' },
+  { slug: 'grids-to-graphs', id: 'P05', label: 'GRIDS_TO_GRAPHS', motif: 'wave' },
   { slug: 'fpx-now',         id: 'P06', label: 'FPX_NOW',         motif: 'prompt' },
-  { slug: 'agentic-browser', id: 'P07', label: 'AGENTIC_BROWSER', motif: 'boundary' },
+  { slug: 'filmarr',         id: 'P07', label: 'FILMARR',         motif: 'deck' },
   { slug: 'kinkeep',         id: 'P08', label: 'KINKEEP',         motif: 'vaultDocs' },
   { slug: 'secure-vault',    id: 'P09', label: 'SECURE_VAULT',    motif: 'seal' },
-  { slug: 'filmarr',         id: 'P10', label: 'FILMARR',         motif: 'deck' },
-  { slug: 'highrise',        id: 'P11', label: 'HIGHRISE',        motif: 'board' },
+  { slug: 'highrise',        id: 'P10', label: 'HIGHRISE',        motif: 'board' },
+  { slug: 'fish-player',     id: 'P11', label: 'FISH_PLAYER',     motif: 'relay' },
   { slug: 'blackwall',       id: 'P12', label: 'BLACKWALL',       motif: 'receipt' },
-  { slug: 'bibverify',       id: 'P13', label: 'BIBVERIFY',       motif: 'diff' },
+  { slug: 'drafting-table',  id: 'P13', label: 'DRAFTING_TABLE',  motif: 'sheet' },
   { slug: 'tally',           id: 'P14', label: 'TALLY',           motif: 'counter' },
+  { slug: 'bibverify',       id: 'P15', label: 'BIBVERIFY',       motif: 'diff' },
+  { slug: 'aistudio-sync',   id: 'P16', label: 'AISTUDIO_SYNC',   motif: 'pull' },
+  { slug: 'a-testers',       id: 'P17', label: 'A_TESTERS',       motif: 'seats' },
+  { slug: 'smartspend',      id: 'P18', label: 'SMARTSPEND',      motif: 'forecast' },
+  { slug: 'mmila',           id: 'P19', label: 'MMILA',           motif: 'chain' },
+  { slug: 'agentic-browser', id: 'P20', label: 'AGENTIC_BROWSER', motif: 'boundary' },
 ];
 
 mkdirSync(OUT, { recursive: true });

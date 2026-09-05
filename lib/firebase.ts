@@ -24,7 +24,11 @@ const DEFAULT_CONFIG = {
   measurementId: 'G-N70BVPZ6JP',
 };
 
-const firebaseConfig = {
+/**
+ * Exported so the Firestore-backed project list can reuse the same app
+ * instance instead of initializing a second one.
+ */
+export const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? DEFAULT_CONFIG.apiKey,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN ?? DEFAULT_CONFIG.authDomain,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID ?? DEFAULT_CONFIG.projectId,

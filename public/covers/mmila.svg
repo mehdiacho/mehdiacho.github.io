@@ -11,7 +11,7 @@
        and the stack chips sit across the bottom of this band, so a label here
        would be redundant at best and half-occluded at worst. -->
   <text x="28" y="100" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
-        font-size="17" fill="#06b6d4" letter-spacing="3" opacity="0.8">P04</text>
+        font-size="17" fill="#06b6d4" letter-spacing="3" opacity="0.8">P19</text>
   <path d="M 14 80 h 26 M 14 80 v 26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
   <path d="M 786 320 h -26 M 786 320 v -26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
 </svg>

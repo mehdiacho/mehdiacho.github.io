@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 68 800 264" width="800" height="264" role="img" aria-label="AISTUDIO_SYNC">
+  <defs>
+    <pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#18181b" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect x="0" y="68" width="800" height="264" fill="#09090b"/>
+  <rect x="0" y="68" width="800" height="264" fill="url(#g)"/>
+  <rect x="112" y="118" width="140" height="24" fill="none" stroke="#3f3f46" stroke-width="1.2" opacity="0.6"/><rect x="120" y="125" width="85" height="6" fill="#3f3f46" opacity="0.5"/><rect x="112" y="152" width="140" height="24" fill="none" stroke="#3f3f46" stroke-width="1.2" opacity="0.6"/><rect x="120" y="159" width="112" height="6" fill="#3f3f46" opacity="0.5"/><rect x="112" y="186" width="140" height="24" fill="none" stroke="#3f3f46" stroke-width="1.2" opacity="0.6"/><rect x="120" y="193" width="78" height="6" fill="#3f3f46" opacity="0.5"/><rect x="112" y="220" width="140" height="24" fill="none" stroke="#3f3f46" stroke-width="1.2" opacity="0.6"/><rect x="120" y="227" width="103" height="6" fill="#3f3f46" opacity="0.5"/><rect x="548" y="118" width="140" height="24" fill="none" stroke="#3f3f46" stroke-width="1.2" opacity="0.6"/><rect x="556" y="125" width="69" height="6" fill="#3f3f46" opacity="0.5"/><rect x="548" y="152" width="140" height="24" fill="none" stroke="#3f3f46" stroke-width="1.2" opacity="0.6"/><rect x="556" y="159" width="118" height="6" fill="#3f3f46" opacity="0.5"/><rect x="548" y="186" width="140" height="24" fill="none" stroke="#3f3f46" stroke-width="1.2" opacity="0.6"/><rect x="556" y="193" width="41" height="6" fill="#3f3f46" opacity="0.5"/><rect x="548" y="220" width="140" height="24" fill="none" stroke="#3f3f46" stroke-width="1.2" opacity="0.6"/><rect x="556" y="227" width="88" height="6" fill="#3f3f46" opacity="0.5"/><path d="M 268 148 L 536 148" fill="none" stroke="#3f3f46" stroke-width="1.4" opacity="0.35" stroke-dasharray="5 5"/><path d="M 524 140 L 536 148 L 524 156" fill="none" stroke="#3f3f46" stroke-width="1.4" opacity="0.35"/><path d="M 536 236 L 268 236" fill="none" stroke="#06b6d4" stroke-width="2.4"/><path d="M 280 227 L 268 236 L 280 245" fill="none" stroke="#06b6d4" stroke-width="2.4"/><circle cx="402" cy="236" r="17" fill="#09090b" stroke="#06b6d4" stroke-width="1.8"/><path d="M 402 228 L 402 244 M 395 238 L 402 245 L 409 238" fill="none" stroke="#06b6d4" stroke-width="1.8"/>
+  <!-- Only the id is drawn. The card already prints the title below the image,
+       and the stack chips sit across the bottom of this band, so a label here
+       would be redundant at best and half-occluded at worst. -->
+  <text x="28" y="100" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
+        font-size="17" fill="#06b6d4" letter-spacing="3" opacity="0.8">P16</text>
+  <path d="M 14 80 h 26 M 14 80 v 26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+  <path d="M 786 320 h -26 M 786 320 v -26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+</svg>

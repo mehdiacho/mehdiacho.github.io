@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, ExternalLink, Cpu, Lock, EyeOff } from 'lucide-react';
-import { PROJECTS } from '../constants';
-import { ProjectStatus } from '../types';
+import { Github, ExternalLink, Cpu, Lock, EyeOff, ArrowUpRight } from 'lucide-react';
+import { useProjects } from '../lib/projects-store';
+import { Project, ProjectStatus } from '../types';
 
 const STATUS_META: Record<ProjectStatus, { label: string; dot: string; text: string; border: string }> = {
   live: { label: 'LIVE', dot: 'bg-green-500', text: 'text-green-400', border: 'border-green-900/60' },
@@ -10,7 +10,38 @@ const STATUS_META: Record<ProjectStatus, { label: string; dot: string; text: str
   concept: { label: 'CONCEPT', dot: 'bg-zinc-500', text: 'text-zinc-400', border: 'border-zinc-700' },
 };
 
+/**
+ * The card's primary action. Everything is a label plus a destination — the
+ * label carries the promise, so a Play tester flow doesn't have to pretend to
+ * be a "deploy" link. The vault is the one in-site destination.
+ */
+const ActionButton: React.FC<{ action: NonNullable<Project['action']> }> = ({ action }) => {
+  const className =
+    'flex items-center gap-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors';
+
+  if (action.vault) {
+    return (
+      <button
+        onClick={() => window.dispatchEvent(new CustomEvent('vault:open', { detail: { tab: 'send' } }))}
+        className={className}
+      >
+        <Lock size={14} />
+        <span>{action.text}</span>
+      </button>
+    );
+  }
+
+  return (
+    <a href={action.href} target="_blank" rel="noopener noreferrer" className={className}>
+      <ArrowUpRight size={14} />
+      <span>{action.text}</span>
+    </a>
+  );
+};
+
 const Projects: React.FC = () => {
+  const { projects } = useProjects();
+
   return (
     <div className="w-full">
       <h3 className="font-mono text-cyan-500 text-sm tracking-widest uppercase mb-6 border-b border-zinc-800 pb-2">
@@ -18,12 +49,14 @@ const Projects: React.FC = () => {
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {PROJECTS.map((project, index) => (
+        {projects.map((project, index) => (
           <motion.div
             key={project.id}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
+            // Stagger only across the first screenful; past that the delay
+            // would stack into seconds of dead time on a 20-card grid.
+            transition={{ delay: Math.min(index, 6) * 0.08 }}
             viewport={{ once: true }}
             className="group relative bg-zinc-900 border border-zinc-800 p-0 overflow-hidden hover:border-cyan-500/50 transition-colors duration-300"
           >
@@ -43,12 +76,13 @@ const Projects: React.FC = () => {
                 </span>
             </div>
 
-            {/* Image Placeholder */}
+            {/* Cover art */}
             <div className="relative h-32 w-full overflow-hidden border-b border-zinc-800/50">
                 <div className="absolute inset-0 bg-cyan-900/10 z-10 group-hover:bg-transparent transition-colors duration-500"></div>
-                <img 
-                    src={project.image} 
-                    alt={project.title}
+                <img
+                    src={project.image}
+                    alt=""
+                    loading="lazy"
                     className="w-full h-full object-cover filter grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105"
                 />
                 {/* Tech Stack Overlay */}
@@ -70,16 +104,8 @@ const Projects: React.FC = () => {
                     {project.pitch}
                 </p>
 
-                <div className="flex gap-4 mt-auto">
-                    {project.action === 'vault' && (
-                        <button
-                            onClick={() => window.dispatchEvent(new CustomEvent('vault:open', { detail: { tab: 'send' } }))}
-                            className="flex items-center gap-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors"
-                        >
-                            <Lock size={14} />
-                            <span>LAUNCH</span>
-                        </button>
-                    )}
+                <div className="flex flex-wrap gap-x-4 gap-y-2 mt-auto">
+                    {project.action && <ActionButton action={project.action} />}
                     {project.github && (
                         <a
                             href={project.github}
@@ -118,7 +144,7 @@ const Projects: React.FC = () => {
                     )}
                 </div>
             </div>
-            
+
             {/* Corner Accent */}
             <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-zinc-700 group-hover:border-cyan-500 transition-colors"></div>
           </motion.div>

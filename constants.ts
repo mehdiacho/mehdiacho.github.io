@@ -19,7 +19,15 @@ export const PROFILE = {
 };
 
 /**
- * Real work only — every entry here maps to a repo that exists.
+ * Fallback project list.
+ *
+ * At runtime the site prefers the `projects` collection in Firestore (managed
+ * from admin.mehdiacho.tech) and only falls back to this array when Firestore
+ * is unreachable or empty — so the page still renders offline, on a cold cache,
+ * or if the database is wiped. Keep it a truthful mirror of what's published.
+ *
+ * Real work only: every entry maps to a repo that exists, and every URL here
+ * has been requested and returned 200.
  *
  * Ordering is deliberate: clickable things are salted through the list so a
  * visitor hits something they can try without scrolling to the bottom. The
@@ -29,10 +37,10 @@ export const PROFILE = {
 export const PROJECTS: Project[] = [
   {
     id: "P01",
-    title: "GRIDS_TO_GRAPHS",
-    pitch: "MSc research. Benchmarks a graph convolutional network against EEGNet on 3-class inner-speech vowel decoding — testing whether electrode geometry beats the grid a CNN assumes.",
-    stack: ["PyTorch", "GNN", "EEG"],
-    image: "/covers/grids-to-graphs.svg",
+    title: "YAP",
+    pitch: "Voice-first idea capture for Android. Speak the thought, get it back structured — title, sections, action items pulled out. Kotlin + Compose on Firebase, with a desktop companion on the same library.",
+    stack: ["Kotlin", "Compose", "Firebase"],
+    image: "/covers/yap.svg",
     status: "wip",
     private: true
   },
@@ -57,26 +65,26 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "P04",
-    title: "MMILA",
-    pitch: "Procurement transparency for a Gaborone residential development. Awarding anything but the cheapest compliant quote demands a written justification, appended to a hash-chained ledger.",
-    stack: ["FastAPI", "Postgres", "Claude"],
-    image: "/covers/mmila.svg",
+    title: "MACHINE_STRIKE",
+    pitch: "The Horizon tactics board game, rebuilt for the browser. Turn-based combat on a hex grid — machine roster, terrain and overpower rules driven from data, in a typed monorepo over Cloudflare Workers.",
+    stack: ["TypeScript", "Workers", "Monorepo"],
+    image: "/covers/machine-strike.svg",
     status: "wip",
     private: true
   },
   {
     id: "P05",
-    title: "FISH_PLAYER",
-    pitch: "Type a line on your phone, hear it in your own cloned voice from a speaker in another building. The server renders and holds the queue; the PC long-polls, so no port is ever opened.",
-    stack: ["TypeScript", "Docker", "Tailnet"],
-    image: "/covers/fish-player.svg",
-    status: "live",
+    title: "GRIDS_TO_GRAPHS",
+    pitch: "MSc research. Benchmarks a graph convolutional network against EEGNet on 3-class inner-speech vowel decoding — testing whether electrode geometry beats the grid a CNN assumes.",
+    stack: ["PyTorch", "GNN", "EEG"],
+    image: "/covers/grids-to-graphs.svg",
+    status: "wip",
     private: true
   },
   {
     id: "P06",
     title: "FPX_NOW",
-    pitch: "Published npm CLI. Caches and aliases the npx invocations you keep retyping, so `npx vite build --mode prod` collapses into `fpx build`.",
+    pitch: "Published npm CLI. Caches and aliases the npx invocations you keep retyping, so a long build incantation collapses into a two-word command.",
     stack: ["Node", "CLI", "npm"],
     image: "/covers/fpx-now.svg",
     status: "live",
@@ -85,10 +93,10 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "P07",
-    title: "AGENTIC_BROWSER",
-    pitch: "Windows-first agentic browser on Electron. The agent package is physically unable to import Electron — enforced by a dependency-cruiser CI gate rather than a code review.",
-    stack: ["Electron", "TypeScript", "React"],
-    image: "/covers/agentic-browser.svg",
+    title: "FILMARR",
+    pitch: "Swipe-first film and TV tracker. Tinder-style triage feeding a graph recommender, with Letterboxd export. Native Kotlin + Compose on a Firebase and Cloud Run backend.",
+    stack: ["Kotlin", "Compose", "Cloud Run"],
+    image: "/covers/filmarr.svg",
     status: "wip",
     private: true
   },
@@ -108,24 +116,24 @@ export const PROJECTS: Project[] = [
     stack: ["React", "WebCrypto", "Cloudflare"],
     image: "/covers/secure-vault.svg",
     status: "live",
-    action: "vault"
+    action: { text: "LAUNCH", vault: true }
   },
   {
     id: "P10",
-    title: "FILMARR",
-    pitch: "Swipe-based film and TV tracker. Tinder-style triage feeding a graph recommender, with Letterboxd export. React front end over a FastAPI + pgvector monorepo.",
-    stack: ["React", "FastAPI", "pgvector"],
-    image: "/covers/filmarr.svg",
-    status: "wip",
-    private: true
-  },
-  {
-    id: "P11",
     title: "HIGHRISE",
     pitch: "Monopoly-family multiplayer board game — 2–4 players plus bots. Server-authoritative, built on one pure reducer engine shared by client and server over Socket.io.",
     stack: ["TypeScript", "Fastify", "Socket.io"],
     image: "/covers/highrise.svg",
     status: "wip",
+    private: true
+  },
+  {
+    id: "P11",
+    title: "FISH_PLAYER",
+    pitch: "Type a line on your phone, hear it in your own cloned voice from a speaker in another building. The server renders and holds the queue; the PC long-polls, so no port is ever opened.",
+    stack: ["TypeScript", "Docker", "Tailnet"],
+    image: "/covers/fish-player.svg",
+    status: "live",
     private: true
   },
   {
@@ -135,15 +143,15 @@ export const PROJECTS: Project[] = [
     stack: ["React", "WebCrypto", "Vite"],
     image: "/covers/blackwall.svg",
     status: "live",
-    link: "https://prints.mehdiacho.tech",
+    action: { text: "LAUNCH", href: "https://prints.mehdiacho.tech" },
     private: true
   },
   {
     id: "P13",
-    title: "BIBVERIFY",
-    pitch: "Paste a .bib file and check every entry against the official DOI registry. Field-by-field diff against CrossRef/DataCite, accept-or-keep per field, export a clean file.",
-    stack: ["React", "Express", "CrossRef"],
-    image: "/covers/bibverify.svg",
+    title: "DRAFTING_TABLE",
+    pitch: "A design system for technical drawing sets that get printed, pinned to a wall and read for months. Extracted from an 18-sheet A2 greenhouse blueprint set, and it carries that job's rule: never let a guess look like a fact.",
+    stack: ["Design System", "Tokens", "Print"],
+    image: "/covers/drafting-table.svg",
     status: "wip",
     private: true
   },
@@ -156,6 +164,60 @@ export const PROJECTS: Project[] = [
     status: "live",
     github: "https://github.com/mehdiacho/tally-counter",
     link: "https://mehdiacho.github.io/tally-counter/"
+  },
+  {
+    id: "P15",
+    title: "BIBVERIFY",
+    pitch: "Paste a .bib file and check every entry against the official DOI registry. Field-by-field diff against CrossRef/DataCite, accept-or-keep per field, export a clean file.",
+    stack: ["React", "Express", "CrossRef"],
+    image: "/covers/bibverify.svg",
+    status: "wip",
+    private: true
+  },
+  {
+    id: "P16",
+    title: "AISTUDIO_SYNC",
+    pitch: "Google AI Studio can push prompts to GitHub but never pull them back. This adds a Pull button straight into its toolbar, so edits made in any local editor sync in.",
+    stack: ["Chrome MV3", "TypeScript"],
+    image: "/covers/aistudio-sync.svg",
+    status: "wip",
+    private: true
+  },
+  {
+    id: "P17",
+    title: "A_TESTERS",
+    pitch: "A seat exchange for Google Play closed testing. Test another developer's app to earn seats, spend seats to get your own tested — solving the twelve-testers-for-fourteen-days wall solo devs hit.",
+    stack: ["TypeScript", "Kotlin", "Firebase"],
+    image: "/covers/a-testers.svg",
+    status: "wip",
+    private: true
+  },
+  {
+    id: "P18",
+    title: "SMARTSPEND",
+    pitch: "Bridges the weekly shop and the semester budget. Built for buying in bulk — unit-price comparison, forecast spend across months, installable and offline-first.",
+    stack: ["React", "Firebase", "PWA"],
+    image: "/covers/smartspend.svg",
+    status: "wip",
+    private: true
+  },
+  {
+    id: "P19",
+    title: "MMILA",
+    pitch: "Procurement transparency for a Gaborone residential development. Awarding anything but the cheapest compliant quote demands a written justification, appended to a hash-chained ledger.",
+    stack: ["FastAPI", "Postgres", "Claude"],
+    image: "/covers/mmila.svg",
+    status: "wip",
+    private: true
+  },
+  {
+    id: "P20",
+    title: "AGENTIC_BROWSER",
+    pitch: "An early prototype where the architecture is the point: the agent package is physically unable to import Electron, enforced by a dependency-cruiser CI gate rather than a code review. The engine tier underneath it stays swappable.",
+    stack: ["Electron", "TypeScript", "React"],
+    image: "/covers/agentic-browser.svg",
+    status: "concept",
+    private: true
   }
 ];
 

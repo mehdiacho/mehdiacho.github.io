@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Terminal as TerminalIcon, ChevronsUp, ChevronsDown, Eye, EyeClosed } from 'lucide-react';
 import { TerminalLine } from '../types';
-import { PROJECTS, PROFILE, SKILLS, TIMELINE, DREAM_LOG } from '../constants';
+import { PROFILE, SKILLS, TIMELINE, DREAM_LOG } from '../constants';
+import { useProjects } from '../lib/projects-store';
 import { track } from '../lib/firebase';
 
 type TerminalState = 'CLOSED' | 'PEEK' | 'OPEN';
@@ -26,6 +27,8 @@ const Terminal: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1); // -1 = current/empty line
+  // Same source the cards use, so `ls` never disagrees with the grid.
+  const { projects: PROJECTS } = useProjects();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -72,13 +75,14 @@ const Terminal: React.FC = () => {
     const p = PROJECTS.find(pr => normalizeId(pr.id) === normalizeId(id));
     if (!p) return { type: 'output', content: `cat: ${id}: No such file or directory` };
     const source = p.github ?? (p.private ? 'private — on request' : 'n/a');
+    const demo = p.link ?? (p.action?.href ?? (p.action?.vault ? 'in-site — run `vault`' : 'n/a'));
     return {
       type: 'output',
       content:
         `[${p.id}] ${p.title}  <${p.status.toUpperCase()}>\n` +
         `  ${p.pitch}\n` +
         `  stack: ${p.stack.join(', ')}\n` +
-        `  source: ${source}   demo: ${p.link ?? 'n/a'}`,
+        `  source: ${source}   demo: ${demo}`,
     };
   };
 
@@ -200,7 +204,7 @@ const Terminal: React.FC = () => {
         response.push({ type: 'output', content: 'about.md   projects/   skills.cfg   timeline.log   contact.vcf' });
         break;
       case 'cat': {
-        if (!arg) { response.push({ type: 'output', content: 'usage: cat <name>   (about | projects | skills | timeline | contact | P1..P14)' }); break; }
+        if (!arg) { response.push({ type: 'output', content: 'usage: cat <name>   (about | projects | skills | timeline | contact | P1..P20)' }); break; }
         const key = arg.replace(/\.(md|cfg|log|vcf)$/,'').replace(/\/$/,'');
         if (/^p\d+$/i.test(key)) { response.push(projectDetail(key)); break; }
         switch (key) {

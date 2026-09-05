@@ -1,5 +1,13 @@
 {
   "projects": {
     "default": "mehdi-00"
+  },
+  "targets": {
+    "mehdi-00": {
+      "hosting": {
+        "admin": ["mehdi-00-admin"],
+        "site": ["mehdi-00"]
+      }
+    }
   }
 }
