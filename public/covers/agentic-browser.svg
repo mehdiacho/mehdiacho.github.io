@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 68 800 264" width="800" height="264" role="img" aria-label="AGENTIC_BROWSER">
+  <defs>
+    <pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#18181b" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect x="0" y="68" width="800" height="264" fill="#09090b"/>
+  <rect x="0" y="68" width="800" height="264" fill="url(#g)"/>
+  <rect x="120" y="108" width="560" height="38" fill="none" stroke="#06b6d4" stroke-width="1.5"/><text x="140" y="133" font-family="ui-monospace,monospace" font-size="15" fill="#06b6d4" opacity="1">agent</text><rect x="120" y="160" width="560" height="38" fill="none" stroke="#3f3f46" stroke-width="1.5"/><text x="140" y="185" font-family="ui-monospace,monospace" font-size="15" fill="#a1a1aa" opacity="0.6">engine-core</text><rect x="120" y="212" width="560" height="38" fill="none" stroke="#3f3f46" stroke-width="1.5"/><text x="140" y="237" font-family="ui-monospace,monospace" font-size="15" fill="#a1a1aa" opacity="0.6">engine-electron</text><rect x="120" y="264" width="560" height="38" fill="none" stroke="#3f3f46" stroke-width="1.5"/><text x="140" y="289" font-family="ui-monospace,monospace" font-size="15" fill="#a1a1aa" opacity="0.6">shell</text><line x1="96" y1="196" x2="704" y2="196" stroke="#06b6d4" stroke-width="2" stroke-dasharray="10 7"/><text x="600" y="188" font-family="ui-monospace,monospace" font-size="13" fill="#06b6d4">no imports</text>
+  <!-- Only the id is drawn. The card already prints the title below the image,
+       and the stack chips sit across the bottom of this band, so a label here
+       would be redundant at best and half-occluded at worst. -->
+  <text x="28" y="100" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
+        font-size="17" fill="#06b6d4" letter-spacing="3" opacity="0.8">P07</text>
+  <path d="M 14 80 h 26 M 14 80 v 26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+  <path d="M 786 320 h -26 M 786 320 v -26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+</svg>

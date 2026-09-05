@@ -65,16 +65,20 @@ const Terminal: React.FC = () => {
   const print = (...newLines: TerminalLine[]) =>
     setLines(prev => [...prev, ...newLines]);
 
+  /** `p4` and `p04` should both find P04 — nobody types the leading zero. */
+  const normalizeId = (id: string) => id.trim().toLowerCase().replace(/^p0*/, 'p');
+
   const projectDetail = (id: string): TerminalLine => {
-    const p = PROJECTS.find(pr => pr.id.toLowerCase() === id.toLowerCase());
+    const p = PROJECTS.find(pr => normalizeId(pr.id) === normalizeId(id));
     if (!p) return { type: 'output', content: `cat: ${id}: No such file or directory` };
+    const source = p.github ?? (p.private ? 'private — on request' : 'n/a');
     return {
       type: 'output',
       content:
         `[${p.id}] ${p.title}  <${p.status.toUpperCase()}>\n` +
         `  ${p.pitch}\n` +
         `  stack: ${p.stack.join(', ')}\n` +
-        `  source: ${p.github ?? 'n/a'}   demo: ${p.link ?? 'n/a'}`,
+        `  source: ${source}   demo: ${p.link ?? 'n/a'}`,
     };
   };
 
@@ -196,7 +200,7 @@ const Terminal: React.FC = () => {
         response.push({ type: 'output', content: 'about.md   projects/   skills.cfg   timeline.log   contact.vcf' });
         break;
       case 'cat': {
-        if (!arg) { response.push({ type: 'output', content: 'usage: cat <name>   (about | projects | skills | timeline | contact | P1..P3)' }); break; }
+        if (!arg) { response.push({ type: 'output', content: 'usage: cat <name>   (about | projects | skills | timeline | contact | P1..P14)' }); break; }
         const key = arg.replace(/\.(md|cfg|log|vcf)$/,'').replace(/\/$/,'');
         if (/^p\d+$/i.test(key)) { response.push(projectDetail(key)); break; }
         switch (key) {

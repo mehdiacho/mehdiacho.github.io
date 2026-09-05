@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 68 800 264" width="800" height="264" role="img" aria-label="TETHER">
+  <defs>
+    <pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#18181b" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect x="0" y="68" width="800" height="264" fill="#09090b"/>
+  <rect x="0" y="68" width="800" height="264" fill="url(#g)"/>
+  <rect x="60" y="150" width="130" height="100" fill="none" stroke="#3f3f46" stroke-width="1.5"/><rect x="610" y="150" width="130" height="100" fill="none" stroke="#3f3f46" stroke-width="1.5"/><path d="M 190 178 L 610 178" stroke="#06b6d4" stroke-width="2"/><path d="M 596 170 L 610 178 L 596 186" fill="none" stroke="#06b6d4" stroke-width="2"/><path d="M 610 222 L 190 222" stroke="#a1a1aa" stroke-width="2" stroke-dasharray="7 6" opacity="0.75"/><path d="M 204 214 L 190 222 L 204 230" fill="none" stroke="#a1a1aa" stroke-width="2" opacity="0.75"/><circle cx="372" cy="200" r="4" fill="#06b6d4" opacity="0.9"/><circle cx="400" cy="200" r="4" fill="#06b6d4" opacity="0.62"/><circle cx="428" cy="200" r="4" fill="#06b6d4" opacity="0.33999999999999997"/>
+  <!-- Only the id is drawn. The card already prints the title below the image,
+       and the stack chips sit across the bottom of this band, so a label here
+       would be redundant at best and half-occluded at worst. -->
+  <text x="28" y="100" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
+        font-size="17" fill="#06b6d4" letter-spacing="3" opacity="0.8">P02</text>
+  <path d="M 14 80 h 26 M 14 80 v 26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+  <path d="M 786 320 h -26 M 786 320 v -26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+</svg>

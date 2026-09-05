@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 68 800 264" width="800" height="264" role="img" aria-label="FILMARR">
+  <defs>
+    <pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#18181b" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect x="0" y="68" width="800" height="264" fill="#09090b"/>
+  <rect x="0" y="68" width="800" height="264" fill="url(#g)"/>
+  <g transform="rotate(-9 360 200)"><rect x="272" y="96" width="176" height="212" fill="#09090b" stroke="#3f3f46" stroke-width="1.5" opacity="0.35"/></g><g transform="rotate(-4.5 360 200)"><rect x="272" y="96" width="176" height="212" fill="#09090b" stroke="#3f3f46" stroke-width="1.5" opacity="0.6"/></g><g transform="rotate(0 360 200)"><rect x="272" y="96" width="176" height="212" fill="#09090b" stroke="#06b6d4" stroke-width="1.5" opacity="1"/></g><rect x="296" y="248" width="86" height="5" fill="#a1a1aa" opacity="0.45"/><rect x="296" y="266" width="144" height="5" fill="#a1a1aa" opacity="0.45"/><rect x="296" y="284" width="95" height="5" fill="#a1a1aa" opacity="0.45"/><path d="M 500 200 L 596 200 M 578 186 L 596 200 L 578 214" fill="none" stroke="#06b6d4" stroke-width="2.5"/><path d="M 220 200 L 124 200 M 142 186 L 124 200 L 142 214" fill="none" stroke="#3f3f46" stroke-width="2.5"/>
+  <!-- Only the id is drawn. The card already prints the title below the image,
+       and the stack chips sit across the bottom of this band, so a label here
+       would be redundant at best and half-occluded at worst. -->
+  <text x="28" y="100" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
+        font-size="17" fill="#06b6d4" letter-spacing="3" opacity="0.8">P10</text>
+  <path d="M 14 80 h 26 M 14 80 v 26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+  <path d="M 786 320 h -26 M 786 320 v -26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+</svg>

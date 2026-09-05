@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 68 800 264" width="800" height="264" role="img" aria-label="TALLY">
+  <defs>
+    <pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#18181b" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect x="0" y="68" width="800" height="264" fill="#09090b"/>
+  <rect x="0" y="68" width="800" height="264" fill="url(#g)"/>
+  <text x="400" y="228" font-family="ui-monospace,monospace" font-size="118" fill="#06b6d4" text-anchor="middle" letter-spacing="6">147</text><circle cx="196" cy="196" r="46" fill="none" stroke="#3f3f46" stroke-width="2"/><path d="M 176 196 h 40" stroke="#a1a1aa" stroke-width="3.5"/><circle cx="604" cy="196" r="46" fill="none" stroke="#06b6d4" stroke-width="2"/><path d="M 584 196 h 40 M 604 176 v 40" stroke="#06b6d4" stroke-width="3.5"/><rect x="338" y="286" width="5" height="34" fill="#3f3f46"/><rect x="352" y="286" width="5" height="34" fill="#3f3f46"/><rect x="366" y="286" width="5" height="34" fill="#3f3f46"/><rect x="380" y="286" width="5" height="34" fill="#3f3f46"/><path d="M 332 320 L 402 282" stroke="#06b6d4" stroke-width="5"/>
+  <!-- Only the id is drawn. The card already prints the title below the image,
+       and the stack chips sit across the bottom of this band, so a label here
+       would be redundant at best and half-occluded at worst. -->
+  <text x="28" y="100" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
+        font-size="17" fill="#06b6d4" letter-spacing="3" opacity="0.8">P14</text>
+  <path d="M 14 80 h 26 M 14 80 v 26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+  <path d="M 786 320 h -26 M 786 320 v -26" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+</svg>

@@ -18,42 +18,144 @@ export const PROFILE = {
   birthDate: new Date("2002-03-18T00:00:00")
 };
 
+/**
+ * Real work only — every entry here maps to a repo that exists.
+ *
+ * Ordering is deliberate: clickable things are salted through the list so a
+ * visitor hits something they can try without scrolling to the bottom. The
+ * `id` is baked into each cover SVG, so reordering means re-running
+ * `node scripts/gen-covers.mjs`.
+ */
 export const PROJECTS: Project[] = [
   {
-    id: "P0",
+    id: "P01",
+    title: "GRIDS_TO_GRAPHS",
+    pitch: "MSc research. Benchmarks a graph convolutional network against EEGNet on 3-class inner-speech vowel decoding — testing whether electrode geometry beats the grid a CNN assumes.",
+    stack: ["PyTorch", "GNN", "EEG"],
+    image: "/covers/grids-to-graphs.svg",
+    status: "wip",
+    private: true
+  },
+  {
+    id: "P02",
+    title: "TETHER",
+    pitch: "A human-in-the-loop layer for AI agents: ask(), not notify(). A self-hosted MCP endpoint an agent blocks on, plus an Android app that rings like an actual phone call.",
+    stack: ["TypeScript", "MCP", "Kotlin"],
+    image: "/covers/tether.svg",
+    status: "wip",
+    private: true
+  },
+  {
+    id: "P03",
+    title: "DITHER",
+    pitch: "1-bit dithering in the browser — Atkinson, Floyd–Steinberg, Bayer, threshold. Group images with independent presets and export a ZIP. Nothing is ever uploaded.",
+    stack: ["Canvas", "Vanilla JS", "Pages"],
+    image: "/covers/dither.svg",
+    status: "live",
+    github: "https://github.com/mehdiacho/dither",
+    link: "https://dither.mehdiacho.tech"
+  },
+  {
+    id: "P04",
+    title: "MMILA",
+    pitch: "Procurement transparency for a Gaborone residential development. Awarding anything but the cheapest compliant quote demands a written justification, appended to a hash-chained ledger.",
+    stack: ["FastAPI", "Postgres", "Claude"],
+    image: "/covers/mmila.svg",
+    status: "wip",
+    private: true
+  },
+  {
+    id: "P05",
+    title: "FISH_PLAYER",
+    pitch: "Type a line on your phone, hear it in your own cloned voice from a speaker in another building. The server renders and holds the queue; the PC long-polls, so no port is ever opened.",
+    stack: ["TypeScript", "Docker", "Tailnet"],
+    image: "/covers/fish-player.svg",
+    status: "live",
+    private: true
+  },
+  {
+    id: "P06",
+    title: "FPX_NOW",
+    pitch: "Published npm CLI. Caches and aliases the npx invocations you keep retyping, so `npx vite build --mode prod` collapses into `fpx build`.",
+    stack: ["Node", "CLI", "npm"],
+    image: "/covers/fpx-now.svg",
+    status: "live",
+    github: "https://github.com/mehdiacho/fpx-now",
+    link: "https://fpx.mehdiacho.tech"
+  },
+  {
+    id: "P07",
+    title: "AGENTIC_BROWSER",
+    pitch: "Windows-first agentic browser on Electron. The agent package is physically unable to import Electron — enforced by a dependency-cruiser CI gate rather than a code review.",
+    stack: ["Electron", "TypeScript", "React"],
+    image: "/covers/agentic-browser.svg",
+    status: "wip",
+    private: true
+  },
+  {
+    id: "P08",
+    title: "KINKEEP",
+    pitch: "A family's documents — findable, verifiable, handed on. Treats a document's validity and its eventual succession as first-class, with tier-based envelope encryption.",
+    stack: ["React", "Firebase", "Kotlin"],
+    image: "/covers/kinkeep.svg",
+    status: "wip",
+    private: true
+  },
+  {
+    id: "P09",
     title: "SECURE_VAULT",
     pitch: "Zero-knowledge secret sharing. Encrypts files & .env vars in your browser, then mints a one-time access key + link with view limits and auto-expiry. Cloudflare Workers + KV.",
     stack: ["React", "WebCrypto", "Cloudflare"],
-    image: "https://picsum.photos/seed/securevault/400/250?grayscale&blur=2",
+    image: "/covers/secure-vault.svg",
     status: "live",
     action: "vault"
   },
   {
-    id: "P1",
-    title: "NEURO_VIS_V1",
-    pitch: "Real-time EEG signal visualization using WebGL and Python.",
-    stack: ["React", "Three.js", "Python"],
-    image: "https://picsum.photos/400/250?grayscale&blur=2",
-    status: "concept"
-    // TODO(#1): on completion -> status: "live", real image + github + link
+    id: "P10",
+    title: "FILMARR",
+    pitch: "Swipe-based film and TV tracker. Tinder-style triage feeding a graph recommender, with Letterboxd export. React front end over a FastAPI + pgvector monorepo.",
+    stack: ["React", "FastAPI", "pgvector"],
+    image: "/covers/filmarr.svg",
+    status: "wip",
+    private: true
   },
   {
-    id: "P2",
-    title: "SENTINEL_BOT",
-    pitch: "Autonomous discord bot for server administration and anomaly detection.",
-    stack: ["Node.js", "Discord.js", "TensorFlow"],
-    image: "https://picsum.photos/400/251?grayscale&blur=2",
-    status: "concept"
-    // TODO(#2): on completion -> status: "live", real image + github + link
+    id: "P11",
+    title: "HIGHRISE",
+    pitch: "Monopoly-family multiplayer board game — 2–4 players plus bots. Server-authoritative, built on one pure reducer engine shared by client and server over Socket.io.",
+    stack: ["TypeScript", "Fastify", "Socket.io"],
+    image: "/covers/highrise.svg",
+    status: "wip",
+    private: true
   },
   {
-    id: "P3",
-    title: "GABORONE_TRAFFIC_AI",
-    pitch: "Computer vision model for optimizing local traffic light patterns.",
-    stack: ["OpenCV", "PyTorch", "Flutter"],
-    image: "https://picsum.photos/400/252?grayscale&blur=2",
-    status: "concept"
-    // TODO(#3): on completion -> status: "live", real image + github + link
+    id: "P12",
+    title: "BLACKWALL",
+    pitch: "Receipt generator with client-side encryption — contents never leave the browser in the clear. Cyberpunk print aesthetic, exports print-ready output.",
+    stack: ["React", "WebCrypto", "Vite"],
+    image: "/covers/blackwall.svg",
+    status: "live",
+    link: "https://prints.mehdiacho.tech",
+    private: true
+  },
+  {
+    id: "P13",
+    title: "BIBVERIFY",
+    pitch: "Paste a .bib file and check every entry against the official DOI registry. Field-by-field diff against CrossRef/DataCite, accept-or-keep per field, export a clean file.",
+    stack: ["React", "Express", "CrossRef"],
+    image: "/covers/bibverify.svg",
+    status: "wip",
+    private: true
+  },
+  {
+    id: "P14",
+    title: "TALLY",
+    pitch: "An installable counter PWA. Tap +/−, the count persists offline, runs from the home screen. No accounts, no network, no build step.",
+    stack: ["PWA", "Vanilla JS", "Pages"],
+    image: "/covers/tally.svg",
+    status: "live",
+    github: "https://github.com/mehdiacho/tally-counter",
+    link: "https://mehdiacho.github.io/tally-counter/"
   }
 ];
 

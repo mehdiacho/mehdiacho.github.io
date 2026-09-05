@@ -11,6 +11,11 @@ export interface Project {
   /** In-site action instead of an external link. 'vault' opens SECURE_VAULT. */
   action?: 'vault';
   /**
+   * The source lives in a private repo. Says so on the card instead of leaving
+   * it looking unstarted — several of these are client or pre-release work.
+   */
+  private?: boolean;
+  /**
    * Honest build state. Drives the badge shown on the card.
    * 'live'    - shipped, has a real demo/source
    * 'wip'     - actively being built

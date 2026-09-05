@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, ExternalLink, Cpu, Lock } from 'lucide-react';
+import { Github, ExternalLink, Cpu, Lock, EyeOff } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { ProjectStatus } from '../types';
 
@@ -81,18 +81,36 @@ const Projects: React.FC = () => {
                         </button>
                     )}
                     {project.github && (
-                        <a href={project.github} className="flex items-center gap-2 text-xs font-mono text-zinc-500 hover:text-zinc-200 transition-colors">
+                        <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-xs font-mono text-zinc-500 hover:text-zinc-200 transition-colors"
+                        >
                             <Github size={14} />
                             <span>SOURCE</span>
                         </a>
                     )}
                     {project.link && (
-                        <a href={project.link} className="flex items-center gap-2 text-xs font-mono text-zinc-500 hover:text-zinc-200 transition-colors">
+                        <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-xs font-mono text-zinc-500 hover:text-zinc-200 transition-colors"
+                        >
                             <ExternalLink size={14} />
                             <span>DEPLOY</span>
                         </a>
                     )}
-                    {!project.github && !project.link && !project.action && (
+                    {/* Private source with nothing public to click — say so rather
+                        than letting a real project read as unstarted. */}
+                    {project.private && !project.github && (
+                        <span className="flex items-center gap-2 text-xs font-mono text-zinc-600" title="Private repository — happy to walk through it">
+                            <EyeOff size={14} />
+                            <span>SOURCE // ON_REQUEST</span>
+                        </span>
+                    )}
+                    {!project.private && !project.github && !project.link && !project.action && (
                         <span className="flex items-center gap-2 text-xs font-mono text-zinc-600 italic">
                             <span className="w-2 h-2 border border-zinc-700"></span>
                             QUEUED // SEE_BACKLOG
