@@ -18,7 +18,7 @@ const Services: React.FC = () => (
       return (
         <li
           key={service.name}
-          className="ticked flex flex-col border-2 border-ink bg-paper-lift p-6"
+          className="block-lift ticked flex flex-col p-6"
         >
           <Mark className="h-14 w-14 text-blue" />
 

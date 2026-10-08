@@ -14,7 +14,6 @@ import SiteFooter from './components/SiteFooter';
 
 const Vault = lazy(() => import('./components/Vault'));
 import { normalizeCode } from './lib/vault-crypto';
-import { ABOUT } from './constants';
 
 const App: React.FC = () => {
   // SECURE_VAULT modal. Opens from the project card or from a #vault=<token>
@@ -63,7 +62,7 @@ const App: React.FC = () => {
           id="services"
           number="01"
           title={<>What I&rsquo;m hired to do</>}
-          standfirst="Three things, in the order I want to be hired for them. Each one has a page of its own with more detail."
+          standfirst="Three things. Roughly in the order I'd like to be hired for them."
         >
           <Services />
         </Section>
@@ -72,7 +71,7 @@ const App: React.FC = () => {
           id="cad"
           number="02"
           title={<>3D printing and CAD modeling in Botswana</>}
-          standfirst="Parts for things that broke, or that were never made in the first place. Measured first, drawn second, printed last."
+          standfirst="Mostly replacements for parts nobody sells any more. Nothing gets modelled until it has been measured."
         >
           <Work3D />
         </Section>
@@ -81,7 +80,7 @@ const App: React.FC = () => {
           id="visualisation"
           number="03"
           title={<>3D visualisation</>}
-          standfirst="Scenes built from real measurements, so what you see on screen is what you would get in the room."
+          standfirst="Rooms and layouts built from real measurements. Much cheaper to be wrong on a screen than in the room."
         >
           <Visualisation />
         </Section>
@@ -90,38 +89,27 @@ const App: React.FC = () => {
           id="software"
           number="04"
           title={<>Software and web work</>}
-          standfirst="Apps, tools and sites I have built. Some are live, some are still being made, and the list says which is which."
+          standfirst="Everything I have built. Some of it is live, plenty of it is not finished, and the labels say which is which."
         >
           <Projects />
         </Section>
 
+        {/* The "about me" itself is in the hero, where he asked for it. This
+            is the rest of the file: what he reaches for, and where he has been. */}
         <Section
           id="about"
           number="05"
-          title={<>About</>}
+          title={<>Background</>}
+          standfirst="What I reach for, and where I have been so far."
         >
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-            <div className="space-y-5">
-              {ABOUT.map((paragraph) => (
-                <p key={paragraph.slice(0, 32)} className="text-base leading-relaxed text-ink-soft">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-
-            <div>
-              <h3 className="label text-ink-faint">What I work with</h3>
-              <div className="mt-4">
-                <Skills />
-              </div>
-            </div>
+          <h3 className="label text-red">What I work with</h3>
+          <div className="mt-4">
+            <Skills />
           </div>
 
-          <div className="mt-14">
-            <h3 className="label text-ink-faint">Where I&rsquo;ve been</h3>
-            <div className="mt-4">
-              <Timeline />
-            </div>
+          <h3 className="label mt-14 text-red">Where I&rsquo;ve been</h3>
+          <div className="mt-4">
+            <Timeline />
           </div>
         </Section>
 

@@ -5,9 +5,9 @@ import { Project, ProjectStatus } from '../types';
 
 /** Plain words again. "WIP" means nothing to someone outside software. */
 const STATUS_META: Record<ProjectStatus, { label: string; className: string }> = {
-  live: { label: 'Live', className: 'border-green-800/40 text-green-800' },
-  wip: { label: 'In progress', className: 'border-amber-700/40 text-amber-700' },
-  concept: { label: 'Planned', className: 'border-rule text-ink-faint' },
+  live: { label: 'Live', className: 'text-green-800' },
+  wip: { label: 'In progress', className: 'text-amber-700' },
+  concept: { label: 'Planned', className: 'text-ink-faint' },
 };
 
 /**
@@ -54,7 +54,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   const status = STATUS_META[project.status];
 
   return (
-    <li className="flex flex-col border-2 border-ink bg-paper-lift">
+    <li className="block-lift flex flex-col">
       <div className="relative h-28 overflow-hidden border-b-2 border-ink bg-white">
         <img
           src={project.image}
@@ -70,7 +70,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           <h3 className="font-display text-lg font-bold tracking-tight text-ink">
             {prettyTitle(project.title)}
           </h3>
-          <span className={`border px-2 py-0.5 label ${status.className}`}>
+          <span className={`stamp ${status.className}`}>
             {status.label}
           </span>
         </div>

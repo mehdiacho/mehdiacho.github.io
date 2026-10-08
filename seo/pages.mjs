@@ -1,45 +1,54 @@
 export const origin = 'https://mehdiacho.tech';
 export const image = `${origin}/portfolio-3d/charger-brace-v1.png`;
 export const areaServed = [{ '@type': 'City', name: 'Gaborone' }, { '@type': 'Country', name: 'Botswana' }];
+
+/**
+ * The crawlable pages.
+ *
+ * Written in the first person, the same as the rest of the site. Marketing
+ * voice ("explore", "solutions", "tailored to your needs") is deliberately
+ * absent — it reads as filler to a person and carries nothing extra for a
+ * crawler. Every claim here has to be one Mehdi can stand behind on a call.
+ */
 export const pages = [
   {
-    path: '/', title: '3D & CAD Modeling Botswana | Mehdi Acho, Gaborone',
-    description: 'Explore Mehdi Acho’s 3D and CAD modeling, functional part designs and full-stack web development in Gaborone, serving clients across Botswana.',
-    heading: '3D modeling and web development in Botswana',
+    path: '/', title: 'Mehdi Acho — CAD Modeling, 3D Printing & Web Development, Gaborone',
+    description: "I'm Mehdi Acho. I do CAD modeling, 3D printing and web development in Gaborone, Botswana. Send me a photo of the part and a couple of measurements.",
+    heading: 'CAD modeling, 3D printing and web development in Botswana',
   },
   {
-    path: '/3d-modeling-botswana/', title: '3D Modeling Gaborone, Botswana | Mehdi Acho',
-    description: '3D modeling in Gaborone for functional objects and clear design presentations. Explore real model studies and discuss your next project with Mehdi Acho.',
+    path: '/3d-modeling-botswana/', title: '3D Modeling in Gaborone, Botswana | Mehdi Acho',
+    description: '3D modeling in Gaborone — objects modelled from photos, sketches or the real thing, with views that actually explain the design. Mehdi Acho, Botswana.',
     heading: '3D modeling in Gaborone', eyebrow: 'OBJECTS / FORM / PRESENTATION',
-    intro: 'Turn an idea or an existing object into a model you can inspect, explain and refine. I work from Gaborone with clients across Botswana, building clear geometry around a practical brief.',
+    intro: "I model objects so you can look at them properly before anyone commits to making one. That might start from a sketch, a few photos, or the thing itself sitting on my desk. I work from Gaborone and take jobs anywhere in Botswana.",
     sections: [
-      ['From reference to a readable model', 'Photographs, sketches and reference dimensions establish the overall shape. The first model makes proportions and assembly visible, so we can resolve the big decisions before spending time on small details.'],
-      ['Views that explain the design', 'A useful presentation shows how an object fits together. Multiple views, assembly studies and rendered stills help communicate the form and reveal what needs another iteration.'],
-      ['What to bring to a 3D modeling project', 'Start with the object or idea, a few reference images and what the model needs to do. Tell me whether you need presentation images, editable geometry or a part for fabrication. Deliverables and tolerances are agreed around that use.'],
+      ['Starting from whatever you have', "Photos and a rough sketch are usually enough to get going. The first model is about proportion and how the pieces sit together, not about detail — it is much easier to argue about the shape when you can turn it around on screen."],
+      ['Views that explain the thing', "A single render is pretty and not very useful. I give you the views that answer questions: how it comes apart, what touches what, where the awkward bit is. That is normally where the next round of changes comes from."],
+      ['What to send me', "The object or the idea, a few photos, and what the model is for. Tell me whether you need images to show someone, geometry you can keep editing, or a file that goes to a machine. That decides how it gets built, so it is worth saying up front."],
     ],
     work: true,
   },
   {
-    path: '/cad-modeling-botswana/', title: 'CAD Modeling Botswana | Functional Parts by Mehdi Acho',
-    description: 'CAD modeling in Botswana for measured parts, dimensioned drawings and print-ready models. See parametric design studies by Mehdi Acho in Gaborone.',
+    path: '/cad-modeling-botswana/', title: 'CAD Modeling in Botswana — Measured Parts | Mehdi Acho',
+    description: 'CAD modeling in Botswana for replacement parts that have to fit. Measured with calipers, drawn, modelled and printed. Mehdi Acho, Gaborone.',
     heading: 'CAD modeling in Botswana', eyebrow: 'MEASURE / CONSTRAIN / ITERATE',
-    intro: 'A replacement part needs more than the right silhouette. My CAD work starts with the dimensions and interfaces that control fit, then turns those constraints into a model that can be adjusted as testing reveals more.',
+    intro: "A replacement part is not about looking right, it is about fitting. So I start with the measurements and the surfaces that have to mate, and let those drive the model. When a test fit tells me something new, the model changes with it instead of being rebuilt.",
     sections: [
-      ['Measured parts and parametric geometry', 'Caliper measurements and a dimensioned drawing provide the starting point. Critical interfaces, clearances and wall thicknesses drive the model instead of being hidden in a finished mesh.'],
-      ['From a drawing to a print-ready file', 'The charger-brace and flip-key studies below show the process: measure the existing object, map the assembly, model the components and review how they can be made. A modelled part is labelled as modelled; a finished print is a separate milestone.'],
-      ['Planning a CAD project', 'Send reference photographs, available measurements, the intended material and how the part will be used. We can agree the drawing, editable model or export files needed for the job, then refine fit through prototypes.'],
+      ['Calipers before software', "I measure the original and draw it before I model anything. Clearances, wall thickness and the faces that have to meet are written down as numbers, not buried in a finished mesh where nobody can find them later."],
+      ['From the drawing to something you can print', "The charger brace and the flip key below are both this process. Measure, map how it comes apart, model the pieces, then look at whether it can actually be made that way. If a part has only been modelled, it says modelled — a finished print is a separate thing and I will not pretend otherwise."],
+      ['What to send me', "Photos, any measurements you already have, what material it needs to be, and how the part gets used. Dropped? Loaded? Hot? That changes the answer. We settle on what you get back — a drawing, an editable model, print files — and then fix the fit with prototypes."],
     ],
     work: true,
   },
   {
-    path: '/web-development-gaborone/', title: 'Web Development Gaborone | Websites by Mehdi Acho',
-    description: 'Website development in Gaborone for businesses and useful web applications. Work with Mehdi Acho on responsive React and TypeScript sites in Botswana.',
+    path: '/web-development-gaborone/', title: 'Web Development in Gaborone | Websites by Mehdi Acho',
+    description: 'Web development in Gaborone, Botswana — websites and web apps in React and TypeScript that load fast on a phone and turn up in search. Mehdi Acho.',
     heading: 'Web development in Gaborone', eyebrow: 'WEBSITES / APPLICATIONS / SYSTEMS',
-    intro: 'I build websites and web applications around the task they need to make easier. Based in Gaborone, I work with React and TypeScript, with Firebase or Cloudflare where a project needs a backend.',
+    intro: "I build sites and web apps around the thing they are supposed to make easier. React and TypeScript, with Firebase or Cloudflare behind them when there is something to store. Based in Gaborone.",
     sections: [
-      ['Website development for a clear purpose', 'A business website should explain what you do, work on a phone and make the next step obvious. Content structure, accessible navigation, metadata and loading performance belong in the build from the start.'],
-      ['When a website needs to do more', 'Some projects need accounts, stored data or workflows rather than a brochure. My portfolio includes browser tools, installable applications and services that connect a frontend to a backend. The technology follows the requirements.'],
-      ['Start with the workflow', 'Tell me who will use the site, what they need to accomplish and any systems it must connect to. That gives us a practical basis for scope, design, implementation and handover.'],
+      ['A site that does its job', "Most business sites fail at three things: they are slow on a phone, they bury what the business actually does, and nobody can find them. Those are build decisions, not things you bolt on at the end. This site is the demonstration — it was built to rank for what I do, and that is why you are reading it."],
+      ['When a site needs to be an app', "Accounts, stored data, something that has to happen on a schedule. I have built browser tools, installable apps and services with real backends; a few of them are listed on the home page. The stack follows what the thing needs, not the other way around."],
+      ['What to tell me', "Who uses it, what they are trying to get done, and anything it has to talk to. That is enough to scope it honestly. If I think you do not need what you are asking for, I will say so before you pay for it."],
     ],
     work: false,
   },
@@ -50,9 +59,10 @@ export function structuredData(page) {
     { '@type': 'Person', '@id': person, name: 'Mehdi Acho', url: origin+'/',
       jobTitle: '3D and CAD modeler, full-stack developer',
       homeLocation: { '@type': 'City', name: 'Gaborone', containedInPlace: { '@type': 'Country', name: 'Botswana' } },
-      knowsAbout: ['3D modeling', 'CAD modeling', 'Web development', 'Machine learning'],
+      knowsAbout: ['3D modeling', 'CAD modeling', '3D printing', 'Web development', 'Machine learning'],
+      alumniOf: { '@type': 'CollegeOrUniversity', name: 'Botswana International University of Science and Technology' },
       sameAs: ['https://github.com/mehdiacho', 'https://linkedin.com/in/mehdiacho'] },
-    { '@type': 'ProfessionalService', '@id': service, name: 'Mehdi Acho — 3D, CAD & Web Development',
+    { '@type': 'ProfessionalService', '@id': service, name: 'Mehdi Acho — CAD, 3D Printing & Web Development',
       url: origin+'/', image, description: pages[0].description, founder: { '@id': person }, areaServed,
       address: { '@type': 'PostalAddress', addressLocality: 'Gaborone', addressCountry: 'BW' },
       hasOfferCatalog: { '@type': 'OfferCatalog', name: 'Design and development services', itemListElement: pages.slice(1).map(p=>({ '@type': 'Offer', itemOffered: { '@type': 'Service', name:p.heading, url:origin+p.path, areaServed, provider:{'@id':service} } })) } },

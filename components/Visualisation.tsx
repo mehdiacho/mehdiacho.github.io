@@ -8,7 +8,7 @@ import { IsometricDesk } from './Drawings';
  * so this block is the hand-off.
  */
 const Visualisation: React.FC = () => (
-  <div className="grid items-center gap-10 border-2 border-ink bg-paper-lift p-7 lg:grid-cols-2 lg:p-10">
+  <div className="block-hard grid items-center gap-10 p-7 lg:grid-cols-2 lg:p-10">
     <IsometricDesk className="w-full text-ink" />
 
     <div>
@@ -17,15 +17,15 @@ const Visualisation: React.FC = () => (
       </h3>
 
       <p className="mt-4 text-base leading-relaxed text-ink-soft">
-        Desk Twin is a model of a real workspace built entirely from a list of
-        measurements. Change one number and the whole scene redraws itself, so
-        you can try a layout before moving any furniture. It runs in a browser
-        with nothing to install.
+        Desk Twin is my actual desk, measured and rebuilt in the browser. The
+        whole scene is driven off a list of numbers, so changing one of them
+        redraws everything. I built it to try layouts without moving any
+        furniture, which I was doing far too often.
       </p>
 
       <p className="mt-4 text-base leading-relaxed text-ink-soft">
-        The same approach works for a room, a shop floor or a stand — anywhere
-        it is cheaper to be wrong on screen than in the room.
+        It works the same way for a room, a shop floor or a stand. Nothing to
+        install, it just runs.
       </p>
 
       <a

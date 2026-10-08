@@ -37,10 +37,11 @@ const ModelViewer: React.FC<Record<string, unknown>> = (props) =>
   React.createElement('model-viewer', props);
 
 /** Plain words. A part that is drawn but not printed should say so. */
+// Hard-edged stamps, the kind that get banged onto a drawing.
 const STATUS_META: Record<ProjectStatus, { label: string; className: string }> = {
-  live: { label: 'Printed', className: 'border-green-800/40 text-green-800' },
-  wip: { label: 'Modelled', className: 'border-amber-700/40 text-amber-700' },
-  concept: { label: 'Drawn', className: 'border-rule text-ink-faint' },
+  live: { label: 'Printed', className: 'text-green-800' },
+  wip: { label: 'Modelled', className: 'text-amber-700' },
+  concept: { label: 'Drawn', className: 'text-ink-faint' },
 };
 
 type ViewerState = 'still' | 'loading' | 'live' | 'failed';
@@ -63,7 +64,7 @@ const WorkCard: React.FC<{ item: Work3DItem; onImageError: (id: string) => void 
   }, []);
 
   return (
-    <figure className="ticked m-0 border-2 border-ink bg-paper-lift">
+    <figure className="block-lift ticked m-0">
       {/* The renders are drawn on light paper, so they keep a white ground
           rather than being tinted to match the sheet. */}
       <div className="relative aspect-[4/3] bg-white">
@@ -111,7 +112,7 @@ const WorkCard: React.FC<{ item: Work3DItem; onImageError: (id: string) => void 
           <h3 className="font-display text-xl font-bold tracking-tight text-ink">
             {item.title}
           </h3>
-          <span className={`border px-2 py-0.5 label ${status.className}`}>
+          <span className={`stamp ${status.className}`}>
             {status.label}
           </span>
         </div>
@@ -182,7 +183,7 @@ const Work3D: React.FC = () => {
       {/* The two crawlable pages behind this section, linked in prose so the
           section is not a dead end for either a reader or a crawler. */}
       <p className="mt-8 border-t border-rule-soft pt-6 text-sm leading-relaxed text-ink-soft">
-        More on{' '}
+        There is more on{' '}
         <a
           href="/3d-modeling-botswana/"
           className="text-ink underline decoration-rule underline-offset-4 transition-colors hover:text-blue"
@@ -196,7 +197,7 @@ const Work3D: React.FC = () => {
         >
           CAD modeling
         </a>
-        , including what a job costs and how long it takes.
+        , if you want the longer version.
       </p>
     </>
   );

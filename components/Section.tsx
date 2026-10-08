@@ -20,11 +20,14 @@ interface SectionProps {
 const Section: React.FC<SectionProps> = ({ id, number, title, standfirst, children }) => (
   <section id={id} aria-labelledby={`${id}-heading`} className="scroll-mt-20">
     <SectionRule className="h-4 w-full text-ink" />
+    <div className="h-[3px] w-full bg-ink" aria-hidden="true" />
 
     <div className="mx-auto max-w-[1180px] px-5 pb-20 pt-10 sm:px-8">
       <div className="grid gap-x-12 gap-y-8 lg:grid-cols-[150px_minmax(0,1fr)]">
-        <p className="label pt-2 text-red lg:sticky lg:top-24 lg:self-start">
-          {number}
+        {/* The index is a mark, not a caption: solid ink with the number
+            knocked out and an acid shadow behind it. */}
+        <p className="lg:sticky lg:top-24 lg:self-start">
+          <span className="numeral" aria-hidden="true">{number}</span>
         </p>
 
         <div>

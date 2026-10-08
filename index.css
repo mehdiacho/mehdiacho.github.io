@@ -59,6 +59,11 @@
   --green:      #2f7d4f;
   --amber:      #a8701a;
 
+  /* The loud pair. These only ever appear on solid ink, never on paper —
+     acid green on paper is unreadable and looks like a mistake. */
+  --acid:       #c8ff2e;
+  --hot:        #ff4d1c;
+
   --font-display: Grotesk, 'Inter Variable', system-ui, sans-serif;
   --font-body: 'Inter Variable', system-ui, sans-serif;
   --font-label: 'Fira Code Variable', ui-monospace, Consolas, monospace;
@@ -74,6 +79,8 @@
   --color-rule-soft: #e2dfd6;
   --color-blue: #11508f;
   --color-red: #bf3b2b;
+  --color-acid: #c8ff2e;
+  --color-hot: #ff4d1c;
 }
 
 html { scroll-behavior: smooth; }
@@ -145,11 +152,73 @@ body {
 .ticked::before { top: -1px; left: -1px; border-top: 2px solid var(--blue); border-left: 2px solid var(--blue); }
 .ticked::after { bottom: -1px; right: -1px; border-bottom: 2px solid var(--blue); border-right: 2px solid var(--blue); }
 
-/* The hard-edged moments: offset shadow, no radius, no gradient. */
+/* ---------- the hard-edged register ---------- *
+ * Offset shadows, no radius, no gradient, no easing on the colour. These
+ * are the moments the drawing sheet is allowed to break: the section
+ * numbers, the service cards, the about block and the contact block.
+ * ---------------------------------------------------------------- */
+
 .block-hard {
   border: 2px solid var(--ink);
   background: var(--paper-lift);
   box-shadow: 7px 7px 0 var(--ink);
+}
+
+/* Same block, inverted. Ink ground, paper text, acid shadow. Used where a
+   section has to stop the eye rather than be read calmly. */
+.block-invert {
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 8px 8px 0 var(--acid);
+}
+.block-invert a { color: var(--acid); }
+
+/* A card that lifts into its own shadow on hover. The movement is small
+   and instant — a hard block should not glide. */
+.block-lift {
+  border: 2px solid var(--ink);
+  background: var(--paper-lift);
+  box-shadow: 0 0 0 var(--ink);
+  transition: transform 90ms steps(2), box-shadow 90ms steps(2);
+}
+.block-lift:hover,
+.block-lift:focus-within {
+  transform: translate(-4px, -4px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+@media (prefers-reduced-motion: reduce) {
+  .block-lift { transition: none; }
+  .block-lift:hover, .block-lift:focus-within { transform: none; box-shadow: 6px 6px 0 var(--ink); }
+}
+
+/* The section index: a filled ink square with the number knocked out of
+   it. Big enough to read as a mark rather than as a caption. */
+.numeral {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 62px; height: 62px;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--font-label); font-weight: 700;
+  font-size: 20px; letter-spacing: .04em;
+  box-shadow: 5px 5px 0 var(--acid);
+}
+
+/* A status stamp. Hard corners, heavy rule, label type — the printed kind
+   that gets banged onto a drawing, not a rounded pill. */
+.stamp {
+  display: inline-block; padding: 3px 8px;
+  border: 2px solid currentColor;
+  font-family: var(--font-label); font-size: 10px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase; line-height: 1.5;
+}
+
+/* A full-bleed band of solid ink, used to break the paper between
+   sections. Edge-to-edge on purpose. */
+.band {
+  background: var(--ink);
+  color: var(--paper);
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
 }
 
 /* Hairline-separated editorial list. */

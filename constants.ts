@@ -8,8 +8,8 @@ export const PROFILE = {
   status: "ONLINE",
   statusSub: "Available for work",
   /** Also the meta description. Changing it changes what Google shows. */
-  bio: "3D & CAD modeling and web development in Gaborone, Botswana.",
-  bioSub: "I measure the part, draw it properly, work out how it goes together, then print it. Software gets the same treatment — figure out what it has to do before writing it.",
+  bio: "I'm Mehdi Acho. I do CAD modeling, 3D printing and web development in Gaborone, Botswana.",
+  bioSub: "I'm doing an MSc at BIUST and building things in between. Mostly replacement parts for things that broke and nobody sells any more, plus software that people actually end up using. If you've got something that needs measuring and printing, or a site that needs building, send me a photo of it.",
   mission: "I do research. I build software. For money. For fun. For the future.",
   email: "mehdiacho@gmail.com",
   socials: {
@@ -28,21 +28,21 @@ export const SERVICES: Service[] = [
   {
     name: "3D and CAD modeling",
     detail:
-      "Replacement parts, brackets, fittings and housings. I measure what you have, draw it, model it and hand back a file you can print — or print it myself.",
+      "Something broke and nobody sells the part any more. I measure the original with calipers, draw it, model it, and then either hand you the file or print it here on PETG.",
     href: "/cad-modeling-botswana/",
     linkText: "More on CAD modeling"
   },
   {
     name: "Web development",
     detail:
-      "Websites and web apps that load fast, work properly on a phone, and can actually be found by someone searching for what you do.",
+      "Sites and web apps. Quick on a bad connection, usable on a phone, and findable on Google. This site is the example — it was built to rank, not just to look at.",
     href: "/web-development-gaborone/",
     linkText: "More on web development"
   },
   {
     name: "Machine learning",
     detail:
-      "Models built and trained for a specific question, then put somewhere they can be used rather than left in a notebook.",
+      "This is what my MSc is in. I train models for one specific question and then put them somewhere they can be used, which is the part most people skip.",
     // No page of its own yet, so this points at the work further down the page
     // rather than at an unrelated service page.
     href: "#software",
@@ -56,10 +56,10 @@ export const SERVICES: Service[] = [
  * actually do", and it is the thing that separates this from a print shop.
  */
 export const PROCESS: { step: string; title: string; detail: string }[] = [
-  { step: "01", title: "Measure", detail: "Calipers on the real object. Every edge written down." },
-  { step: "02", title: "Draw", detail: "A proper drawing first, so the gaps show up before they cost anything." },
-  { step: "03", title: "Model", detail: "Built from those numbers, so a change is a change, not a redo." },
-  { step: "04", title: "Print", detail: "Test fit, adjust, print the real one." }
+  { step: "01", title: "Measure", detail: "Calipers on the real thing. Every edge written down before I open anything." },
+  { step: "02", title: "Draw", detail: "A drawing comes first. Mistakes are cheap at this stage and expensive later." },
+  { step: "03", title: "Model", detail: "Built from those numbers. Change one and the rest of the model follows." },
+  { step: "04", title: "Print", detail: "Test fit. Adjust. Then print the real one." }
 ];
 
 /**
@@ -283,7 +283,7 @@ export const WORKS_3D: Work3D[] = [
     id: "M01",
     title: "Laptop charger brace",
     caption:
-      "The rubber sleeve where the cable meets the plug had torn right off, leaving the wires bare. This grips the plug, carries the cable past the damage and clips onto the back of the laptop. It prints as two halves that close around the cable.",
+      "The rubber sleeve where my charger cable meets the plug tore off completely and left the wires showing. This grips the plug, carries the cable past the damaged bit and clips onto the back of the laptop. It prints as two halves that close around the cable, so you don't have to cut anything.",
     image: "/portfolio-3d/charger-brace-v1.png",
     alt:
       "Four shaded CAD views of the charger brace. The assembled part is shown from behind the laptop and from the face that touches it; below, the two halves lie flat on their split faces the way they print, and one half is turned over to show the hollow the plug barrel sits in. The part is a round ribbed sleeve on a flat mounting plate, with a thin arm hooking off one side.",
@@ -294,7 +294,7 @@ export const WORKS_3D: Work3D[] = [
     id: "M02",
     title: "Mazda flip-key body",
     caption:
-      "A replacement shell for a 2007 Mazda flip key, built from caliper readings rather than a scan. The drawing comes first: every corner is tagged and measured, and anything not measured yet stays a question mark rather than becoming a guess. Three test fits printed so far.",
+      "A new shell for a 2007 Mazda flip key. No scanner, just calipers and a lot of patience. Every corner on the drawing is tagged and measured, and anything I haven't got a reading for yet stays a question mark instead of a guess. Three test fits printed so far and it still isn't right.",
     image: "/portfolio-3d/mazda-key-blueprint.png",
     alt:
       "A measurement blueprint sheet for a Mazda flip-key head. Four orthographic views — front, back, side and bottom — have every corner tagged with a red lettered point and every edge boxed in teal. A schedule beside them lists measurements A to Z in millimetres, with question marks where a reading has not been taken yet.",
@@ -309,28 +309,28 @@ export const TIMELINE: Experience[] = [
     role: "MSc Computer Science",
     company: "BIUST",
     period: "Feb 2025 - Present",
-    description: "Specializing in Deep Learning architectures. Expected completion: Late 2026."
+    description: "Deep learning architectures. My thesis benchmarks graph networks against CNNs on EEG inner-speech data. Finishing late 2026."
   },
   {
     id: "E2",
     role: "Innovation Club President",
     company: "BIUST",
     period: "Aug 2023 - May 2024",
-    description: "Led student initiatives and fostered a culture of tech innovation."
+    description: "Ran the club for a year. Events, talks and getting student projects off the ground."
   },
   {
     id: "E3",
     role: "Software Intern",
     company: "Spectrum Analytics",
     period: "May 2023 - Aug 2023",
-    description: "Led AI integration projects and collaborated with cross-functional teams."
+    description: "First proper job. AI integration work, across teams that had not built with it before."
   },
   {
     id: "E4",
     role: "BSc Computer Science",
     company: "BIUST",
     period: "Aug 2020 - May 2024",
-    description: "Graduated with a strong foundation in software engineering principles."
+    description: "Four years of software engineering. Graduated 2024, straight into the MSc."
   }
 ];
 
