@@ -15,6 +15,14 @@ import SiteFooter from './components/SiteFooter';
 const Vault = lazy(() => import('./components/Vault'));
 import { normalizeCode } from './lib/vault-crypto';
 
+/**
+ * The page.
+ *
+ * Each section names its own theme and its own heading layout, and no two
+ * next to each other share either — the ground changes under you as you go
+ * down, which is the point. What the theme actually does to the colours is
+ * in index.css §2.
+ */
 const App: React.FC = () => {
   // SECURE_VAULT modal. Opens from the project card or from a #vault=<token>
   // share link; everything else on the page is a plain document.
@@ -48,7 +56,7 @@ const App: React.FC = () => {
     <div className="min-h-screen">
       <a
         href="#services"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:border-2 focus:border-ink focus:bg-paper focus:px-4 focus:py-2"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:border-[3px] focus:border-ink focus:bg-paper focus:px-4 focus:py-2"
       >
         Skip to content
       </a>
@@ -61,6 +69,8 @@ const App: React.FC = () => {
         <Section
           id="services"
           number="01"
+          theme="riso"
+          variant="banner"
           title={<>What I&rsquo;m hired to do</>}
           standfirst="Three things. Roughly in the order I'd like to be hired for them."
         >
@@ -70,6 +80,8 @@ const App: React.FC = () => {
         <Section
           id="cad"
           number="02"
+          theme="blueprint"
+          variant="rail"
           title={<>3D printing and CAD modeling in Botswana</>}
           standfirst="Mostly replacements for parts nobody sells any more. Nothing gets modelled until it has been measured."
         >
@@ -79,6 +91,8 @@ const App: React.FC = () => {
         <Section
           id="visualisation"
           number="03"
+          theme="soft"
+          variant="inline"
           title={<>3D visualisation</>}
           standfirst="Rooms and layouts built from real measurements. Much cheaper to be wrong on a screen than in the room."
         >
@@ -88,6 +102,8 @@ const App: React.FC = () => {
         <Section
           id="software"
           number="04"
+          theme="swiss"
+          variant="banner"
           title={<>Software and web work</>}
           standfirst="Everything I have built. Some of it is live, plenty of it is not finished, and the labels say which is which."
         >
@@ -99,16 +115,18 @@ const App: React.FC = () => {
         <Section
           id="about"
           number="05"
+          theme="ledger"
+          variant="rail"
           title={<>Background</>}
           standfirst="What I reach for, and where I have been so far."
         >
-          <h3 className="label text-red">What I work with</h3>
-          <div className="mt-4">
+          <h3 className="label text-accent">What I work with</h3>
+          <div className="mt-5">
             <Skills />
           </div>
 
-          <h3 className="label mt-14 text-red">Where I&rsquo;ve been</h3>
-          <div className="mt-4">
+          <h3 className="label mt-16 text-accent">Where I&rsquo;ve been</h3>
+          <div className="mt-5">
             <Timeline />
           </div>
         </Section>

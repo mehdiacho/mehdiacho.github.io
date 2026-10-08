@@ -3,52 +3,53 @@ import React from 'react';
 import { PROFILE } from '../constants';
 
 /**
- * The one moment on the page that stops behaving like a drawing sheet: solid
- * ink, an offset shadow, and the display face used exactly once. Everything
- * above it is restrained so that this reads as the end of the argument.
+ * The bookend. It is dressed the same as the hero on purpose: the page opens
+ * in black and acid and closes there, and everything in between is a detour
+ * through the work.
  */
 const Contact: React.FC = () => (
-  <section id="contact" aria-labelledby="contact-heading" className="scroll-mt-20">
-    <div className="mx-auto max-w-[1180px] px-5 pb-20 sm:px-8">
-      <div className="block-hard p-8 sm:p-12">
-        <p className="label text-red">Gaborone, Botswana</p>
+  <section
+    id="contact"
+    data-theme="brut"
+    aria-labelledby="contact-heading"
+    className="scroll-mt-20 border-t-[4px] border-ink"
+  >
+    <div className="bleed py-20">
+      <p className="label text-accent">Gaborone, Botswana</p>
 
-        <h2 id="contact-heading" className="mt-4">
-          <span className="font-pilow block text-[clamp(2.6rem,9vw,6rem)] leading-[0.9] text-ink">
-            Let&rsquo;s build it
-          </span>
-        </h2>
+      {/* Broken by hand rather than left to wrap. At this size the line
+          always runs over, and left to itself it drops the "it" onto a row
+          of its own, which looks like a mistake rather than a decision. */}
+      <h2
+        id="contact-heading"
+        className="font-pilow mt-6 text-[clamp(3rem,13vw,11rem)] leading-[.85] text-ink"
+      >
+        <span className="block">Let&rsquo;s</span>
+        <span className="block">build it</span>
+      </h2>
 
-        <p className="mt-6 max-w-[48ch] text-lg leading-relaxed text-ink-soft">
+      <div className="mt-14 grid gap-12 border-t-[3px] border-ink pt-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
+        <p className="m-0 max-w-[48ch] text-xl leading-relaxed text-ink-soft">
           Send a photo of the part, a rough idea, or the website you wish you
-          had. A couple of measurements is usually enough to tell you whether it
-          is worth doing and what it would take.
+          had. A couple of measurements is usually enough to tell you whether
+          it is worth doing and what it would take.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <a
-            href={`mailto:${PROFILE.email}`}
-            className="border-2 border-ink bg-ink px-6 py-3.5 label text-paper transition-colors hover:border-blue hover:bg-blue"
-          >
-            Email me
-          </a>
-          <a
-            href={PROFILE.socials.github}
-            className="border-2 border-ink px-6 py-3.5 label text-ink transition-colors hover:bg-ink hover:text-paper"
-          >
-            GitHub
-          </a>
-          <a
-            href={PROFILE.socials.linkedin}
-            className="border-2 border-ink px-6 py-3.5 label text-ink transition-colors hover:bg-ink hover:text-paper"
-          >
-            LinkedIn
-          </a>
+        <div>
+          <div className="flex flex-wrap items-center gap-4">
+            <a href={`mailto:${PROFILE.email}`} className="btn">
+              Email me
+            </a>
+            <a href={PROFILE.socials.github} className="btn btn-hollow">
+              GitHub
+            </a>
+            <a href={PROFILE.socials.linkedin} className="btn btn-hollow">
+              LinkedIn
+            </a>
+          </div>
+
+          <p className="mt-8 font-label text-[15px] text-accent">{PROFILE.email}</p>
         </div>
-
-        <p className="mt-8 font-label text-[13px] text-ink-soft">
-          {PROFILE.email}
-        </p>
       </div>
     </div>
   </section>

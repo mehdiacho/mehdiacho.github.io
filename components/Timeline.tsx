@@ -7,23 +7,24 @@ import { TIMELINE } from '../constants';
  * four entries do not need a rail and a row of dots to be read in order.
  */
 const Timeline: React.FC = () => (
-  <ol className="list-none border-b border-rule-soft p-0">
+  <ol className="list-none border-b-2 border-ink p-0">
     {TIMELINE.map((item) => (
       <li
         key={item.id}
-        className="grid gap-x-8 gap-y-1 border-t border-rule-soft py-6 sm:grid-cols-[160px_minmax(0,1fr)]"
+        className="grid gap-x-10 gap-y-2 border-t-2 border-ink py-7 lg:grid-cols-[200px_minmax(0,22ch)_minmax(0,1fr)]"
       >
-        <p className="label pt-1 text-ink-faint">{item.period}</p>
+        <p className="label m-0 pt-1.5 text-ink-faint">{item.period}</p>
 
         <div>
-          <h3 className="font-display text-lg font-bold tracking-tight text-ink">
+          <h3 className="font-display text-xl font-bold leading-tight tracking-tight text-ink">
             {item.role}
           </h3>
-          <p className="label mt-1 text-blue">{item.company}</p>
-          <p className="mt-2 max-w-[60ch] text-sm leading-relaxed text-ink-soft">
-            {item.description}
-          </p>
+          <p className="label mt-1.5 text-accent">{item.company}</p>
         </div>
+
+        <p className="m-0 max-w-[62ch] text-base leading-relaxed text-ink-soft">
+          {item.description}
+        </p>
       </li>
     ))}
   </ol>

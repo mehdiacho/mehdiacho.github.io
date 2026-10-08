@@ -1,23 +1,38 @@
-@import "@fontsource-variable/inter/wght.css";
 @import "@fontsource-variable/fira-code/wght.css";
 @import "tailwindcss";
 
 /* ==================================================================== *
  * Mehdi Acho — mehdiacho.tech
  *
- * The page is laid out like a drawing sheet: paper ground, a faint grid,
- * hairline rules, dimension lines and a title block. The typographic
- * rhythm is editorial — numbered sections, one very large headline, a lot
- * of air. A few moments break out of both and go hard-edged: the contact
- * block, the status stamps, the primary buttons.
+ * The page is not one design. Each section is dressed for what it holds,
+ * and the switch between them is meant to be felt:
+ *
+ *   brut       the hero and the contact block. Black ground, acid green,
+ *              heavy rules, offset shadows with no softness anywhere.
+ *   riso       the services. Warm stock, two spot colours overprinting.
+ *   blueprint  the 3D and CAD work. Navy ground, cyan lines, a real grid,
+ *              annotations set in monospace — the drawing-sheet idiom.
+ *   soft       Desk Twin. Rounded, light, generous shadow. The one place
+ *              the page relaxes, because the thing it holds is a toy.
+ *   swiss      the software. White stock, hairline rules, one red, a
+ *              strict grid, no shadow and no decoration.
+ *   ledger     the background. Yellow stock and ruled lines, like a page
+ *              out of a notebook.
+ *
+ * Every theme redefines the same handful of tokens, so a class written as
+ * `text-ink` means "whatever the primary colour is here" rather than a
+ * fixed near-black. Nothing below needs to know which theme it is in.
  *
  * Three self-hosted families, all OFL, all under /fonts:
- *   Grotesk   — headings and leads. Geometric, three weights.
+ *   Grotesk   — everything. Headings run at 700, body at 400.
  *   Lineal    — the wordmark only. Its N is reversed by design, which
  *               reads as a typo in running text, so it never appears in
  *               a sentence. "MEHDI ACHO" has no N.
  *   Pilowlava — one word, once, in the contact block.
- * Inter carries body copy and Fira Code carries drawing-sheet labels.
+ * Fira Code carries the drawing-sheet annotations.
+ *
+ * There is no Inter here on purpose. It is the default face of every
+ * generated site on the internet and it had the same job on this one.
  * ==================================================================== */
 
 @font-face {
@@ -46,42 +61,222 @@
   font-weight: 400; font-style: normal; font-display: swap;
 }
 
+/* ==================================================================== *
+ * 1. The palette
+ *
+ * Nine colours and two neutrals. They are raw here and never used raw in
+ * a component — a section picks from them in §2 and the component only
+ * ever asks for `ink`, `paper`, `accent`.
+ * ==================================================================== */
 :root {
-  --paper:      #f3f1ea;
-  --paper-lift: #fbfaf7;
-  --ink:        #15181c;
-  --ink-soft:   #5a6069;
-  --ink-faint:  #8d9199;
-  --rule:       #cfcbc0;
-  --rule-soft:  #e2dfd6;
-  --blue:       #11508f;
-  --red:        #bf3b2b;
-  --green:      #2f7d4f;
-  --amber:      #a8701a;
+  --c-ink:       #141619;  /* near black, warmed slightly               */
+  --c-ink-lift:  #20242a;
+  --c-paper:     #f4f1e8;  /* warm stock, the default ground            */
+  --c-paper-up:  #fcfaf4;
+  --c-white:     #ffffff;
 
-  /* The loud pair. These only ever appear on solid ink, never on paper —
-     acid green on paper is unreadable and looks like a mistake. */
-  --acid:       #c8ff2e;
-  --hot:        #ff4d1c;
+  --c-acid:      #ccff00;  /* lime. Only ever on black.                 */
+  --c-hot:       #ff4b12;  /* orange red. The riso spot.                */
+  --c-signal:    #e5231b;  /* a colder, louder red. Swiss accent.       */
+  --c-navy:      #0b2a57;  /* blueprint ground                          */
+  --c-navy-up:   #11356a;
+  --c-cyan:      #3fd2f2;  /* blueprint line                            */
+  --c-mint:      #e8f6ef;  /* the soft section's ground                 */
+  --c-forest:    #0d7a52;  /* its accent, dark enough to read on white  */
+  --c-butter:    #fdf5d4;  /* notebook stock                            */
+  --c-ochre:     #9a6207;  /* its accent                                */
+  --c-blue:      #11508f;  /* the quiet link blue, default theme only   */
 
-  --font-display: Grotesk, 'Inter Variable', system-ui, sans-serif;
-  --font-body: 'Inter Variable', system-ui, sans-serif;
-  --font-label: 'Fira Code Variable', ui-monospace, Consolas, monospace;
+  --font-display: Grotesk, 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    Grotesk, 'Helvetica Neue', Arial, sans-serif;
+  --font-label:   'Fira Code Variable', ui-monospace, Consolas, monospace;
 }
 
+/* The semantic tokens. Tailwind emits `text-ink` as `color: var(--color-ink)`,
+   and a custom property cascades — so overriding these on a section element
+   retints every utility inside it without touching a single class name. */
 @theme {
-  --color-paper: #f3f1ea;
-  --color-paper-lift: #fbfaf7;
-  --color-ink: #15181c;
-  --color-ink-soft: #5a6069;
-  --color-ink-faint: #8d9199;
-  --color-rule: #cfcbc0;
-  --color-rule-soft: #e2dfd6;
-  --color-blue: #11508f;
-  --color-red: #bf3b2b;
-  --color-acid: #c8ff2e;
-  --color-hot: #ff4d1c;
+  --color-paper:      #f4f1e8;
+  --color-paper-lift: #fcfaf4;
+  --color-ink:        #141619;
+  --color-ink-soft:   #585e68;
+  --color-ink-faint:  #8b9099;
+  --color-rule:       #cdc8bb;
+  --color-rule-soft:  #e3dfd4;
+  --color-accent:     #11508f;
+  --color-accent-ink: #ffffff;
+  --color-blue:       #11508f;
+  --color-red:        #bf3b2b;
+  --color-acid:       #ccff00;
+  --color-hot:        #ff4b12;
 }
+
+/* Panel geometry, also per theme. A brutalist block and a rounded card are
+   the same element with different numbers in these four. */
+:root {
+  --panel-radius: 0px;
+  --panel-border: 2px;
+  --panel-line:   var(--color-ink);
+  --panel-shadow: none;
+  --panel-raise:  6px;
+}
+
+/* ==================================================================== *
+ * 2. The themes
+ *
+ * Unlayered, so they beat Tailwind's `theme` layer regardless of order.
+ * ==================================================================== */
+
+/* -- brut: the hero, the process strip, the contact block ------------ */
+[data-theme='brut'] {
+  --color-paper:      var(--c-ink);
+  --color-paper-lift: var(--c-ink-lift);
+  --color-ink:        var(--c-paper);
+  --color-ink-soft:   #aeab9f;
+  --color-ink-faint:  #76736a;
+  --color-rule:       #3b4047;
+  --color-rule-soft:  #2a2e34;
+  --color-accent:     var(--c-acid);
+  --color-accent-ink: var(--c-ink);
+  --color-blue:       var(--c-acid);
+  --color-red:        var(--c-hot);
+
+  --panel-radius: 0px;
+  --panel-border: 3px;
+  --panel-line:   var(--c-paper);
+  --panel-shadow: 10px 10px 0 var(--c-acid);
+  --panel-raise:  8px;
+}
+
+/* -- riso: the services ---------------------------------------------- */
+[data-theme='riso'] {
+  --color-paper:      #f8f0e1;
+  --color-paper-lift: #fffaf0;
+  --color-ink:        #1a1410;
+  --color-ink-soft:   #5d5146;
+  --color-ink-faint:  #8e8274;
+  --color-rule:       #d8c7ab;
+  --color-rule-soft:  #e9ddc8;
+  --color-accent:     var(--c-hot);
+  --color-accent-ink: #fffaf0;
+  --color-blue:       var(--c-blue);
+  --color-red:        var(--c-hot);
+  --invert-ground:    #16100c;
+  --invert-fg:        #fdf4e4;
+
+  --panel-radius: 0px;
+  --panel-border: 2px;
+  --panel-line:   #1a1410;
+  --panel-shadow: 7px 7px 0 var(--c-hot);
+  --panel-raise:  6px;
+}
+
+/* -- blueprint: the 3D and CAD work ---------------------------------- */
+[data-theme='blueprint'] {
+  --color-paper:      var(--c-navy);
+  --color-paper-lift: var(--c-navy-up);
+  --color-ink:        #e9f4ff;
+  --color-ink-soft:   #a7c8ec;
+  --color-ink-faint:  #7398c7;
+  --color-rule:       #35639e;
+  --color-rule-soft:  #214a7e;
+  --color-accent:     var(--c-cyan);
+  --color-accent-ink: var(--c-navy);
+  --color-blue:       var(--c-cyan);
+  --color-red:        #ffcb2b;
+
+  --panel-radius: 0px;
+  --panel-border: 1px;
+  --panel-line:   var(--c-cyan);
+  --panel-shadow: none;
+  --panel-raise:  0px;
+}
+
+/* -- soft: Desk Twin. The one rounded thing on the site. ------------- */
+[data-theme='soft'] {
+  --color-paper:      var(--c-mint);
+  --color-paper-lift: var(--c-white);
+  --color-ink:        #0f2118;
+  --color-ink-soft:   #426052;
+  --color-ink-faint:  #7a968a;
+  --color-rule:       #cbe5d9;
+  --color-rule-soft:  #e0f0e8;
+  --color-accent:     var(--c-forest);
+  --color-accent-ink: var(--c-white);
+  --color-blue:       var(--c-forest);
+  --color-red:        #b3522a;
+
+  --panel-radius: 26px;
+  --panel-border: 0px;
+  --panel-line:   transparent;
+  --panel-shadow: 0 18px 40px -18px rgba(13, 60, 42, .35);
+  --panel-raise:  0px;
+}
+
+/* -- swiss: the software and web work -------------------------------- */
+[data-theme='swiss'] {
+  --color-paper:      var(--c-white);
+  --color-paper-lift: var(--c-white);
+  --color-ink:        #000000;
+  --color-ink-soft:   #44474b;
+  --color-ink-faint:  #8a8d92;
+  --color-rule:       #000000;
+  --color-rule-soft:  #d6d6d6;
+  --color-accent:     var(--c-signal);
+  --color-accent-ink: var(--c-white);
+  --color-blue:       var(--c-signal);
+  --color-red:        var(--c-signal);
+
+  --panel-radius: 0px;
+  --panel-border: 1px;
+  --panel-line:   #000000;
+  --panel-shadow: none;
+  --panel-raise:  0px;
+}
+
+/* -- ledger: the background section ---------------------------------- */
+[data-theme='ledger'] {
+  --color-paper:      var(--c-butter);
+  --color-paper-lift: #fffced;
+  --color-ink:        #1b1a12;
+  --color-ink-soft:   #56533e;
+  --color-ink-faint:  #8b866a;
+  --color-rule:       #d9c98e;
+  --color-rule-soft:  #e9dcae;
+  --color-accent:     var(--c-ochre);
+  --color-accent-ink: #fffced;
+  --color-blue:       var(--c-ochre);
+  --color-red:        #a33517;
+
+  --panel-radius: 3px;
+  --panel-border: 2px;
+  --panel-line:   #1b1a12;
+  --panel-shadow: 5px 5px 0 #1b1a12;
+  --panel-raise:  5px;
+}
+
+/* Each themed block paints its own ground, so the section reads as a
+   change of stock rather than as a box sitting on the page. */
+[data-theme] { background-color: var(--color-paper); color: var(--color-ink); }
+
+/* Only two themes carry a texture, and for different reasons: the ledger
+   is ruled like a notebook, the blueprint is gridded like a drawing. */
+[data-theme='ledger'] {
+  background-image: repeating-linear-gradient(
+    to bottom, transparent 0 31px, var(--color-rule-soft) 31px 32px);
+}
+[data-theme='blueprint'] {
+  background-image:
+    linear-gradient(to right,  rgba(63, 210, 242, .09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(63, 210, 242, .09) 1px, transparent 1px),
+    linear-gradient(to right,  rgba(63, 210, 242, .16) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(63, 210, 242, .16) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px;
+}
+
+/* ==================================================================== *
+ * 3. Page furniture
+ * ==================================================================== */
 
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
@@ -90,28 +285,33 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background-color: var(--paper);
-  /* The sheet. Two hairlines at 32px, deliberately almost invisible —
-     it should register as texture, not as a table. */
-  background-image:
-    linear-gradient(to right,  rgba(21, 24, 28, .045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(21, 24, 28, .045) 1px, transparent 1px);
-  background-size: 32px 32px;
-  color: var(--ink);
+  background-color: var(--c-paper);
+  color: var(--c-ink);
   font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.65;
+  font-size: 17px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-::selection { background: var(--blue); color: #fff; }
+::selection { background: var(--c-ink); color: var(--c-acid); }
 
-/* Visible focus everywhere. The grid makes a faint ring hard to see, so
-   this one is deliberately heavy. */
+/* Deliberately heavy, and tinted to the section it lands in. */
 :where(a, button, [tabindex]):focus-visible {
-  outline: 2px solid var(--blue);
+  outline: 3px solid var(--color-accent);
   outline-offset: 3px;
 }
+
+/* The full-width gutter. There is no max-width anywhere on this site: a
+   section is expected to use the whole screen, and the columns inside it
+   are what keep a line of text down to a readable length. */
+.bleed { padding-inline: clamp(1.1rem, 3.2vw, 4.5rem); }
+
+/* Everything from here to §6 sits in Tailwind's `components` layer so a
+   utility can still override it — `.btn px-4` has to actually win, and an
+   unlayered rule would beat the utility and silently do nothing. The theme
+   blocks above stay unlayered on purpose, because they have to beat
+   Tailwind's own `theme` layer. */
+@layer components {
 
 /* ---------- type ---------- */
 .font-display { font-family: var(--font-display); }
@@ -129,16 +329,27 @@ body {
   line-height: 1.4;
 }
 
+/* Section headings. Set at 700 rather than the hairline weight the site
+   used to run — he asked for the heavier cut and it carries the brutalist
+   sections far better. */
+.h-section {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 5.2vw, 4.4rem);
+  line-height: .98;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
 /* ---------- drawing-sheet furniture ---------- */
 
 /* A dimension line: a rule with a tick at each end, the way a measurement
-   is called out on a drawing. Used as a section divider and under the
-   hero. Decorative only, so it is hidden from assistive tech at source. */
-.dimline { position: relative; border-top: 1px solid var(--ink); }
+   is called out on a drawing. Decorative, hidden from assistive tech. */
+.dimline { position: relative; border-top: 1px solid currentColor; }
 .dimline::before,
 .dimline::after {
   content: ""; position: absolute; top: -6px;
-  width: 1px; height: 13px; background: var(--ink);
+  width: 1px; height: 13px; background: currentColor;
 }
 .dimline::before { left: 0; }
 .dimline::after  { right: 0; }
@@ -147,104 +358,195 @@ body {
 .ticked { position: relative; }
 .ticked::before,
 .ticked::after {
-  content: ""; position: absolute; width: 10px; height: 10px; pointer-events: none;
+  content: ""; position: absolute; width: 11px; height: 11px; pointer-events: none;
+  color: var(--color-accent);
 }
-.ticked::before { top: -1px; left: -1px; border-top: 2px solid var(--blue); border-left: 2px solid var(--blue); }
-.ticked::after { bottom: -1px; right: -1px; border-bottom: 2px solid var(--blue); border-right: 2px solid var(--blue); }
+.ticked::before { top: -1px; left: -1px; border-top: 2px solid currentColor; border-left: 2px solid currentColor; }
+.ticked::after  { bottom: -1px; right: -1px; border-bottom: 2px solid currentColor; border-right: 2px solid currentColor; }
 
-/* ---------- the hard-edged register ---------- *
- * Offset shadows, no radius, no gradient, no easing on the colour. These
- * are the moments the drawing sheet is allowed to break: the section
- * numbers, the service cards, the about block and the contact block.
- * ---------------------------------------------------------------- */
+/* ==================================================================== *
+ * 4. Panels
+ *
+ * One element, six appearances. A brutalist block and a rounded card
+ * differ only in the four geometry tokens the theme set above.
+ * ==================================================================== */
 
-.block-hard {
-  border: 2px solid var(--ink);
-  background: var(--paper-lift);
-  box-shadow: 7px 7px 0 var(--ink);
+.panel {
+  background: var(--color-paper-lift);
+  border: var(--panel-border) solid var(--panel-line);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
 }
 
-/* Same block, inverted. Ink ground, paper text, acid shadow. Used where a
-   section has to stop the eye rather than be read calmly. */
-.block-invert {
-  border: 2px solid var(--ink);
-  background: var(--ink);
-  color: var(--paper);
-  box-shadow: 8px 8px 0 var(--acid);
-}
-.block-invert a { color: var(--acid); }
+/* Inverted. Rather than restyling what is inside it, this swaps the two
+   tokens everything else is written against — so a card already set in
+   `text-ink` on `bg-paper-lift` simply comes out the other way round, with
+   no second set of classes to keep in step. */
+.panel-invert {
+  --color-paper:      var(--invert-ground, var(--c-ink));
+  --color-paper-lift: var(--invert-ground, var(--c-ink));
+  --color-ink:        var(--invert-fg, var(--c-paper));
+  --color-ink-soft:   #aeab9f;
+  --color-ink-faint:  #807c72;
+  --color-rule:       #3d424a;
+  --color-rule-soft:  #2b2f35;
 
-/* A card that lifts into its own shadow on hover. The movement is small
-   and instant — a hard block should not glide. */
-.block-lift {
-  border: 2px solid var(--ink);
-  background: var(--paper-lift);
-  box-shadow: 0 0 0 var(--ink);
-  transition: transform 90ms steps(2), box-shadow 90ms steps(2);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border: var(--panel-border) solid var(--color-paper);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
 }
-.block-lift:hover,
-.block-lift:focus-within {
-  transform: translate(-4px, -4px);
-  box-shadow: 6px 6px 0 var(--ink);
+.panel-invert a { color: var(--color-accent); }
+
+/* Lifts into its own shadow. Stepped easing, so a hard block jumps rather
+   than glides; the soft theme has no raise and simply deepens instead. */
+.panel-lift {
+  background: var(--color-paper-lift);
+  border: var(--panel-border) solid var(--panel-line);
+  border-radius: var(--panel-radius);
+  transition: transform 90ms steps(2), box-shadow 140ms ease, border-color 90ms;
+}
+.panel-lift:hover,
+.panel-lift:focus-within {
+  transform: translate(calc(var(--panel-raise) * -.6), calc(var(--panel-raise) * -.6));
+  box-shadow: var(--panel-raise) var(--panel-raise) 0 var(--color-ink);
+  border-color: var(--color-ink);
+}
+/* Soft and blueprint do not have a shadow to lift into, so they change in
+   the way their own language allows. */
+[data-theme='soft'] .panel-lift { box-shadow: var(--panel-shadow); }
+[data-theme='soft'] .panel-lift:hover,
+[data-theme='soft'] .panel-lift:focus-within {
+  box-shadow: 0 26px 50px -20px rgba(13, 60, 42, .45);
+}
+[data-theme='blueprint'] .panel-lift:hover,
+[data-theme='blueprint'] .panel-lift:focus-within {
+  box-shadow: none;
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-paper-lift) 70%, var(--color-accent) 8%);
 }
 @media (prefers-reduced-motion: reduce) {
-  .block-lift { transition: none; }
-  .block-lift:hover, .block-lift:focus-within { transform: none; box-shadow: 6px 6px 0 var(--ink); }
+  .panel-lift { transition: none; }
+  .panel-lift:hover, .panel-lift:focus-within { transform: none; }
 }
 
-/* The section index: a filled ink square with the number knocked out of
-   it. Big enough to read as a mark rather than as a caption. */
+/* The section index: a filled square with the number knocked out of it. */
 .numeral {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 62px; height: 62px;
-  background: var(--ink); color: var(--paper);
+  width: 64px; height: 64px;
+  background: var(--color-ink); color: var(--color-paper);
+  border-radius: var(--panel-radius);
   font-family: var(--font-label); font-weight: 700;
-  font-size: 20px; letter-spacing: .04em;
-  box-shadow: 5px 5px 0 var(--acid);
+  font-size: 21px; letter-spacing: .04em;
+  box-shadow: 6px 6px 0 var(--color-accent);
+}
+[data-theme='soft'] .numeral,
+[data-theme='swiss'] .numeral,
+[data-theme='blueprint'] .numeral { box-shadow: none; }
+[data-theme='swiss'] .numeral { background: var(--color-accent); color: #fff; }
+[data-theme='blueprint'] .numeral {
+  background: transparent; color: var(--color-accent);
+  border: 1px solid var(--color-accent);
 }
 
-/* A status stamp. Hard corners, heavy rule, label type — the printed kind
-   that gets banged onto a drawing, not a rounded pill. */
+/* A status stamp: the printed kind banged onto a drawing, not a pill. */
 .stamp {
   display: inline-block; padding: 3px 8px;
   border: 2px solid currentColor;
+  border-radius: calc(var(--panel-radius) / 4);
   font-family: var(--font-label); font-size: 10px; font-weight: 700;
   letter-spacing: .14em; text-transform: uppercase; line-height: 1.5;
 }
 
-/* A full-bleed band of solid ink, used to break the paper between
-   sections. Edge-to-edge on purpose. */
-.band {
-  background: var(--ink);
-  color: var(--paper);
-  border-top: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
+/* Buttons. Solid is the ask, hollow is the alternative, and both take the
+   section's colours — so the same markup is acid on black in the hero and
+   red on white in the software section. */
+.btn {
+  display: inline-block;
+  padding: 14px 26px;
+  border: var(--panel-border) solid var(--color-ink);
+  border-radius: var(--panel-radius);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-label); font-size: 11px; font-weight: 600;
+  letter-spacing: .16em; text-transform: uppercase; line-height: 1.4;
+  text-decoration: none;
+  transition: background-color 90ms, color 90ms, border-color 90ms;
 }
+.btn:hover { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-ink); }
+
+.btn-hollow {
+  background: transparent;
+  color: var(--color-ink);
+}
+.btn-hollow:hover { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-paper); }
 
 /* Hairline-separated editorial list. */
-.ruled > * + * { border-top: 1px solid var(--rule-soft); }
+.ruled > * + * { border-top: 1px solid var(--color-rule-soft); }
 
 /* ==================================================================== *
- * The crawlable service pages are plain HTML written at build time by
+ * 5. The bento
+ *
+ * Twelve columns, fixed row height, cells spanning what they need. The
+ * spans are set per card in Projects.tsx; this only establishes the grid
+ * and collapses it sanely on the way down to a phone.
+ * ==================================================================== */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-rows: 172px;
+  gap: 14px;
+  /* Dense, so a page that does not divide evenly closes its own holes
+     instead of leaving the grid looking half-built. */
+  grid-auto-flow: row dense;
+}
+.bento > * { grid-column: span 12; grid-row: span 2; }
+
+@media (min-width: 680px) {
+  .bento > * { grid-column: span 6; }
+  .bento > [data-span='wide']  { grid-column: span 12; }
+  .bento > [data-span='hero']  { grid-column: span 12; grid-row: span 3; }
+}
+@media (min-width: 1100px) {
+  .bento > *                   { grid-column: span 4; grid-row: span 2; }
+  .bento > [data-span='wide']  { grid-column: span 8; }
+  .bento > [data-span='tall']  { grid-column: span 4; grid-row: span 3; }
+  .bento > [data-span='hero']  { grid-column: span 8; grid-row: span 3; }
+  .bento > [data-span='small'] { grid-column: span 4; grid-row: span 2; }
+}
+@media (min-width: 1600px) {
+  .bento { grid-auto-rows: 186px; }
+  .bento > *                   { grid-column: span 3; }
+  .bento > [data-span='wide']  { grid-column: span 6; }
+  .bento > [data-span='tall']  { grid-column: span 3; grid-row: span 3; }
+  .bento > [data-span='hero']  { grid-column: span 6; grid-row: span 3; }
+  .bento > [data-span='small'] { grid-column: span 3; }
+}
+
+}
+
+/* ==================================================================== *
+ * 6. The crawlable service pages are plain HTML written at build time by
  * seo/static-pages.mjs, with no Tailwind in reach — so they style
  * themselves from here, in the same language as the app.
  * ==================================================================== */
 .service-nav,
 .service-footer {
-  max-width: 1100px; margin: auto; padding: 22px 24px;
+  margin: auto; padding: 22px clamp(1.1rem, 3.2vw, 4.5rem);
   display: flex; gap: 26px; flex-wrap: wrap; align-items: center;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 3px solid var(--c-ink);
   font-family: var(--font-label);
   font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
 }
-.service-nav a { color: var(--ink-soft); text-decoration: none; }
-.service-nav a:first-child { font-family: Lineal, var(--font-display); font-weight: 900; font-size: 16px; letter-spacing: .1em; color: var(--ink); }
-.service-nav a:hover { color: var(--blue); }
+.service-nav a { color: var(--color-ink-soft); text-decoration: none; }
+.service-nav a:first-child { font-family: Lineal, var(--font-display); font-weight: 900; font-size: 16px; letter-spacing: .1em; color: var(--c-ink); }
+.service-nav a:hover { color: var(--c-signal); }
 
-.service-page { max-width: 1000px; margin: auto; padding: 64px 24px; }
+.service-page { max-width: 1100px; margin: auto; padding: 64px clamp(1.1rem, 3.2vw, 4.5rem); }
 .service-page h1 {
-  font-family: var(--font-display); font-weight: 200;
-  font-size: clamp(2.2rem, 6vw, 4.4rem); line-height: 1.02; letter-spacing: -.035em;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(2.1rem, 6vw, 4.4rem); line-height: .99; letter-spacing: -.035em;
   margin: 14px 0 28px; max-width: 18ch;
 }
 .service-page h2 {
@@ -252,24 +554,27 @@ body {
   font-size: 1.3rem; letter-spacing: -.02em; margin: 30px 0 12px;
 }
 .service-page h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; margin: 0 0 6px; }
-.service-page p { margin: 0 0 16px; color: var(--ink-soft); max-width: 72ch; }
-.service-lead { font-size: 1.15rem; color: var(--ink) !important; max-width: 60ch !important; }
+.service-page p { margin: 0 0 16px; color: var(--color-ink-soft); max-width: 72ch; }
+.service-lead { font-size: 1.15rem; color: var(--c-ink) !important; max-width: 60ch !important; }
 .service-eyebrow {
   font-family: var(--font-label); font-size: 11px; font-weight: 500;
-  letter-spacing: .2em; text-transform: uppercase; color: var(--red); margin: 0 !important;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--c-hot); margin: 0 !important;
 }
 .service-sections {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 34px; margin: 40px 0 56px; padding-top: 28px; border-top: 1px solid var(--ink);
+  gap: 34px; margin: 40px 0 56px; padding-top: 28px; border-top: 3px solid var(--c-ink);
 }
 .service-work { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 24px; }
-.service-work figure { margin: 0; border: 2px solid var(--ink); background: var(--paper-lift); }
+.service-work figure { margin: 0; border: 2px solid var(--c-ink); background: var(--c-paper-up); }
 .service-work img { display: block; width: 100%; height: auto; aspect-ratio: 4/3; object-fit: contain; background: #fff; }
-.service-work figcaption { padding: 18px; border-top: 2px solid var(--ink); }
+.service-work figcaption { padding: 18px; border-top: 2px solid var(--c-ink); }
 .service-contact {
   margin-top: 56px; padding: 28px;
-  border: 2px solid var(--ink); background: var(--paper-lift); box-shadow: 7px 7px 0 var(--ink);
+  border: 3px solid var(--c-ink); background: var(--c-ink); color: var(--c-paper);
+  box-shadow: 10px 10px 0 var(--c-acid);
 }
+.service-contact p { color: #aeab9f; }
 .service-page a,
-.service-footer a { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
-.service-footer { justify-content: space-between; border-top: 2px solid var(--ink); border-bottom: 0; color: var(--ink-soft); }
+.service-footer a { color: var(--c-blue); text-decoration: underline; text-underline-offset: 4px; }
+.service-contact a { color: var(--c-acid); }
+.service-footer { justify-content: space-between; border-top: 3px solid var(--c-ink); border-bottom: 0; color: var(--color-ink-soft); }

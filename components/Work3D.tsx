@@ -36,11 +36,15 @@ const loadModelViewer = (): Promise<void> =>
 const ModelViewer: React.FC<Record<string, unknown>> = (props) =>
   React.createElement('model-viewer', props);
 
-/** Plain words. A part that is drawn but not printed should say so. */
-// Hard-edged stamps, the kind that get banged onto a drawing.
+/**
+ * Plain words. A part that is drawn but not printed should say so.
+ *
+ * The colours are the section's own, not fixed ones — this grid sits on the
+ * blueprint ground, where a Tailwind green would disappear.
+ */
 const STATUS_META: Record<ProjectStatus, { label: string; className: string }> = {
-  live: { label: 'Printed', className: 'text-green-800' },
-  wip: { label: 'Modelled', className: 'text-amber-700' },
+  live: { label: 'Printed', className: 'text-accent' },
+  wip: { label: 'Modelled', className: 'text-red' },
   concept: { label: 'Drawn', className: 'text-ink-faint' },
 };
 
@@ -64,10 +68,10 @@ const WorkCard: React.FC<{ item: Work3DItem; onImageError: (id: string) => void 
   }, []);
 
   return (
-    <figure className="block-lift ticked m-0">
+    <figure className="panel-lift ticked m-0 flex flex-col">
       {/* The renders are drawn on light paper, so they keep a white ground
           rather than being tinted to match the sheet. */}
-      <div className="relative aspect-[4/3] bg-white">
+      <div className="relative aspect-[4/3] border-b border-rule bg-white">
         {viewer === 'live' && item.model ? (
           <ModelViewer
             src={item.model}
@@ -100,16 +104,16 @@ const WorkCard: React.FC<{ item: Work3DItem; onImageError: (id: string) => void 
           <button
             onClick={show3D}
             disabled={viewer === 'loading'}
-            className="absolute bottom-3 right-3 border-2 border-ink bg-paper px-3 py-2 label text-ink transition-colors hover:bg-ink hover:text-paper disabled:opacity-60"
+            className="btn absolute bottom-3 right-3 px-4 py-2.5 disabled:opacity-60"
           >
             {viewer === 'loading' ? 'Loading…' : 'Turn it around'}
           </button>
         )}
       </div>
 
-      <figcaption className="border-t-2 border-ink p-5">
+      <figcaption className="flex flex-1 flex-col p-6">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
-          <h3 className="font-display text-xl font-bold tracking-tight text-ink">
+          <h3 className="font-display text-2xl font-bold tracking-tight text-ink">
             {item.title}
           </h3>
           <span className={`stamp ${status.className}`}>
@@ -117,10 +121,10 @@ const WorkCard: React.FC<{ item: Work3DItem; onImageError: (id: string) => void 
           </span>
         </div>
 
-        <p className="mt-3 text-sm leading-relaxed text-ink-soft">{item.caption}</p>
+        <p className="mt-4 flex-1 text-base leading-relaxed text-ink-soft">{item.caption}</p>
 
         {viewer === 'failed' && (
-          <p className="mt-3 border-l-2 border-red pl-3 text-sm text-ink-soft">
+          <p className="mt-4 border-l-2 border-red pl-3 text-sm text-ink-soft">
             The 3D viewer did not load. The picture above is the same part, and
             the file is linked below.
           </p>
@@ -143,7 +147,7 @@ const WorkCard: React.FC<{ item: Work3DItem; onImageError: (id: string) => void 
           <a
             href={item.model}
             download
-            className="mt-4 inline-block border-b-2 border-blue pb-0.5 font-label text-[12px] text-ink transition-colors hover:text-blue"
+            className="mt-5 inline-block self-start border-b-2 border-accent pb-1 font-label text-[12px] text-ink transition-colors hover:text-accent"
           >
             Download the model file ↓
           </a>
@@ -174,7 +178,7 @@ const Work3D: React.FC = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {items.map((item) => (
           <WorkCard key={item.id} item={item} onImageError={onImageError} />
         ))}
@@ -182,18 +186,18 @@ const Work3D: React.FC = () => {
 
       {/* The two crawlable pages behind this section, linked in prose so the
           section is not a dead end for either a reader or a crawler. */}
-      <p className="mt-8 border-t border-rule-soft pt-6 text-sm leading-relaxed text-ink-soft">
+      <p className="mt-10 max-w-[70ch] border-t border-rule pt-7 text-base leading-relaxed text-ink-soft">
         There is more on{' '}
         <a
           href="/3d-modeling-botswana/"
-          className="text-ink underline decoration-rule underline-offset-4 transition-colors hover:text-blue"
+          className="text-ink underline decoration-accent underline-offset-4 transition-colors hover:text-accent"
         >
           3D modeling in Botswana
         </a>{' '}
         and{' '}
         <a
           href="/cad-modeling-botswana/"
-          className="text-ink underline decoration-rule underline-offset-4 transition-colors hover:text-blue"
+          className="text-ink underline decoration-accent underline-offset-4 transition-colors hover:text-accent"
         >
           CAD modeling
         </a>

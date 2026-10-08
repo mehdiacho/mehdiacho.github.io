@@ -7,19 +7,20 @@ import { TOOLKIT } from '../constants';
  *
  * This used to be a set of progress bars with a percentage against each
  * skill. The percentages were invented, and a made-up number about yourself
- * is worse than no number, so it is a list now.
+ * is worse than no number, so they are index cards now.
  */
 const Skills: React.FC = () => (
-  <ul className="grid list-none grid-cols-1 gap-x-10 gap-y-0 border-b border-rule-soft p-0 sm:grid-cols-2">
+  <ul className="grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 xl:grid-cols-4">
     {TOOLKIT.map((group) => (
-      <li
-        key={group.group}
-        className="border-t border-rule-soft py-5"
-      >
-        <h3 className="label text-red">{group.group}</h3>
-        <p className="mt-2 text-base leading-relaxed text-ink">
-          {group.items.join(' · ')}
-        </p>
+      <li key={group.group} className="panel flex flex-col p-6">
+        <h3 className="label text-accent">{group.group}</h3>
+        <ul className="ruled mt-4 list-none p-0">
+          {group.items.map((item) => (
+            <li key={item} className="py-2 text-base leading-snug text-ink">
+              {item}
+            </li>
+          ))}
+        </ul>
       </li>
     ))}
   </ul>

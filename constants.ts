@@ -35,7 +35,7 @@ export const SERVICES: Service[] = [
   {
     name: "Web development",
     detail:
-      "Sites and web apps. Quick on a bad connection, usable on a phone, and findable on Google. This site is the example — it was built to rank, not just to look at.",
+      "Sites and web apps. Quick on a bad connection, usable on a phone, and findable on Google. This site is the example. It was built to rank, not just to look at.",
     href: "/web-development-gaborone/",
     linkText: "More on web development"
   },
@@ -82,7 +82,7 @@ export const PROJECTS: Project[] = [
   {
     id: "P01",
     title: "YAP",
-    pitch: "Voice-first idea capture for Android. Speak the thought, get it back structured — title, sections, action items pulled out. Kotlin + Compose on Firebase, with a desktop companion on the same library.",
+    pitch: "Voice-first idea capture for Android. Speak the thought and get it back structured, with the title, sections and action items pulled out. Kotlin + Compose on Firebase, with a desktop companion on the same library.",
     stack: ["Kotlin", "Compose", "Firebase"],
     image: "/covers/yap.svg",
     status: "wip",
@@ -100,7 +100,7 @@ export const PROJECTS: Project[] = [
   {
     id: "P03",
     title: "DITHER",
-    pitch: "1-bit dithering in the browser — Atkinson, Floyd–Steinberg, Bayer, threshold. Group images with independent presets and export a ZIP. Nothing is ever uploaded.",
+    pitch: "1-bit dithering in the browser. Atkinson, Floyd-Steinberg, Bayer and plain threshold. Group images with independent presets and export a ZIP. Nothing is ever uploaded.",
     stack: ["Canvas", "Vanilla JS", "Pages"],
     image: "/covers/dither.svg",
     status: "live",
@@ -110,7 +110,7 @@ export const PROJECTS: Project[] = [
   {
     id: "P04",
     title: "MACHINE_STRIKE",
-    pitch: "The Horizon tactics board game, rebuilt for the browser. Turn-based combat on a hex grid — machine roster, terrain and overpower rules driven from data, in a typed monorepo over Cloudflare Workers.",
+    pitch: "The Horizon tactics board game, rebuilt for the browser. Turn-based combat on a hex grid. The machine roster, the terrain and the overpower rules all come out of data files, in a typed monorepo running on Cloudflare Workers.",
     stack: ["TypeScript", "Workers", "Monorepo"],
     image: "/covers/machine-strike.svg",
     status: "wip",
@@ -119,7 +119,7 @@ export const PROJECTS: Project[] = [
   {
     id: "P05",
     title: "GRIDS_TO_GRAPHS",
-    pitch: "MSc research. Benchmarks a graph convolutional network against EEGNet on 3-class inner-speech vowel decoding — testing whether electrode geometry beats the grid a CNN assumes.",
+    pitch: "MSc research. Benchmarks a graph convolutional network against EEGNet on 3-class inner-speech vowel decoding, to find out whether the real electrode layout beats the square grid a CNN assumes.",
     stack: ["PyTorch", "GNN", "EEG"],
     image: "/covers/grids-to-graphs.svg",
     status: "wip",
@@ -147,7 +147,7 @@ export const PROJECTS: Project[] = [
   {
     id: "P08",
     title: "KINKEEP",
-    pitch: "A family's documents — findable, verifiable, handed on. Treats a document's validity and its eventual succession as first-class, with tier-based envelope encryption.",
+    pitch: "A family's papers, kept somewhere they can be found, checked and eventually handed on. Whether a document is still valid, and who gets it next, are built into it rather than written on a sticky note. Encrypted so that only the family can read it.",
     stack: ["React", "Firebase", "Kotlin"],
     image: "/covers/kinkeep.svg",
     status: "wip",
@@ -156,7 +156,7 @@ export const PROJECTS: Project[] = [
   {
     id: "P09",
     title: "SECURE_VAULT",
-    pitch: "Zero-knowledge secret sharing. Encrypts files & .env vars in your browser, then mints a one-time access key + link with view limits and auto-expiry. Cloudflare Workers + KV.",
+    pitch: "Share a password or a config file without the server ever being able to read it. Everything is encrypted in your browser first; what you send is a link that can expire or be opened a set number of times. Cloudflare Workers and KV.",
     stack: ["React", "WebCrypto", "Cloudflare"],
     image: "/covers/secure-vault.svg",
     status: "live",
@@ -165,7 +165,7 @@ export const PROJECTS: Project[] = [
   {
     id: "P10",
     title: "HIGHRISE",
-    pitch: "Monopoly-family multiplayer board game — 2–4 players plus bots. Server-authoritative, built on one pure reducer engine shared by client and server over Socket.io.",
+    pitch: "A Monopoly-shaped multiplayer board game for two to four players, with bots to fill the empty seats. The server has the only real copy of the game, and both ends run the same rules engine over Socket.io.",
     stack: ["TypeScript", "Fastify", "Socket.io"],
     image: "/covers/highrise.svg",
     status: "wip",
@@ -183,7 +183,7 @@ export const PROJECTS: Project[] = [
   {
     id: "P12",
     title: "BLACKWALL",
-    pitch: "Receipt generator with client-side encryption — contents never leave the browser in the clear. Cyberpunk print aesthetic, exports print-ready output.",
+    pitch: "Receipt generator that encrypts in the browser, so the contents never leave it in the clear. Cyberpunk print aesthetic, exports print-ready output.",
     stack: ["React", "WebCrypto", "Vite"],
     image: "/covers/blackwall.svg",
     status: "live",
@@ -230,7 +230,7 @@ export const PROJECTS: Project[] = [
   {
     id: "P17",
     title: "A_TESTERS",
-    pitch: "A seat exchange for Google Play closed testing. Test another developer's app to earn seats, spend seats to get your own tested — solving the twelve-testers-for-fourteen-days wall solo devs hit.",
+    pitch: "A seat exchange for Google Play closed testing. Test another developer's app to earn seats, spend seats to get your own tested. It exists because of the twelve-testers-for-fourteen-days wall that every solo developer runs into.",
     stack: ["TypeScript", "Kotlin", "Firebase"],
     image: "/covers/a-testers.svg",
     status: "wip",
@@ -239,7 +239,7 @@ export const PROJECTS: Project[] = [
   {
     id: "P18",
     title: "SMARTSPEND",
-    pitch: "Bridges the weekly shop and the semester budget. Built for buying in bulk — unit-price comparison, forecast spend across months, installable and offline-first.",
+    pitch: "Bridges the weekly shop and the semester budget. Built for buying in bulk: compare unit prices, see what the month looks like before you commit. Installs to the home screen and works with no signal.",
     stack: ["React", "Firebase", "PWA"],
     image: "/covers/smartspend.svg",
     status: "wip",
@@ -257,7 +257,7 @@ export const PROJECTS: Project[] = [
   {
     id: "P20",
     title: "AGENTIC_BROWSER",
-    pitch: "An early prototype where the architecture is the point: the agent package is physically unable to import Electron, enforced by a dependency-cruiser CI gate rather than a code review. The engine tier underneath it stays swappable.",
+    pitch: "An early prototype where the architecture is the point: the agent half of it physically cannot reach into the browser half. That is checked by the build rather than by a reviewer noticing, which means the browser underneath can be swapped out later.",
     stack: ["Electron", "TypeScript", "React"],
     image: "/covers/agentic-browser.svg",
     status: "concept",
@@ -297,7 +297,7 @@ export const WORKS_3D: Work3D[] = [
       "A new shell for a 2007 Mazda flip key. No scanner, just calipers and a lot of patience. Every corner on the drawing is tagged and measured, and anything I haven't got a reading for yet stays a question mark instead of a guess. Three test fits printed so far and it still isn't right.",
     image: "/portfolio-3d/mazda-key-blueprint.png",
     alt:
-      "A measurement blueprint sheet for a Mazda flip-key head. Four orthographic views — front, back, side and bottom — have every corner tagged with a red lettered point and every edge boxed in teal. A schedule beside them lists measurements A to Z in millimetres, with question marks where a reading has not been taken yet.",
+      "A measurement blueprint sheet for a Mazda flip-key head. Four orthographic views (front, back, side and bottom) have every corner tagged with a red lettered point and every edge boxed in teal. A schedule beside them lists measurements A to Z in millimetres, with question marks where a reading has not been taken yet.",
     specs: ["Measured by caliper", "3 test fits", "About 20 g"],
     status: "wip"
   }

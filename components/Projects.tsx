@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { useProjects } from '../lib/projects-store';
 import { Project, ProjectStatus } from '../types';
 
 /** Plain words again. "WIP" means nothing to someone outside software. */
 const STATUS_META: Record<ProjectStatus, { label: string; className: string }> = {
-  live: { label: 'Live', className: 'text-green-800' },
-  wip: { label: 'In progress', className: 'text-amber-700' },
+  live: { label: 'Live', className: 'text-accent' },
+  wip: { label: 'In progress', className: 'text-ink-soft' },
   concept: { label: 'Planned', className: 'text-ink-faint' },
 };
 
@@ -47,15 +47,28 @@ const prettyTitle = (title: string): string => {
   return words.charAt(0).toUpperCase() + words.slice(1);
 };
 
-const linkClass =
-  'border-b border-rule pb-0.5 font-label text-[12px] text-ink-soft transition-colors hover:border-blue hover:text-blue';
+/**
+ * The shape of one page of the grid.
+ *
+ * Seven cells that tile a twelve-column grid exactly: a big one and a tall
+ * one across the top, a row of three, then a wide one and a small one. The
+ * sizes are what makes it a bento rather than a row of equal cards, and
+ * because the pattern repeats, every page is composed the same way instead
+ * of being whatever twenty cards happened to fall into.
+ */
+const SPANS = ['hero', 'tall', 'small', 'small', 'small', 'wide', 'small'] as const;
+const PER_PAGE = SPANS.length;
 
-const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
+const linkClass =
+  'border-b border-rule-soft pb-0.5 font-label text-[12px] text-ink-soft transition-colors hover:border-accent hover:text-accent';
+
+const ProjectCard: React.FC<{ project: Project; span: string }> = ({ project, span }) => {
   const status = STATUS_META[project.status];
+  const roomy = span === 'hero' || span === 'tall';
 
   return (
-    <li className="block-lift flex flex-col">
-      <div className="relative h-28 overflow-hidden border-b-2 border-ink bg-white">
+    <li data-span={span} className="panel-lift flex min-h-0 flex-col overflow-hidden">
+      <div className="relative min-h-0 flex-1 overflow-hidden border-b border-rule bg-white">
         <img
           src={project.image}
           alt={`Cover illustration for ${prettyTitle(project.title)}`}
@@ -63,23 +76,25 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           decoding="async"
           className="h-full w-full object-cover"
         />
+        <span className={`stamp absolute left-3 top-3 bg-paper-lift ${status.className}`}>
+          {status.label}
+        </span>
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
-        <div className="flex flex-wrap items-baseline justify-between gap-3">
-          <h3 className="font-display text-lg font-bold tracking-tight text-ink">
-            {prettyTitle(project.title)}
-          </h3>
-          <span className={`stamp ${status.className}`}>
-            {status.label}
-          </span>
-        </div>
+      <div className="flex shrink-0 flex-col p-5">
+        <h3 className="font-display text-xl font-bold leading-tight tracking-tight text-ink">
+          {prettyTitle(project.title)}
+        </h3>
 
-        <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-soft">
+        <p
+          className={`mt-2 text-sm leading-relaxed text-ink-soft ${
+            roomy ? 'line-clamp-6' : 'line-clamp-3'
+          }`}
+        >
           {project.pitch}
         </p>
 
-        {project.stack.length > 0 && (
+        {roomy && project.stack.length > 0 && (
           <ul className="mt-4 flex flex-wrap gap-1.5 p-0 list-none">
             {project.stack.map((tech) => (
               <li
@@ -92,7 +107,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           </ul>
         )}
 
-        <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
           {project.action &&
             (project.action.vault ? (
               <button
@@ -112,7 +127,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
                 rel="noopener noreferrer"
                 className={linkClass}
               >
-                {project.action.text} →
+                {project.action.text} &rarr;
               </a>
             ))}
 
@@ -123,7 +138,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
               rel="noopener noreferrer"
               className={linkClass}
             >
-              Visit →
+              Visit &rarr;
             </a>
           )}
 
@@ -134,7 +149,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
               rel="noopener noreferrer"
               className={linkClass}
             >
-              Source →
+              Source &rarr;
             </a>
           )}
 
@@ -143,7 +158,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           {project.private && !project.github && (
             <span
               className="font-label text-[12px] text-ink-faint"
-              title="Private repository — happy to walk through it"
+              title="Private repository, happy to walk through it"
             >
               Source on request
             </span>
@@ -154,15 +169,90 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   );
 };
 
+const arrowClass =
+  'flex h-12 w-12 items-center justify-center border border-ink text-xl leading-none text-ink transition-colors hover:bg-ink hover:text-paper disabled:cursor-not-allowed disabled:border-rule-soft disabled:text-ink-faint disabled:hover:bg-transparent';
+
+/**
+ * Twenty projects in a bento grid, seven at a time.
+ *
+ * Paged rather than scrolled: twenty cards in one go is a wall, and a
+ * sideways scroller is worse — he asked for arrows and pages, so that is
+ * what this is. The page changes in place, the heading above it says which
+ * page you are on, and the whole thing is announced to a screen reader.
+ */
 const Projects: React.FC = () => {
   const { projects } = useProjects();
+  const [page, setPage] = useState(0);
+
+  const pages = Math.max(1, Math.ceil(projects.length / PER_PAGE));
+  // Firestore can return fewer projects than the page we are sitting on.
+  const current = Math.min(page, pages - 1);
+
+  const slice = useMemo(
+    () => projects.slice(current * PER_PAGE, current * PER_PAGE + PER_PAGE),
+    [projects, current],
+  );
+
+  if (projects.length === 0) return null;
 
   return (
-    <ul className="grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 xl:grid-cols-3">
-      {projects.map((project) => (
-        <ProjectCard key={project.id} project={project} />
-      ))}
-    </ul>
+    <div>
+      <ul className="bento list-none p-0">
+        {slice.map((project, index) => (
+          <ProjectCard key={project.id} project={project} span={SPANS[index]} />
+        ))}
+      </ul>
+
+      {pages > 1 && (
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-6 border-t border-ink pt-6">
+          <p className="label m-0 text-ink-soft" aria-live="polite">
+            Page {current + 1} of {pages}
+            <span className="sr-only">
+              {' '}
+              — showing {slice.length} of {projects.length} projects
+            </span>
+          </p>
+
+          <div className="flex items-center gap-3">
+            {/* Dots first, so the arrows stay at the end of the row where a
+                thumb expects them. */}
+            <div className="mr-2 hidden items-center gap-2 sm:flex">
+              {Array.from({ length: pages }, (_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setPage(index)}
+                  aria-label={`Go to page ${index + 1}`}
+                  aria-current={index === current ? 'true' : undefined}
+                  className={`h-3 w-3 border border-ink transition-colors ${
+                    index === current ? 'bg-accent' : 'bg-transparent hover:bg-ink'
+                  }`}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setPage(current - 1)}
+              disabled={current === 0}
+              aria-label="Previous page of projects"
+              className={arrowClass}
+            >
+              &larr;
+            </button>
+            <button
+              type="button"
+              onClick={() => setPage(current + 1)}
+              disabled={current === pages - 1}
+              aria-label="Next page of projects"
+              className={arrowClass}
+            >
+              &rarr;
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

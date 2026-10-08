@@ -14,10 +14,10 @@ const SERVICE_PAGES = [
  * they are reachable without scrolling to the right section.
  */
 const SiteFooter: React.FC = () => (
-  <footer className="border-t-2 border-ink bg-paper-lift">
-    <div className="mx-auto grid max-w-[1180px] gap-8 px-5 py-12 sm:grid-cols-2 sm:px-8 lg:grid-cols-4">
+  <footer className="border-t-[3px] border-ink bg-paper-lift">
+    <div className="bleed grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
       <div>
-        <p className="font-mark text-lg tracking-[0.12em] text-ink">MEHDI ACHO</p>
+        <p className="font-mark text-xl tracking-[0.12em] text-ink">MEHDI ACHO</p>
         <p className="mt-3 text-sm leading-relaxed text-ink-soft">{PROFILE.role}</p>
       </div>
 
