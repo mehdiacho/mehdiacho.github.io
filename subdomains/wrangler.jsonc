@@ -1,0 +1,22 @@
+{
+  // Static-asset Worker. `wrangler pages deploy` is dead as of wrangler 4.131;
+  // this is the supported route for a static site, and a `custom_domain` route
+  // creates its own DNS record even though the OAuth token is only zone:read.
+  "name": "mehdiacho-subdomains",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "../dist",
+    "binding": "ASSETS",
+    // Without this, static assets are served BEFORE the Worker runs, so "/"
+    // matches dist/index.html and the alias serves the apex home page instead
+    // of its own service page. Only the root needs intercepting; every other
+    // path is served straight from assets.
+    "run_worker_first": ["/"]
+  },
+  "routes": [
+    { "pattern": "3d.mehdiacho.tech", "custom_domain": true },
+    { "pattern": "cad.mehdiacho.tech", "custom_domain": true },
+    { "pattern": "web.mehdiacho.tech", "custom_domain": true }
+  ]
+}
