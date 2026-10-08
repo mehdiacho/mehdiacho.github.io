@@ -50,6 +50,46 @@ export interface Project {
   draft?: boolean;
 }
 
+/**
+ * One thing Mehdi is hired to do. Short enough to sit in the hero card without
+ * pushing the contact buttons below the fold.
+ */
+export interface Service {
+  name: string;
+  detail: string;
+  /** The crawlable page that covers this in depth, if there is one. */
+  href?: string;
+  /** Link label. Written as a phrase, not "read more". */
+  linkText?: string;
+}
+
+/**
+ * A piece of 3D / CAD work: a modelled part, a dimensioned blueprint, or both.
+ *
+ * `image` is the still that goes in the grid and is the only thing most
+ * visitors will ever load. `model` is optional and costs a megabyte of viewer,
+ * so it is fetched on request rather than on page load.
+ */
+export interface Work3D {
+  id: string;
+  title: string;
+  /** What it is and why it was made. One or two sentences. */
+  caption: string;
+  /** Still image, served from `/portfolio-3d/`. */
+  image: string;
+  /**
+   * Written for someone who cannot see it. Describes what the drawing or
+   * render actually shows, not just what the part is called — the title and
+   * caption already say that.
+   */
+  alt: string;
+  /** Optional `.glb` in `/portfolio-3d/`. Shows a "VIEW_3D" button when set. */
+  model?: string;
+  /** Material, process, tooling — the facts a print shop would ask for. */
+  specs?: string[];
+  status: ProjectStatus;
+}
+
 export interface Experience {
   id: string;
   role: string;
@@ -58,14 +98,12 @@ export interface Experience {
   description: string;
 }
 
-export interface Skill {
-  name: string;
-  level: number; // 0-100
-  category: 'language' | 'framework' | 'core';
+/**
+ * A named group of tools. Replaced an earlier `Skill` type that carried a
+ * 0-100 `level`; those numbers were invented and are not missed.
+ */
+export interface ToolGroup {
+  group: string;
+  items: string[];
 }
 
-export interface TerminalLine {
-  type: 'input' | 'output' | 'system';
-  content: string;
-  isHtml?: boolean;
-}

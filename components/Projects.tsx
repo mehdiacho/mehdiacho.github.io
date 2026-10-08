@@ -1,41 +1,156 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Github, ExternalLink, Cpu, Lock, EyeOff, ArrowUpRight } from 'lucide-react';
+
 import { useProjects } from '../lib/projects-store';
 import { Project, ProjectStatus } from '../types';
 
-const STATUS_META: Record<ProjectStatus, { label: string; dot: string; text: string; border: string }> = {
-  live: { label: 'LIVE', dot: 'bg-green-500', text: 'text-green-400', border: 'border-green-900/60' },
-  wip: { label: 'WIP', dot: 'bg-amber-500 animate-pulse', text: 'text-amber-400', border: 'border-amber-900/60' },
-  concept: { label: 'CONCEPT', dot: 'bg-zinc-500', text: 'text-zinc-400', border: 'border-zinc-700' },
+/** Plain words again. "WIP" means nothing to someone outside software. */
+const STATUS_META: Record<ProjectStatus, { label: string; className: string }> = {
+  live: { label: 'Live', className: 'border-green-800/40 text-green-800' },
+  wip: { label: 'In progress', className: 'border-amber-700/40 text-amber-700' },
+  concept: { label: 'Planned', className: 'border-rule text-ink-faint' },
 };
 
 /**
- * The card's primary action. Everything is a label plus a destination — the
- * label carries the promise, so a Play tester flow doesn't have to pretend to
- * be a "deploy" link. The vault is the one in-site destination.
+ * Titles are stored SHOUTED_WITH_UNDERSCORES — that was the terminal theme's
+ * voice, and they are edited in Firestore, so they cannot simply be renamed
+ * in this repo. They are formatted for display instead: underscores become
+ * spaces, and the handful of names that are not plain words are spelled out.
  */
-const ActionButton: React.FC<{ action: NonNullable<Project['action']> }> = ({ action }) => {
-  const className =
-    'flex items-center gap-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors';
+const NAME_OVERRIDES: Record<string, string> = {
+  YAP: 'Yap',
+  TETHER: 'Tether',
+  DITHER: 'Dither',
+  MACHINE_STRIKE: 'Machine Strike',
+  GRIDS_TO_GRAPHS: 'Grids to Graphs',
+  FPX_NOW: 'FPX Now',
+  FILMARR: 'Filmarr',
+  KINKEEP: 'Kin Keep',
+  SECURE_VAULT: 'Secure Vault',
+  HIGHRISE: 'Highrise',
+  FISH_PLAYER: 'Fish Player',
+  BLACKWALL: 'Blackwall',
+  DRAFTING_TABLE: 'Drafting Table',
+  TALLY: 'Tally',
+  BIBVERIFY: 'BibVerify',
+  AISTUDIO_SYNC: 'AI Studio Sync',
+  A_TESTERS: 'A-Testers',
+  SMARTSPEND: 'SmartSpend',
+  MMILA: 'Mmila',
+  AGENTIC_BROWSER: 'Agentic Browser',
+};
 
-  if (action.vault) {
-    return (
-      <button
-        onClick={() => window.dispatchEvent(new CustomEvent('vault:open', { detail: { tab: 'send' } }))}
-        className={className}
-      >
-        <Lock size={14} />
-        <span>{action.text}</span>
-      </button>
-    );
-  }
+const prettyTitle = (title: string): string => {
+  const known = NAME_OVERRIDES[title];
+  if (known) return known;
+  // Unknown name from Firestore: do the safe part of the job only.
+  const words = title.replace(/_/g, ' ').toLowerCase();
+  return words.charAt(0).toUpperCase() + words.slice(1);
+};
+
+const linkClass =
+  'border-b border-rule pb-0.5 font-label text-[12px] text-ink-soft transition-colors hover:border-blue hover:text-blue';
+
+const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
+  const status = STATUS_META[project.status];
 
   return (
-    <a href={action.href} target="_blank" rel="noopener noreferrer" className={className}>
-      <ArrowUpRight size={14} />
-      <span>{action.text}</span>
-    </a>
+    <li className="flex flex-col border-2 border-ink bg-paper-lift">
+      <div className="relative h-28 overflow-hidden border-b-2 border-ink bg-white">
+        <img
+          src={project.image}
+          alt={`Cover illustration for ${prettyTitle(project.title)}`}
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover"
+        />
+      </div>
+
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex flex-wrap items-baseline justify-between gap-3">
+          <h3 className="font-display text-lg font-bold tracking-tight text-ink">
+            {prettyTitle(project.title)}
+          </h3>
+          <span className={`border px-2 py-0.5 label ${status.className}`}>
+            {status.label}
+          </span>
+        </div>
+
+        <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-soft">
+          {project.pitch}
+        </p>
+
+        {project.stack.length > 0 && (
+          <ul className="mt-4 flex flex-wrap gap-1.5 p-0 list-none">
+            {project.stack.map((tech) => (
+              <li
+                key={tech}
+                className="border border-rule-soft px-1.5 py-0.5 font-label text-[11px] text-ink-faint"
+              >
+                {tech}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+          {project.action &&
+            (project.action.vault ? (
+              <button
+                onClick={() =>
+                  window.dispatchEvent(
+                    new CustomEvent('vault:open', { detail: { tab: 'send' } }),
+                  )
+                }
+                className={linkClass}
+              >
+                {project.action.text}
+              </button>
+            ) : (
+              <a
+                href={project.action.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={linkClass}
+              >
+                {project.action.text} →
+              </a>
+            ))}
+
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              Visit →
+            </a>
+          )}
+
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              Source →
+            </a>
+          )}
+
+          {/* Private source with nothing public to click — say so rather than
+              letting real work read as unstarted. */}
+          {project.private && !project.github && (
+            <span
+              className="font-label text-[12px] text-ink-faint"
+              title="Private repository — happy to walk through it"
+            >
+              Source on request
+            </span>
+          )}
+        </div>
+      </div>
+    </li>
   );
 };
 
@@ -43,114 +158,11 @@ const Projects: React.FC = () => {
   const { projects } = useProjects();
 
   return (
-    <div className="w-full">
-      <h3 className="font-mono text-cyan-500 text-sm tracking-widest uppercase mb-6 border-b border-zinc-800 pb-2">
-        Active_Modules
-      </h3>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projects.map((project, index) => (
-          <motion.div
-            key={project.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            // Stagger only across the first screenful; past that the delay
-            // would stack into seconds of dead time on a 20-card grid.
-            transition={{ delay: Math.min(index, 6) * 0.08 }}
-            viewport={{ once: true }}
-            className="group relative bg-zinc-900 border border-zinc-800 p-0 overflow-hidden hover:border-cyan-500/50 transition-colors duration-300"
-          >
-            {/* Header bar */}
-            <div className="bg-zinc-950 border-b border-zinc-800 p-2 flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                    <Cpu size={14} className="text-zinc-500" />
-                    <span className="font-mono text-xs text-zinc-400 uppercase">{project.id}</span>
-                </div>
-                {/* Honest build status */}
-                <span
-                    className={`flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 border ${STATUS_META[project.status].border} ${STATUS_META[project.status].text}`}
-                    title={`Build status: ${STATUS_META[project.status].label}`}
-                >
-                    <span className={`w-1.5 h-1.5 rounded-full ${STATUS_META[project.status].dot}`}></span>
-                    {STATUS_META[project.status].label}
-                </span>
-            </div>
-
-            {/* Cover art */}
-            <div className="relative h-32 w-full overflow-hidden border-b border-zinc-800/50">
-                <div className="absolute inset-0 bg-cyan-900/10 z-10 group-hover:bg-transparent transition-colors duration-500"></div>
-                <img
-                    src={project.image}
-                    alt=""
-                    loading="lazy"
-                    className="w-full h-full object-cover filter grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105"
-                />
-                {/* Tech Stack Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-zinc-950 to-transparent z-20 flex gap-2">
-                    {project.stack.map(tech => (
-                        <span key={tech} className="text-[10px] font-mono text-cyan-200 bg-cyan-950/50 px-1 border border-cyan-900/50">
-                            {tech}
-                        </span>
-                    ))}
-                </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-4">
-                <h4 className="font-mono text-zinc-100 text-lg font-bold mb-2 group-hover:text-cyan-400 transition-colors">
-                    {project.title}
-                </h4>
-                <p className="text-zinc-400 text-sm mb-4 h-16 line-clamp-3">
-                    {project.pitch}
-                </p>
-
-                <div className="flex flex-wrap gap-x-4 gap-y-2 mt-auto">
-                    {project.action && <ActionButton action={project.action} />}
-                    {project.github && (
-                        <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-xs font-mono text-zinc-500 hover:text-zinc-200 transition-colors"
-                        >
-                            <Github size={14} />
-                            <span>SOURCE</span>
-                        </a>
-                    )}
-                    {project.link && (
-                        <a
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-xs font-mono text-zinc-500 hover:text-zinc-200 transition-colors"
-                        >
-                            <ExternalLink size={14} />
-                            <span>DEPLOY</span>
-                        </a>
-                    )}
-                    {/* Private source with nothing public to click — say so rather
-                        than letting a real project read as unstarted. */}
-                    {project.private && !project.github && (
-                        <span className="flex items-center gap-2 text-xs font-mono text-zinc-600" title="Private repository — happy to walk through it">
-                            <EyeOff size={14} />
-                            <span>SOURCE // ON_REQUEST</span>
-                        </span>
-                    )}
-                    {!project.private && !project.github && !project.link && !project.action && (
-                        <span className="flex items-center gap-2 text-xs font-mono text-zinc-600 italic">
-                            <span className="w-2 h-2 border border-zinc-700"></span>
-                            QUEUED // SEE_BACKLOG
-                        </span>
-                    )}
-                </div>
-            </div>
-
-            {/* Corner Accent */}
-            <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-zinc-700 group-hover:border-cyan-500 transition-colors"></div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
+    <ul className="grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 xl:grid-cols-3">
+      {projects.map((project) => (
+        <ProjectCard key={project.id} project={project} />
+      ))}
+    </ul>
   );
 };
 

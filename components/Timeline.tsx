@@ -1,44 +1,32 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+
 import { TIMELINE } from '../constants';
 
-const Timeline: React.FC = () => {
-  return (
-    <div className="flex flex-col gap-6">
-      <h3 className="font-mono text-cyan-500 text-sm tracking-widest uppercase mb-4 border-b border-zinc-800 pb-2">
-        Execution_Log
-      </h3>
-      
-      <div className="relative border-l border-zinc-800 ml-3 space-y-8">
-        {TIMELINE.map((item, index) => (
-          <motion.div 
-            key={item.id}
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 }}
-            viewport={{ once: true }}
-            className="relative pl-8"
-          >
-            {/* Dot */}
-            <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 bg-zinc-950 border border-cyan-500 rounded-full"></div>
-            
-            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between mb-1">
-                <h4 className="font-mono text-zinc-200 font-bold text-sm md:text-base uppercase">{item.role}</h4>
-                <span className="font-mono text-zinc-500 text-xs">{item.period}</span>
-            </div>
-            
-            <div className="text-cyan-500/80 font-mono text-xs mb-2 uppercase tracking-wide">
-                @{item.company}
-            </div>
-            
-            <p className="text-zinc-400 text-sm leading-relaxed max-w-lg">
-                {item.description}
-            </p>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-};
+/**
+ * Where he has been. An editorial list rather than a decorated timeline —
+ * four entries do not need a rail and a row of dots to be read in order.
+ */
+const Timeline: React.FC = () => (
+  <ol className="list-none border-b border-rule-soft p-0">
+    {TIMELINE.map((item) => (
+      <li
+        key={item.id}
+        className="grid gap-x-8 gap-y-1 border-t border-rule-soft py-6 sm:grid-cols-[160px_minmax(0,1fr)]"
+      >
+        <p className="label pt-1 text-ink-faint">{item.period}</p>
+
+        <div>
+          <h3 className="font-display text-lg font-bold tracking-tight text-ink">
+            {item.role}
+          </h3>
+          <p className="label mt-1 text-blue">{item.company}</p>
+          <p className="mt-2 max-w-[60ch] text-sm leading-relaxed text-ink-soft">
+            {item.description}
+          </p>
+        </div>
+      </li>
+    ))}
+  </ol>
+);
 
 export default Timeline;

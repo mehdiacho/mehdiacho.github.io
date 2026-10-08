@@ -1,14 +1,15 @@
-import { Project, Experience, Skill } from './types';
+import { Project, Experience, ToolGroup, Service, Work3D } from './types';
 
 export const PROFILE = {
-  name: "MEHDI ACHO",
-  role: "DEEP LEARNING RESEARCHER // FULL-STACK ENGINEER",
-  location: "GABORONE, BOTSWANA",
+  name: "Mehdi Acho",
+  role: "3D and CAD modeling · Web development",
+  location: "Gaborone, Botswana",
   coordinates: "24.6282° S, 25.9231° E",
   status: "ONLINE",
-  statusSub: "OPEN_TO_WORK",
-  bio: "Deep Learning Researcher based in Gaborone.",
-  bioSub: "Investigating high-dimensional signal processing.",
+  statusSub: "Available for work",
+  /** Also the meta description. Changing it changes what Google shows. */
+  bio: "3D & CAD modeling and web development in Gaborone, Botswana.",
+  bioSub: "I measure the part, draw it properly, work out how it goes together, then print it. Software gets the same treatment — figure out what it has to do before writing it.",
   mission: "I do research. I build software. For money. For fun. For the future.",
   email: "mehdiacho@gmail.com",
   socials: {
@@ -17,6 +18,49 @@ export const PROFILE = {
   },
   birthDate: new Date("2002-03-18T00:00:00")
 };
+
+/**
+ * What someone can actually hire him for, in the order he wants to be hired
+ * for it. Rendered in the hero card, directly under the bio — a visitor who
+ * came from a search for "CAD modeling Gaborone" should not have to scroll.
+ */
+export const SERVICES: Service[] = [
+  {
+    name: "3D and CAD modeling",
+    detail:
+      "Replacement parts, brackets, fittings and housings. I measure what you have, draw it, model it and hand back a file you can print — or print it myself.",
+    href: "/cad-modeling-botswana/",
+    linkText: "More on CAD modeling"
+  },
+  {
+    name: "Web development",
+    detail:
+      "Websites and web apps that load fast, work properly on a phone, and can actually be found by someone searching for what you do.",
+    href: "/web-development-gaborone/",
+    linkText: "More on web development"
+  },
+  {
+    name: "Machine learning",
+    detail:
+      "Models built and trained for a specific question, then put somewhere they can be used rather than left in a notebook.",
+    // No page of its own yet, so this points at the work further down the page
+    // rather than at an unrelated service page.
+    href: "#software",
+    linkText: "See the research work"
+  }
+];
+
+/**
+ * How the work actually goes, in four steps. Shown under the hero with a
+ * drawing against each one — it is the clearest answer to "what do you
+ * actually do", and it is the thing that separates this from a print shop.
+ */
+export const PROCESS: { step: string; title: string; detail: string }[] = [
+  { step: "01", title: "Measure", detail: "Calipers on the real object. Every edge written down." },
+  { step: "02", title: "Draw", detail: "A proper drawing first, so the gaps show up before they cost anything." },
+  { step: "03", title: "Model", detail: "Built from those numbers, so a change is a change, not a redo." },
+  { step: "04", title: "Print", detail: "Test fit, adjust, print the real one." }
+];
 
 /**
  * Fallback project list.
@@ -221,6 +265,44 @@ export const PROJECTS: Project[] = [
   }
 ];
 
+/**
+ * 3D / CAD work.
+ *
+ * Stills live in `public/portfolio-3d/`. Add a file there, add an entry here,
+ * and write the `alt` yourself — the gallery will not invent one, and an item
+ * whose image 404s is dropped from the grid rather than shown broken.
+ *
+ * Set `model` to a `.glb` in the same folder to get a "VIEW_3D" button. The
+ * viewer is ~1 MB and is only fetched when someone presses it.
+ *
+ * Source for all of this: `X:\Projects\3d` — the blueprints, the Python build
+ * scripts and the STLs.
+ */
+export const WORKS_3D: Work3D[] = [
+  {
+    id: "M01",
+    title: "Laptop charger brace",
+    caption:
+      "The rubber sleeve where the cable meets the plug had torn right off, leaving the wires bare. This grips the plug, carries the cable past the damage and clips onto the back of the laptop. It prints as two halves that close around the cable.",
+    image: "/portfolio-3d/charger-brace-v1.png",
+    alt:
+      "Four shaded CAD views of the charger brace. The assembled part is shown from behind the laptop and from the face that touches it; below, the two halves lie flat on their split faces the way they print, and one half is turned over to show the hollow the plug barrel sits in. The part is a round ribbed sleeve on a flat mounting plate, with a thin arm hooking off one side.",
+    specs: ["Black PETG", "About 12 g", "Prints in two halves"],
+    status: "wip"
+  },
+  {
+    id: "M02",
+    title: "Mazda flip-key body",
+    caption:
+      "A replacement shell for a 2007 Mazda flip key, built from caliper readings rather than a scan. The drawing comes first: every corner is tagged and measured, and anything not measured yet stays a question mark rather than becoming a guess. Three test fits printed so far.",
+    image: "/portfolio-3d/mazda-key-blueprint.png",
+    alt:
+      "A measurement blueprint sheet for a Mazda flip-key head. Four orthographic views — front, back, side and bottom — have every corner tagged with a red lettered point and every edge boxed in teal. A schedule beside them lists measurements A to Z in millimetres, with question marks where a reading has not been taken yet.",
+    specs: ["Measured by caliper", "3 test fits", "About 20 g"],
+    status: "wip"
+  }
+];
+
 export const TIMELINE: Experience[] = [
   {
     id: "E1",
@@ -252,25 +334,37 @@ export const TIMELINE: Experience[] = [
   }
 ];
 
-export const SKILLS: Skill[] = [
-  { name: "Python", level: 95, category: "language" },
-  { name: "JavaScript", level: 85, category: "language" },
-  { name: "C++", level: 70, category: "language" },
-  { name: "Dart", level: 65, category: "language" },
-  { name: "React.js", level: 90, category: "framework" },
-  { name: "PyTorch", level: 85, category: "framework" },
-  { name: "GNNs & CNNs", level: 90, category: "core" },
-  { name: "Full-Stack", level: 80, category: "core" },
+/**
+ * What I actually reach for, grouped. There used to be a percentage against
+ * each of these; it was a number I made up about myself, which is worse than
+ * saying nothing, so it is gone.
+ */
+export const TOOLKIT: ToolGroup[] = [
+  {
+    group: "Modeling and printing",
+    items: ["Fusion 360", "Parametric models in Python", "Caliper surveys and drawings", "PETG on an Ender-3"]
+  },
+  {
+    group: "Web",
+    items: ["React", "TypeScript", "Tailwind", "Firebase", "Cloudflare Workers"]
+  },
+  {
+    group: "Machine learning",
+    items: ["PyTorch", "Graph and convolutional networks"]
+  },
+  {
+    group: "Languages",
+    items: ["Python", "JavaScript", "Kotlin", "C++", "Dart"]
+  }
 ];
 
-export const DREAM_LOG = `Initializing Core Dump...
-
-Truth is, I love building software. I found a love for research I didn't expect. My goal isn't just a job; it's to work on tech that will see the light of day.
-
-The Dream: A massive signing bonus from a company that actually cares about mankind. Or starting a business that does. I want to use that capital to invest in global change. I've lived on the short side of the stick. I know what it's like. I want to make sure one less kid has to live like that.
-
-Capabilities: My strength is ideas. I have too many. I need teams to help me execute them.
-
-Downtime Protocols: Cyberpunk 2077 (Masterpiece). Shared gaming sessions. Reading Manhwa (formerly Anime/Manga, but I evolved).
-
-End of Log.`;
+/**
+ * Mehdi's own words, from the terminal easter egg the old site hid them in.
+ * Only the machine framing around them was removed — the sentences are his.
+ */
+export const ABOUT: string[] = [
+  "Truth is, I love building software. I found a love for research I didn't expect. My goal isn't just a job; it's to work on tech that will see the light of day.",
+  "The dream is a signing bonus from a company that actually cares about mankind — or starting a business that does — and using that to invest in global change. I've lived on the short side of the stick. I know what it's like. I want to make sure one less kid has to live like that.",
+  "My strength is ideas. I have too many of them. I need teams to help me execute them.",
+  "Off the clock: Cyberpunk 2077, gaming with friends, and reading manhwa."
+];

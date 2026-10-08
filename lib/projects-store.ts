@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import { PROJECTS } from '../constants';
 import type { Project, ProjectStatus } from '../types';
 
-const COLLECTION = 'projects';
+import { firebaseConfig } from './firebase';
 
 /** Where the list currently on screen came from. Surfaced in the terminal. */
 export type ProjectSource = 'firestore' | 'fallback';
@@ -74,23 +74,43 @@ function toProject(id: string, raw: Record<string, unknown>): Project | null {
  * Fetch the published project list. Resolves to the fallback rather than
  * rejecting — callers should never have to handle an error to show a page.
  */
-export async function fetchProjects(): Promise<{ projects: Project[]; source: ProjectSource }> {
+type FirestoreValue = { stringValue?: string; booleanValue?: boolean; integerValue?: string; doubleValue?: number; arrayValue?: { values?: FirestoreValue[] }; mapValue?: { fields?: Record<string, FirestoreValue> } };
+export function decodeValue(value: FirestoreValue): unknown {
+  if ('stringValue' in value) return value.stringValue;
+  if ('booleanValue' in value) return value.booleanValue;
+  if ('integerValue' in value) return Number(value.integerValue);
+  if ('doubleValue' in value) return value.doubleValue;
+  if (value.arrayValue) return (value.arrayValue.values ?? []).map(decodeValue);
+  if (value.mapValue) return decodeFields(value.mapValue.fields ?? {});
+  return null;
+}
+function decodeFields(fields: Record<string, FirestoreValue>): Record<string, unknown> {
+  return Object.fromEntries(Object.entries(fields).map(([key,value]) => [key,decodeValue(value)]));
+}
+let pending: ReturnType<typeof readProjects> | undefined;
+export function fetchProjects() { return pending ??= readProjects(); }
+async function readProjects(): Promise<{ projects: Project[]; source: ProjectSource }> {
   try {
-    const [{ initializeApp, getApps }, { getFirestore, collection, getDocs }] = await Promise.all([
-      import('firebase/app'),
-      import('firebase/firestore'),
-    ]);
-    const { firebaseConfig } = await import('./firebase');
-
-    const app = getApps()[0] ?? initializeApp(firebaseConfig);
-    const snap = await getDocs(collection(getFirestore(app), COLLECTION));
-
-    const rows = snap.docs
-      .map((d) => toProject(d.id, d.data() as Record<string, unknown>))
-      .filter((p): p is Project => p !== null)
-      // `draft` documents are filtered by the query consumer, not here — the
-      // rules keep them readable so the admin can list them.
-      .filter((p) => !(p as Project & { draft?: boolean }).draft);
+    // Public REST reads use the same Firestore rules, without shipping the full
+    // realtime SDK for a list that is fetched once. Pagination preserves all rows.
+    const rows: Project[] = [];
+    let pageToken = '';
+    do {
+      const url = new URL(`https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/projects`);
+      url.searchParams.set('key', firebaseConfig.apiKey);
+      url.searchParams.set('pageSize', '100');
+      if (pageToken) url.searchParams.set('pageToken', pageToken);
+      const response = await fetch(url, { signal: AbortSignal.timeout(10000) });
+      if (!response.ok) throw new Error(`Project list returned ${response.status}`);
+      const data = await response.json();
+      for (const document of data.documents ?? []) {
+        const raw = decodeFields(document.fields ?? {});
+        if (raw.draft === true) continue;
+        const project = toProject(document.name.split('/').pop(), raw);
+        if (project) rows.push(project);
+      }
+      pageToken = data.nextPageToken ?? '';
+    } while (pageToken);
 
     if (!rows.length) return { projects: PROJECTS, source: 'fallback' };
 

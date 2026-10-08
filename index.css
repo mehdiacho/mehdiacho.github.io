@@ -1,81 +1,206 @@
+@import "@fontsource-variable/inter/wght.css";
+@import "@fontsource-variable/fira-code/wght.css";
 @import "tailwindcss";
 
-/* ---- CUSTOM GLOBAL STYLES ---- */
+/* ==================================================================== *
+ * Mehdi Acho — mehdiacho.tech
+ *
+ * The page is laid out like a drawing sheet: paper ground, a faint grid,
+ * hairline rules, dimension lines and a title block. The typographic
+ * rhythm is editorial — numbered sections, one very large headline, a lot
+ * of air. A few moments break out of both and go hard-edged: the contact
+ * block, the status stamps, the primary buttons.
+ *
+ * Three self-hosted families, all OFL, all under /fonts:
+ *   Grotesk   — headings and leads. Geometric, three weights.
+ *   Lineal    — the wordmark only. Its N is reversed by design, which
+ *               reads as a typo in running text, so it never appears in
+ *               a sentence. "MEHDI ACHO" has no N.
+ *   Pilowlava — one word, once, in the contact block.
+ * Inter carries body copy and Fira Code carries drawing-sheet labels.
+ * ==================================================================== */
+
+@font-face {
+  font-family: Grotesk;
+  src: url('/fonts/Grotesk-01Extrafin.woff2') format('woff2');
+  font-weight: 200; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: Grotesk;
+  src: url('/fonts/Grotesk-03Regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: Grotesk;
+  src: url('/fonts/Grotesk-04Gras.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: Lineal;
+  src: url('/fonts/Lineal-Black.woff2') format('woff2');
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: Pilowlava;
+  src: url('/fonts/Pilowlava-Regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+
+:root {
+  --paper:      #f3f1ea;
+  --paper-lift: #fbfaf7;
+  --ink:        #15181c;
+  --ink-soft:   #5a6069;
+  --ink-faint:  #8d9199;
+  --rule:       #cfcbc0;
+  --rule-soft:  #e2dfd6;
+  --blue:       #11508f;
+  --red:        #bf3b2b;
+  --green:      #2f7d4f;
+  --amber:      #a8701a;
+
+  --font-display: Grotesk, 'Inter Variable', system-ui, sans-serif;
+  --font-body: 'Inter Variable', system-ui, sans-serif;
+  --font-label: 'Fira Code Variable', ui-monospace, Consolas, monospace;
+}
+
+@theme {
+  --color-paper: #f3f1ea;
+  --color-paper-lift: #fbfaf7;
+  --color-ink: #15181c;
+  --color-ink-soft: #5a6069;
+  --color-ink-faint: #8d9199;
+  --color-rule: #cfcbc0;
+  --color-rule-soft: #e2dfd6;
+  --color-blue: #11508f;
+  --color-red: #bf3b2b;
+}
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 
 body {
-  background-color: #09090b; /* zinc-950 */
-  color: #e4e4e7; /* zinc-200 */
-  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background-color: var(--paper);
+  /* The sheet. Two hairlines at 32px, deliberately almost invisible —
+     it should register as texture, not as a table. */
+  background-image:
+    linear-gradient(to right,  rgba(21, 24, 28, .045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(21, 24, 28, .045) 1px, transparent 1px);
+  background-size: 32px 32px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
 }
 
-.font-mono {
-  font-family: 'Fira Code', monospace;
+::selection { background: var(--blue); color: #fff; }
+
+/* Visible focus everywhere. The grid makes a faint ring hard to see, so
+   this one is deliberately heavy. */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
 }
 
-/* Custom scrollbar for webkit */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* ---------- type ---------- */
+.font-display { font-family: var(--font-display); }
+.font-label   { font-family: var(--font-label); }
+.font-mark    { font-family: Lineal, var(--font-display); font-weight: 900; }
+.font-pilow   { font-family: Pilowlava, var(--font-display); font-weight: 400; }
+
+/* A drawing-sheet annotation: small, spaced, upper case. */
+.label {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  line-height: 1.4;
 }
 
-::-webkit-scrollbar-track {
-  background: #18181b;
+/* ---------- drawing-sheet furniture ---------- */
+
+/* A dimension line: a rule with a tick at each end, the way a measurement
+   is called out on a drawing. Used as a section divider and under the
+   hero. Decorative only, so it is hidden from assistive tech at source. */
+.dimline { position: relative; border-top: 1px solid var(--ink); }
+.dimline::before,
+.dimline::after {
+  content: ""; position: absolute; top: -6px;
+  width: 1px; height: 13px; background: var(--ink);
+}
+.dimline::before { left: 0; }
+.dimline::after  { right: 0; }
+
+/* Registration marks on a panel corner. */
+.ticked { position: relative; }
+.ticked::before,
+.ticked::after {
+  content: ""; position: absolute; width: 10px; height: 10px; pointer-events: none;
+}
+.ticked::before { top: -1px; left: -1px; border-top: 2px solid var(--blue); border-left: 2px solid var(--blue); }
+.ticked::after { bottom: -1px; right: -1px; border-bottom: 2px solid var(--blue); border-right: 2px solid var(--blue); }
+
+/* The hard-edged moments: offset shadow, no radius, no gradient. */
+.block-hard {
+  border: 2px solid var(--ink);
+  background: var(--paper-lift);
+  box-shadow: 7px 7px 0 var(--ink);
 }
 
-::-webkit-scrollbar-thumb {
-  background: #3f3f46;
-  border-radius: 2px;
-}
+/* Hairline-separated editorial list. */
+.ruled > * + * { border-top: 1px solid var(--rule-soft); }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #52525b;
+/* ==================================================================== *
+ * The crawlable service pages are plain HTML written at build time by
+ * seo/static-pages.mjs, with no Tailwind in reach — so they style
+ * themselves from here, in the same language as the app.
+ * ==================================================================== */
+.service-nav,
+.service-footer {
+  max-width: 1100px; margin: auto; padding: 22px 24px;
+  display: flex; gap: 26px; flex-wrap: wrap; align-items: center;
+  border-bottom: 2px solid var(--ink);
+  font-family: var(--font-label);
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
 }
+.service-nav a { color: var(--ink-soft); text-decoration: none; }
+.service-nav a:first-child { font-family: Lineal, var(--font-display); font-weight: 900; font-size: 16px; letter-spacing: .1em; color: var(--ink); }
+.service-nav a:hover { color: var(--blue); }
 
-.cursor-blink {
-  animation: blink 1s step-end infinite;
+.service-page { max-width: 1000px; margin: auto; padding: 64px 24px; }
+.service-page h1 {
+  font-family: var(--font-display); font-weight: 200;
+  font-size: clamp(2.2rem, 6vw, 4.4rem); line-height: 1.02; letter-spacing: -.035em;
+  margin: 14px 0 28px; max-width: 18ch;
 }
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+.service-page h2 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 1.3rem; letter-spacing: -.02em; margin: 30px 0 12px;
 }
-
-/* ---- CRT / SCANLINE EFFECT (used by the boot intro) ---- */
-.crt-scanlines::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 0px,
-    rgba(0, 0, 0, 0) 2px,
-    rgba(0, 0, 0, 0.35) 3px,
-    rgba(0, 0, 0, 0.35) 4px
-  );
-  z-index: 1;
+.service-page h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; margin: 0 0 6px; }
+.service-page p { margin: 0 0 16px; color: var(--ink-soft); max-width: 72ch; }
+.service-lead { font-size: 1.15rem; color: var(--ink) !important; max-width: 60ch !important; }
+.service-eyebrow {
+  font-family: var(--font-label); font-size: 11px; font-weight: 500;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--red); margin: 0 !important;
 }
-
-.crt-scanlines::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse at center, rgba(0, 255, 200, 0.03) 0%, rgba(0, 0, 0, 0.45) 100%);
-  z-index: 1;
+.service-sections {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 34px; margin: 40px 0 56px; padding-top: 28px; border-top: 1px solid var(--ink);
 }
-
-.crt-flicker {
-  animation: crt-flicker 4s infinite steps(1);
+.service-work { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 24px; }
+.service-work figure { margin: 0; border: 2px solid var(--ink); background: var(--paper-lift); }
+.service-work img { display: block; width: 100%; height: auto; aspect-ratio: 4/3; object-fit: contain; background: #fff; }
+.service-work figcaption { padding: 18px; border-top: 2px solid var(--ink); }
+.service-contact {
+  margin-top: 56px; padding: 28px;
+  border: 2px solid var(--ink); background: var(--paper-lift); box-shadow: 7px 7px 0 var(--ink);
 }
-
-@keyframes crt-flicker {
-  0%, 96%, 100% { opacity: 1; }
-  97% { opacity: 0.92; }
-  98% { opacity: 0.98; }
-  99% { opacity: 0.9; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .crt-flicker { animation: none; }
-}
+.service-page a,
+.service-footer a { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
+.service-footer { justify-content: space-between; border-top: 2px solid var(--ink); border-bottom: 0; color: var(--ink-soft); }

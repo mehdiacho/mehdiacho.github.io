@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { Github, Linkedin, Mail, Lock } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 
-import SystemStatus from './components/SystemStatus';
-import Timeline from './components/Timeline';
+import SiteHeader from './components/SiteHeader';
+import Hero from './components/Hero';
+import Section from './components/Section';
+import Services from './components/Services';
+import Work3D from './components/Work3D';
+import Visualisation from './components/Visualisation';
 import Projects from './components/Projects';
-import Terminal from './components/Terminal';
 import Skills from './components/Skills';
-import BootSequence from './components/BootSequence';
-import Vault from './components/Vault';
+import Timeline from './components/Timeline';
+import Contact from './components/Contact';
+import SiteFooter from './components/SiteFooter';
+
+const Vault = lazy(() => import('./components/Vault'));
 import { normalizeCode } from './lib/vault-crypto';
-import { PROFILE } from './constants';
+import { ABOUT } from './constants';
 
 const App: React.FC = () => {
-  // Show the boot intro unless the visitor opted out of it previously.
-  const [booting, setBooting] = useState<boolean>(() => {
-    try { return localStorage.getItem('tu_boot_dismissed') !== '1'; } catch { return true; }
-  });
-
-  // SECURE_VAULT modal. Opens via the hero button, the `vault` terminal command,
-  // the project card, or automatically when arriving on a #vault=<token> link.
+  // SECURE_VAULT modal. Opens from the project card or from a #vault=<token>
+  // share link; everything else on the page is a plain document.
   const [vaultOpen, setVaultOpen] = useState(false);
   const [vaultTab, setVaultTab] = useState<'send' | 'receive'>('send');
   const [vaultToken, setVaultToken] = useState<string | undefined>(undefined);
@@ -47,102 +46,101 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-200 font-sans selection:bg-cyan-900 selection:text-white pb-40">
-      {booting && <BootSequence onComplete={() => setBooting(false)} />}
-      <SystemStatus />
+    <div className="min-h-screen">
+      <a
+        href="#services"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:border-2 focus:border-ink focus:bg-paper focus:px-4 focus:py-2"
+      >
+        Skip to content
+      </a>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <SiteHeader />
 
-        {/* Left Column: Profile & Diagnostics (Fixed-ish on Desktop) */}
-        <div className="lg:col-span-4 space-y-8">
+      <main>
+        <Hero />
 
-          {/* Hero Profile Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="bg-zinc-900 border border-zinc-800 p-6 relative"
-          >
-            <div className="absolute -top-1 -left-1 w-3 h-3 border-t border-l border-cyan-500"></div>
-            <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b border-r border-cyan-500"></div>
+        <Section
+          id="services"
+          number="01"
+          title={<>What I&rsquo;m hired to do</>}
+          standfirst="Three things, in the order I want to be hired for them. Each one has a page of its own with more detail."
+        >
+          <Services />
+        </Section>
 
-            <div className="mb-6">
-              <h1 className="font-mono text-4xl font-bold text-white tracking-tighter mb-2">
-                {PROFILE.name.split(' ')[0]}<br />
-                <span className="text-zinc-600">{PROFILE.name.split(' ')[1]}</span>
-              </h1>
-              <p className="font-mono text-xs text-cyan-500 tracking-widest mb-1">{PROFILE.role}</p>
-              <div className="flex items-center gap-2 text-xs text-zinc-500 font-mono">
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                {PROFILE.statusSub}
-              </div>
-            </div>
+        <Section
+          id="cad"
+          number="02"
+          title={<>3D printing and CAD modeling in Botswana</>}
+          standfirst="Parts for things that broke, or that were never made in the first place. Measured first, drawn second, printed last."
+        >
+          <Work3D />
+        </Section>
 
-            <p className="text-zinc-400 leading-relaxed text-sm mb-6 border-l-2 border-zinc-800 pl-4 italic">
-              {PROFILE.bio}
-            </p>
-            <p className="text-zinc-400 leading-relaxed text-sm border-l-2 border-zinc-800 pl-4 italic">
-              {PROFILE.bioSub}
-            </p>
-            <p className="text-zinc-400 leading-relaxed text-sm mb-6 border-l-2 border-zinc-800 pl-4 italic">
-              {PROFILE.mission}
-            </p>
+        <Section
+          id="visualisation"
+          number="03"
+          title={<>3D visualisation</>}
+          standfirst="Scenes built from real measurements, so what you see on screen is what you would get in the room."
+        >
+          <Visualisation />
+        </Section>
 
-            {/* Social Actions */}
-            <div className="flex flex-col gap-3">
-              <button
-                onClick={() => window.dispatchEvent(new CustomEvent('vault:open', { detail: { tab: 'send' } }))}
-                className="flex items-center justify-between px-4 py-3 bg-cyan-950/30 border border-cyan-800/60 text-cyan-300 hover:border-cyan-500 hover:bg-cyan-900/30 transition-all group"
-              >
-                <span className="font-mono text-xs uppercase tracking-wider">Secure_Vault // Pass_Secrets</span>
-                <Lock size={16} className="text-cyan-600 group-hover:text-cyan-400" />
-              </button>
-              <a href={`mailto:${PROFILE.email}`} className="flex items-center justify-between px-4 py-3 bg-zinc-950 border border-zinc-800 hover:border-cyan-500/50 hover:text-cyan-400 transition-all group">
-                <span className="font-mono text-xs uppercase">Init_Contact</span>
-                <Mail size={16} className="text-zinc-600 group-hover:text-cyan-500" />
-              </a>
-              <div className="grid grid-cols-2 gap-3">
-                <a href={PROFILE.socials.github} className="flex items-center justify-center gap-2 py-3 bg-zinc-950 border border-zinc-800 hover:bg-zinc-800 transition-all">
-                  <Github size={16} />
-                  <span className="font-mono text-xs">GITHUB</span>
-                </a>
-                <a href={PROFILE.socials.linkedin} className="flex items-center justify-center gap-2 py-3 bg-zinc-950 border border-zinc-800 hover:bg-zinc-800 transition-all">
-                  <Linkedin size={16} />
-                  <span className="font-mono text-xs">LINKEDIN</span>
-                </a>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Skills Visualization */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Skills />
-          </motion.div>
-
-        </div>
-
-        {/* Right Column: Projects & Timeline */}
-        <div className="lg:col-span-8 space-y-16">
+        <Section
+          id="software"
+          number="04"
+          title={<>Software and web work</>}
+          standfirst="Apps, tools and sites I have built. Some are live, some are still being made, and the list says which is which."
+        >
           <Projects />
-          <Timeline />
-        </div>
+        </Section>
 
+        <Section
+          id="about"
+          number="05"
+          title={<>About</>}
+        >
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+            <div className="space-y-5">
+              {ABOUT.map((paragraph) => (
+                <p key={paragraph.slice(0, 32)} className="text-base leading-relaxed text-ink-soft">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+
+            <div>
+              <h3 className="label text-ink-faint">What I work with</h3>
+              <div className="mt-4">
+                <Skills />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-14">
+            <h3 className="label text-ink-faint">Where I&rsquo;ve been</h3>
+            <div className="mt-4">
+              <Timeline />
+            </div>
+          </div>
+        </Section>
+
+        <Contact />
       </main>
 
-      {/* Floating CLI Terminal */}
-      <Terminal />
+      <SiteFooter />
 
       {/* SECURE_VAULT — zero-knowledge secret sharing */}
-      <Vault
-        open={vaultOpen}
-        initialTab={vaultTab}
-        initialToken={vaultToken}
-        onClose={() => setVaultOpen(false)}
-      />
+      {vaultOpen && (
+        <Suspense fallback={<p role="status">Loading…</p>}>
+          <Vault
+            open={vaultOpen}
+            initialTab={vaultTab}
+            initialToken={vaultToken}
+            onClose={() => setVaultOpen(false)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };

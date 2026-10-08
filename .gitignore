@@ -34,3 +34,13 @@ firebase-debug.log
 
 # Cloudflare Wrangler local state
 .wrangler
+
+# Font sources dropped in locally (58 MB of specimens and sources).
+# Only the .woff2 files actually used are committed, under public/fonts/.
+src/assets/fonts/
+
+# Throwaway design exploration
+design-samples/
+
+# Lighthouse output
+reports/

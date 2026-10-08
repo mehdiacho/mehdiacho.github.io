@@ -311,7 +311,7 @@ export default function App() {
                 </div>
               </Field>
               {form.image && (
-                <img src={form.image} alt=""
+                <img src={form.image} alt={`Cover art preview for ${form.title || 'this project'}`}
                      className="mt-3 h-24 w-full max-w-md object-cover border border-zinc-800" />
               )}
             </div>
@@ -424,7 +424,7 @@ export default function App() {
                   {data.order ?? '—'}
                 </span>
                 {data.image
-                  ? <img src={data.image} alt="" className="h-10 w-20 object-cover border border-zinc-800 shrink-0" />
+                  ? <img src={data.image} alt={`Cover art for ${data.title}`} className="h-10 w-20 object-cover border border-zinc-800 shrink-0" />
                   : <div className="h-10 w-20 border border-zinc-800 shrink-0" />}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">

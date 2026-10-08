@@ -1,0 +1,28 @@
+[
+  {
+    "id": "M01",
+    "title": "Laptop charger brace",
+    "caption": "The rubber sleeve where the cable meets the plug had torn right off, leaving the wires bare. This grips the plug, carries the cable past the damage and clips onto the back of the laptop. It prints as two halves that close around the cable.",
+    "image": "/portfolio-3d/charger-brace-v1.png",
+    "alt": "Four shaded CAD views of the charger brace. The assembled part is shown from behind the laptop and from the face that touches it; below, the two halves lie flat on their split faces the way they print, and one half is turned over to show the hollow the plug barrel sits in. The part is a round ribbed sleeve on a flat mounting plate, with a thin arm hooking off one side.",
+    "specs": [
+      "Black PETG",
+      "About 12 g",
+      "Prints in two halves"
+    ],
+    "status": "wip"
+  },
+  {
+    "id": "M02",
+    "title": "Mazda flip-key body",
+    "caption": "A replacement shell for a 2007 Mazda flip key, built from caliper readings rather than a scan. The drawing comes first: every corner is tagged and measured, and anything not measured yet stays a question mark rather than becoming a guess. Three test fits printed so far.",
+    "image": "/portfolio-3d/mazda-key-blueprint.png",
+    "alt": "A measurement blueprint sheet for a Mazda flip-key head. Four orthographic views — front, back, side and bottom — have every corner tagged with a red lettered point and every edge boxed in teal. A schedule beside them lists measurements A to Z in millimetres, with question marks where a reading has not been taken yet.",
+    "specs": [
+      "Measured by caliper",
+      "3 test fits",
+      "About 20 g"
+    ],
+    "status": "wip"
+  }
+]
