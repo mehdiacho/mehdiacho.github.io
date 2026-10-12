@@ -25,29 +25,9 @@ export const PROFILE = {
  * came from a search for "CAD modeling Gaborone" should not have to scroll.
  */
 export const SERVICES: Service[] = [
-  {
-    name: "3D and CAD modeling",
-    detail:
-      "Something broke and nobody sells the part any more. I measure the original with calipers, draw it, model it, and then either hand you the file or print it here on PETG.",
-    href: "/cad-modeling-botswana/",
-    linkText: "More on CAD modeling"
-  },
-  {
-    name: "Web development",
-    detail:
-      "Sites and web apps. Quick on a bad connection, usable on a phone, and findable on Google. This site is the example. It was built to rank, not just to look at.",
-    href: "/web-development-gaborone/",
-    linkText: "More on web development"
-  },
-  {
-    name: "Machine learning",
-    detail:
-      "This is what my MSc is in. I train models for one specific question and then put them somewhere they can be used, which is the part most people skip.",
-    // No page of its own yet, so this points at the work further down the page
-    // rather than at an unrelated service page.
-    href: "#software",
-    linkText: "See the research work"
-  }
+  { name: "Making things fit", detail: "I got into CAD and 3D printing through small things I wanted to fix. A charger plug, a key shell, the sort of part you cannot just buy on its own. The drawings and test fits are as much a part of it as the finished model.", href: "/models/", linkText: "My model notebook" },
+  { name: "Building software", detail: "I build for fun and for work. Some projects start with an annoyance I want to get rid of; others turn into something bigger. There are browser tools, apps and plenty of unfinished experiments here.", href: "#software", linkText: "Things I have been building" },
+  { name: "Machine learning", detail: "My MSc work looks at EEG inner-speech data, comparing graph networks with convolutional models. It is a different kind of building: asking a question and working out how to test it.", href: "#software", linkText: "Find the research among the projects" }
 ];
 
 /**
@@ -294,7 +274,7 @@ export const WORKS_3D: Work3D[] = [
     id: "M02",
     title: "Mazda flip-key body",
     caption:
-      "A new shell for a 2007 Mazda flip key. No scanner, just calipers and a lot of patience. Every corner on the drawing is tagged and measured, and anything I haven't got a reading for yet stays a question mark instead of a guess. Three test fits printed so far and it still isn't right.",
+      "A new shell for a 2007 Mazda flip key. No scanner, just calipers and a lot of patience. Every corner on the drawing is tagged and measured, and anything I haven't got a reading for yet stays a question mark instead of a guess. Three fit-test variants have been printed; the fit results are still pending.",
     image: "/portfolio-3d/mazda-key-blueprint.png",
     alt:
       "A measurement blueprint sheet for a Mazda flip-key head. Four orthographic views (front, back, side and bottom) have every corner tagged with a red lettered point and every edge boxed in teal. A schedule beside them lists measurements A to Z in millimetres, with question marks where a reading has not been taken yet.",

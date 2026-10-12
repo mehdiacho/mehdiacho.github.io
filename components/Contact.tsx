@@ -30,9 +30,9 @@ const Contact: React.FC = () => (
 
       <div className="mt-14 grid gap-12 border-t-[3px] border-ink pt-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
         <p className="m-0 max-w-[48ch] text-xl leading-relaxed text-ink-soft">
-          Send a photo of the part, a rough idea, or the website you wish you
-          had. A couple of measurements is usually enough to tell you whether
-          it is worth doing and what it would take.
+          Want to talk about a project, ask about something here, or share what
+          you’re making? Write to me. If you have a modeling request, send it
+          over and I’ll let you know whether I can help.
         </p>
 
         <div>

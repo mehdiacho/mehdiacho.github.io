@@ -22,7 +22,7 @@ const SiteFooter: React.FC = () => (
       </div>
 
       <div>
-        <h2 className="label text-ink-faint">Services</h2>
+        <h2 className="label text-ink-faint">More about the work</h2>
         <ul className="mt-3 list-none space-y-2 p-0">
           {SERVICE_PAGES.map((page) => (
             <li key={page.href}>
@@ -72,6 +72,7 @@ const SiteFooter: React.FC = () => (
         </p>
       </div>
     </div>
+    <div className="bleed py-5 border-t border-rule font-label text-xs">© {new Date().getFullYear()} Mehdi Acho</div>
   </footer>
 );
 

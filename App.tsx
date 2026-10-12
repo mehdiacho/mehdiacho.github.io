@@ -1,5 +1,6 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 
+import CadPages from './components/CadPages';
 import SiteHeader from './components/SiteHeader';
 import Hero from './components/Hero';
 import Section from './components/Section';
@@ -23,7 +24,7 @@ import { normalizeCode } from './lib/vault-crypto';
  * down, which is the point. What the theme actually does to the colours is
  * in index.css §2.
  */
-const App: React.FC = () => {
+const Home: React.FC = () => {
   // SECURE_VAULT modal. Opens from the project card or from a #vault=<token>
   // share link; everything else on the page is a plain document.
   const [vaultOpen, setVaultOpen] = useState(false);
@@ -71,8 +72,8 @@ const App: React.FC = () => {
           number="01"
           theme="riso"
           variant="banner"
-          title={<>What I&rsquo;m hired to do</>}
-          standfirst="Three things. Roughly in the order I'd like to be hired for them."
+          title={<>Things I keep coming back to</>}
+          standfirst="Making things, writing software and trying to understand how things work."
         >
           <Services />
         </Section>
@@ -83,7 +84,7 @@ const App: React.FC = () => {
           theme="blueprint"
           variant="rail"
           title={<>3D printing and CAD modeling in Botswana</>}
-          standfirst="Mostly replacements for parts nobody sells any more. Nothing gets modelled until it has been measured."
+          standfirst="Small fixes for my own things. You can turn the models around here, then open the drawings and the notes behind each one."
         >
           <Work3D />
         </Section>
@@ -94,7 +95,7 @@ const App: React.FC = () => {
           theme="soft"
           variant="inline"
           title={<>3D visualisation</>}
-          standfirst="Rooms and layouts built from real measurements. Much cheaper to be wrong on a screen than in the room."
+          standfirst="A work in progress: turning my desk into a place you can explore in a browser."
         >
           <Visualisation />
         </Section>
@@ -151,4 +152,8 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default function App({ path = typeof window === 'undefined' ? '/' : window.location.pathname }: { path?: string }) {
+  const normalized = path.endsWith('/') ? path : path + '/';
+  if (normalized === '/models/' || normalized === '/models/charger-brace/' || normalized === '/models/mazda-flip-key/') return <CadPages path={normalized} />;
+  return <Home />;
+}

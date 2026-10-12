@@ -5,14 +5,7 @@ import { MarkCad, MarkWeb, MarkLearning } from './Drawings';
 
 const MARKS = [MarkCad, MarkWeb, MarkLearning];
 
-/**
- * What someone can hire him for.
- *
- * Not three identical cards. The standfirst says these are in the order he
- * wants to be hired for them, so the layout says it too: the first is wider,
- * printed the other way round, and set larger. Each one links to its own
- * crawlable page, which is where the long-form copy a crawler reads lives.
- */
+// Three interests, each with a route into the work.
 const Services: React.FC = () => (
   <ul className="grid list-none grid-cols-1 gap-7 p-0 lg:grid-cols-[1.45fr_1fr_1fr]">
     {SERVICES.map((service, index) => {
@@ -26,9 +19,7 @@ const Services: React.FC = () => (
             lead ? 'panel-invert' : 'panel-lift'
           }`}
         >
-          {/* The sheet number, printed large and pale and running off the
-              corner, the way it sits on a riso poster rather than in a
-              caption underneath. */}
+          
           <span
             aria-hidden="true"
             className="font-display pointer-events-none absolute -right-4 -top-10 text-[9rem] font-bold leading-none text-accent/20"

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const LINKS = [
-  { href: '#services', label: 'Services' },
+  { href: '#services', label: 'Interests' },
   { href: '#cad', label: '3D & CAD' },
   { href: '#visualisation', label: 'Visualisation' },
   { href: '#software', label: 'Software' },
@@ -39,7 +39,7 @@ const SiteHeader: React.FC = () => (
         href="#contact"
         className="btn ml-auto whitespace-nowrap px-3.5 py-2 md:px-5 md:py-2.5"
       >
-        Start a project
+        Say hello
       </a>
     </div>
   </header>

@@ -13,14 +13,14 @@ export const areaServed = [{ '@type': 'City', name: 'Gaborone' }, { '@type': 'Co
 export const pages = [
   {
     path: '/', title: 'Mehdi Acho — CAD Modeling, 3D Printing & Web Development, Gaborone',
-    description: "I'm Mehdi Acho. I do CAD modeling, 3D printing and web development in Gaborone, Botswana. Send me a photo of the part and a couple of measurements.",
+    description: "I'm Mehdi Acho, based in Gaborone, Botswana. A notebook of CAD models, 3D printing experiments, software projects and research, with the stories behind them.",
     heading: 'CAD modeling, 3D printing and web development in Botswana',
   },
   {
     path: '/3d-modeling-botswana/', title: '3D Modeling in Gaborone, Botswana | Mehdi Acho',
     description: '3D modeling in Gaborone. I model objects from photos, sketches or the thing itself, and give you views that actually explain the design. Mehdi Acho, Botswana.',
     heading: '3D modeling in Gaborone', eyebrow: 'OBJECTS / FORM / PRESENTATION',
-    intro: "I model objects so you can look at them properly before anyone commits to making one. That might start from a sketch, a few photos, or the thing itself sitting on my desk. I work from Gaborone and take jobs anywhere in Botswana.",
+    intro: "I model objects so you can look at them properly before anyone commits to making one. That might start from a sketch, a few photos, or the thing itself sitting on my desk. I’m based in Gaborone, Botswana. Most of these models start with something of my own; I also consider requests when they are a good fit.",
     sections: [
       ['Starting from whatever you have', "Photos and a rough sketch are usually enough to get going. The first model is about proportion and how the pieces sit together, not about detail. It is much easier to argue about the shape once you can turn it around on screen."],
       ['Views that explain the thing', "A single render is pretty and not very useful. I give you the views that answer questions: how it comes apart, what touches what, where the awkward bit is. That is normally where the next round of changes comes from."],
@@ -46,9 +46,9 @@ export const pages = [
     heading: 'Web development in Gaborone', eyebrow: 'WEBSITES / APPLICATIONS / SYSTEMS',
     intro: "I build sites and web apps around the thing they are supposed to make easier. React and TypeScript, with Firebase or Cloudflare behind them when there is something to store. Based in Gaborone.",
     sections: [
-      ['A site that does its job', "Most business sites here are slow on a phone and bury what the business actually does, which is the same reason nobody ever finds them. None of that gets fixed at the end; it is decided while the thing is being built. This site is the demonstration. It was built to rank for what I do, and that is why you are reading it."],
+      ['A site that does its job', "When I build a site, I care about whether someone can find what they need and use it on a phone. This portfolio is one of those ongoing experiments: content, performance and design all change as I learn what works."],
       ['When a site needs to be an app', "Accounts, stored data, something that has to happen on a schedule. I have built browser tools, installable apps and services with real backends; a few of them are listed on the home page. The stack follows what the thing needs, not the other way around."],
-      ['What to tell me', "Who uses it, what they are trying to get done, and anything it has to talk to. That is enough to scope it honestly. If I think you do not need what you are asking for, I will say so before you pay for it."],
+      ['What to tell me', "Who uses it, what they are trying to get done, and anything it has to talk to. That gives us a starting point. I can look at the request and tell you whether it is something I can take on."],
     ],
     work: false,
   },
