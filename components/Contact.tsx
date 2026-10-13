@@ -12,7 +12,7 @@ const Contact: React.FC = () => (
     id="contact"
     data-theme="brut"
     aria-labelledby="contact-heading"
-    className="scroll-mt-20 border-t-[4px] border-ink"
+    className="section-screen scroll-mt-20 border-t-[4px] border-ink"
   >
     <div className="bleed py-20">
       <p className="label text-accent">Gaborone, Botswana</p>

@@ -22,7 +22,7 @@ export default function Background() {
         <p>I love building software, and I found a love for research I didn’t expect. Research is a different kind of building: you take a question seriously, try something, and then work out whether it actually helped.</p>
         <blockquote className="background-quote"><p>My goal isn’t just a job; it’s to work on tech that will see the light of day. I’ve lived on the short side of the stick. I know what it’s like. I want to make sure one less kid has to live like that.</p></blockquote>
         <p>My strength is ideas, and I have too many of them. I’ve learnt that I need good people around me to turn them into something. This site keeps the work, the open questions and the unfinished threads in one place, along with a little of what I do away from them.</p>
-        <p><a className="background-link" href="#hobbies">What I do off the clock ↑</a></p>
+        <p><a className="background-link" href="#hobbies">What I do off the clock ↓</a></p>
       </div>
     </div>
     <h3 className="label text-accent mb-5">How I got here</h3>

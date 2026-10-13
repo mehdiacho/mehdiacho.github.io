@@ -41,7 +41,7 @@ const Section: React.FC<SectionProps> = ({
     id={id}
     data-theme={theme}
     aria-labelledby={`${id}-heading`}
-    className="scroll-mt-20"
+    className="section-screen scroll-mt-20"
   >
     {/* The seam between two themes. A dimension rule on the lighter stocks,
         a plain heavy edge where a drawn rule would be lost. */}

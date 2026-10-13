@@ -59,3 +59,85 @@
   .research-method > div { grid-template-columns: minmax(0, 1fr); gap: 6px; }
   .model-shelf-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* -- Every section is at least a screen --------------------------------- */
+/* Full width already; this makes each one a full screen tall too, with
+   short content sat in the middle. Longer sections simply grow. */
+.section-screen { min-height: 100svh; display: flex; flex-direction: column; }
+.section-screen > .bleed { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+/* -- Side quests: floppy discs ------------------------------------------ */
+/* The flat deck: phones, reduced motion, the prerendered page, and the
+   moment before the 3D room arrives. A 3.5" disc is nearly square. */
+.quest-deck { height: 470px; position: relative; isolation: isolate; margin: 10px 0 0; }
+.quest-card { position: absolute; top: 70px; left: calc(50% - 140px + (var(--card-index) - 1.5) * 190px); width: 280px; height: 292px; padding: 0; background: var(--quest-color); color: #172321; border: 1.5px solid #172321; border-radius: 5px; text-align: left; transform: rotate(var(--card-angle)); transform-origin: center 85%; box-shadow: 0 12px 18px #201e231a; transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s; }
+.quest-card:is(:hover, :focus-visible) { transform: translateY(-38px) rotate(0deg) scale(1.04); z-index: 8; box-shadow: 0 28px 32px #201e232b; }
+.floppy-shutter { position: absolute; top: 0; left: 30%; width: 44%; height: 31%; background: linear-gradient(#dfe2e6, #aab0b7); border: 1.5px solid #172321; border-top: 0; border-radius: 0 0 3px 3px; }
+.floppy-shutter span { position: absolute; top: 16%; right: 20%; width: 22%; height: 62%; background: #2a241d; border-radius: 2px; }
+.floppy-tab { position: absolute; top: 9px; left: 10px; width: 15px; height: 15px; background: #2a241d; border-radius: 2px; }
+.floppy-label { position: absolute; left: 8%; right: 8%; bottom: 0; height: 60%; padding: 14px 16px 12px; display: flex; flex-direction: column; justify-content: space-between; background: #f7f2e6 repeating-linear-gradient(transparent 0 27px, #1a141016 27px 28px); border: 1.5px solid #172321; border-bottom: 0; border-radius: 4px 4px 0 0; }
+.floppy-icon { position: absolute; right: 14px; top: 38px; opacity: .55; }
+.quest-front { padding: 0; }
+.quest-front .floppy-label { padding: clamp(14px, 3vw, 28px); }
+
+@media (min-width: 761px) and (max-width: 1100px) {
+  .quest-card { left: calc(50% - 125px + (var(--card-index) - 1.5) * 140px); width: 250px; height: 262px; }
+}
+@media (min-width: 761px) and (max-width: 900px) {
+  .quest-card { left: calc(50% - 110px + (var(--card-index) - 1.5) * 105px); width: 220px; height: 232px; }
+}
+@media (max-width: 760px) {
+  .quest-deck { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 12px; height: auto; padding: 18px 4px; }
+  .quest-card { position: relative; left: auto; top: auto; width: 100%; height: auto; aspect-ratio: 1 / 1.04; transform: rotate(calc(var(--card-angle) * .35)); }
+  .quest-card:is(:hover, :focus-visible) { transform: translateY(-10px) rotate(0deg); }
+  .floppy-label { left: 6%; right: 6%; padding: 9px 9px 8px; }
+  .floppy-icon { display: none; }
+  .floppy-tab { width: 10px; height: 10px; top: 6px; left: 7px; }
+  .quest-card .quest-card-top { font-size: 8px; }
+  .quest-card .quest-card-bottom h3 { font-size: 17px; }
+  .quest-card .quest-card-bottom svg { width: 16px; height: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .quest-card { transition: none; }
+  .quest-card:is(:hover, :focus-visible) { transform: rotate(0deg); }
+}
+
+/* The 3D room takes the whole width of the screen, edge to edge, and the rest
+   of its height under the heading. The scene's ground is this theme's paper,
+   so the heading and the room read as one space. */
+.floppy-stage[data-mode='loading'], .floppy-stage[data-mode='room'] { position: relative; height: max(540px, calc(100svh - 330px)); margin-inline: calc(-1 * clamp(1.1rem, 3.2vw, 4.5rem)); display: grid; align-content: center; }
+@media (min-width: 761px) { .floppy-stage[data-mode='loading'], .floppy-stage[data-mode='room'] { margin-right: calc(-1 * max(86px, 6.5vw)); } }
+@media (min-width: 1700px) { .floppy-stage[data-mode='loading'], .floppy-stage[data-mode='room'] { margin-right: -110px; } }
+.floppy-room { position: absolute; inset: 0; opacity: 0; transition: opacity .6s cubic-bezier(.2,.8,.2,1); }
+.floppy-room[data-ready='true'] { opacity: 1; }
+.floppy-canvas { position: absolute; inset: 0; }
+.floppy-hint { position: absolute; top: 16px; left: clamp(1.1rem, 3.2vw, 4.5rem); margin: 0; color: var(--color-ink-soft); pointer-events: none; }
+.floppy-index { position: absolute; left: clamp(1.1rem, 3.2vw, 4.5rem); bottom: 20px; display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.floppy-index button { display: flex; align-items: center; gap: 8px; padding: 8px 12px; font: 11px var(--font-label); text-transform: uppercase; letter-spacing: .08em; color: var(--color-ink); background: var(--color-paper); border: var(--panel-line) solid var(--color-ink); transition: background .09s steps(2), color .09s steps(2); }
+.floppy-index button span { padding: 1px 5px; background: var(--quest-color); color: #172321; }
+.floppy-index button[data-hot='true'] { background: var(--color-ink); color: var(--color-paper); }
+.floppy-controls { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); display: flex; gap: 12px; }
+.floppy-monitor { position: absolute; top: 14px; bottom: 14px; left: clamp(1.1rem, 3.2vw, 4.5rem); right: 150px; z-index: 2; display: flex; flex-direction: column; overflow: hidden; background: #111512; color: #f4f1e8; border: 3px solid var(--color-ink); box-shadow: inset 0 0 60px #000b, 10px 10px 0 #ff4b12; transform-origin: right center; animation: floppy-power .5s cubic-bezier(.2,.8,.2,1); }
+.floppy-boot { flex: 1; margin: 0; padding: clamp(16px, 3%, 36px); font: 15px/1.9 var(--font-label); color: #ccff00; white-space: pre; animation: floppy-type .9s steps(3) both; }
+@keyframes floppy-type { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+.floppy-monitor-body { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); column-gap: clamp(20px, 4vw, 60px); align-content: start; animation: floppy-in .35s ease-out both; }
+@keyframes floppy-in { from { opacity: 0; } }
+@media (max-width: 1000px) { .floppy-monitor-body { grid-template-columns: minmax(0, 1fr); } }
+.floppy-port { position: absolute; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 10px 0; background: linear-gradient(90deg, #cfc4ad, #e9e0cc 40%, #c2b69c); border: 2px solid var(--color-ink); border-radius: 4px; box-shadow: 6px 6px 0 #1a141030; }
+.floppy-port-slot { flex: 1; width: 8px; margin: 4px 0 10px; background: #141210; border-radius: 2px; box-shadow: inset 2px 0 0 #000, 1px 0 0 #fff8; }
+.floppy-port-led { width: 10px; height: 6px; background: #4a3a2c; border-radius: 1px; }
+.floppy-port[data-busy='true'] .floppy-port-led { background: #ff4b12; box-shadow: 0 0 8px #ff4b12; animation: floppy-led .18s steps(2) 6; }
+@keyframes floppy-led { 50% { background: #4a3a2c; box-shadow: none; } }
+.floppy-port-label { margin-top: 6px; font: 10px var(--font-label); color: var(--color-ink); }
+.floppy-monitor::after { content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: repeating-linear-gradient(#0000 0 2px, #0000002e 2px 4px); }
+@keyframes floppy-power { from { opacity: 0; transform: scale(1, .02); } 55% { opacity: 1; transform: scale(1, 1.02); } to { transform: none; } }
+.floppy-monitor-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 14px; border-bottom: 1px solid #ccff0055; font: 12px var(--font-label); color: #ccff00; }
+.floppy-monitor-bar button { padding: 5px 11px; color: #ccff00; border: 1.5px solid #ccff00; font: inherit; }
+.floppy-monitor-bar button:hover { background: #ccff00; color: #141619; }
+.floppy-monitor-body { flex: 1; overflow: auto; overscroll-behavior: contain; padding: clamp(14px, 3.5%, 34px); }
+.floppy-monitor-body h3 { margin: 10px 0 12px; font-size: clamp(22px, 2.3vw, 40px); font-weight: 700; line-height: 1.05; letter-spacing: -.03em; max-width: 18ch; }
+.floppy-monitor-body p { margin: 0 0 12px; max-width: 62ch; font-size: 15px; line-height: 1.65; color: #c7cbbf; }
+.floppy-monitor-body .floppy-monitor-lead { font-size: clamp(15px, 1.25vw, 19px); line-height: 1.5; color: #f4f1e8; }
+.floppy-monitor-body img { display: block; max-width: 100%; height: auto; margin: 12px 0 16px; border: 1px solid #ccff0066; }
+.floppy-monitor-link { display: inline-block; margin-top: 10px; padding: 9px 15px; font-weight: 700; background: #ccff00; color: #141619; }
+
