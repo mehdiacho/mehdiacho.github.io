@@ -1,29 +1,56 @@
-# Signal Run — 2026-10-13
+# Weekly arcade — 2026-10-13
 
-Implemented: deterministic daily 4×4 weighted circuits, TX-to-RX routing through two required relays, tap and keyboard controls, undo, replay-derived scores and per-browser best results. A shortest-path solver over node/relay states establishes the optimum. No speed bonus.
+The `#play` section is a weekly game slot. One game runs per ISO week (Monday 00:00 to Sunday 23:59:59 UTC). Each week has its own scoreboard, and the week's top score goes into a permanent hall of fame with a downloadable certificate. Signal Run, the daily routing puzzle, is retired.
 
-## Two ranking modes
+## This week: Box Rush (`box-rush-v1`)
 
-The local leaderboard says **THIS BROWSER ONLY**. It contains only saved runs, has no invented competitors, and can be edited by the browser owner. Storage failure falls back to the current session.
+You are the object detector. Drones, birds and the odd satellite fly across a camera frame for 60 seconds; drag a box around each drone before it leaves.
 
-The separate shared service is implemented in `game-worker/` and verified locally with Cloudflare's runtime and D1. Set `VITE_SIGNAL_API_URL` at build time to connect it. With a localhost endpoint the UI says **Preview rankings**, never public rankings. With no endpoint, the game remains fully playable and says shared rankings are offline. Merely loading the page does not contact the service; visitors explicitly load rankings or publish a route.
+- A hit needs IoU ≥ 0.5 with a live drone or satellite. Points = IoU × 100 (satellites ×3), times a combo multiplier that rises every 4 hits in a row, up to ×4.
+- Boxing a bird is a false positive: −40 and the combo resets. An empty box: −10. A drone that leaves unboxed resets the combo. The total never goes below 0.
+- The end screen reports precision, recall, mean IoU and best combo.
+- The sky is generated from the week, so it is the same for everyone all week. Practice pays.
+- Needs a mouse, pen or touchscreen; there is no keyboard mode.
 
-## Server behavior
+The engine (`lib/arcade/box-rush.ts`) uses integer arithmetic only (a mulberry32 RNG, integer motion, a triangle-wave bob instead of `Math.sin`), so every browser and the worker compute the same positions. The screen calls the same `createRound().apply()` live that the worker calls on the submitted boxes. `scripts/check-arcade.ts` checks that a frame-by-frame live round equals the replay, and rejects malformed, out-of-order, too-fast, out-of-frame and oversized runs.
 
-- Recomputes scores from the daily route; rejects missing relays, disconnected steps, post-finish moves, oversized JSON and dates other than today for submissions.
-- Keeps the best score per day and random browser identifier. The player may opt in to showing their callsign (3–12 letters or numbers, run through `publicCallsign` in `lib/signal-game.ts`: a word filter with leetspeak folding and reserved prefixes such as ROUTE and MEHDI). Otherwise the board shows a generated ROUTE alias. Re-publishing updates the name but keeps the best score.
-- Equal costs share a place (competition ranking, 1, 1, 3). `GET /leaderboard` also returns `tiedForFirst`.
-- Stores the hashed identifier, the alias or chosen callsign, score/cost and server timestamp. No raw route, raw identifier or raw IP is stored. Hourly rate buckets are derived from the edge-provided address and hour; this is pseudonymization, not a claim of anonymity.
-- Limits submission attempts to 30 per address per hour. Bounded reads (4 KB), parameterized SQL, exact origin allowlist, request timeouts, failure feedback and retry controls.
-- Daily cleanup removes expired rate buckets and results older than 30 days. No authentication: a cleared browser is a new player, and automated optimal solvers remain possible. This is a casual board, not a prize competition.
-- Isolated from the existing vault and Firestore content rules.
+## How the slot works
 
-## Local commands
+- `lib/arcade/registry.ts`: `GAMES` (id, version, title, body-size limit, replay scorer) and `SCHEDULE` (which game runs from which week). Shared by the site and the worker; no React.
+- `components/arcade/games.tsx`: each game's screen, loaded as its own chunk, plus its one-line pitch.
+- `components/arcade/Arcade.tsx`: the shell. Week, countdown, scoreboard, publishing, hall of fame, last week's champion banner. The game chunk, the scoreboard and the hall of fame load only when the section scrolls near the viewport.
 
-From `game-worker`: `npm ci`, `npm run types`, `npm run check`, `npm run migrate:local`, then `npm run dev` (port 8788). From the portfolio root, set `VITE_SIGNAL_API_URL=http://127.0.0.1:8788` in the build process environment, then `npm run build` and preview on 4173. The environment value is not committed or written into the user's existing env file.
+### Adding next week's game
 
-Tests: `npx tsx scripts/check-signal-game.ts` checks 120 boards against an independent solver and malformed/replayed inputs. With the local worker running, `npx tsx scripts/check-signal-service.ts` verifies the real D1 service, CORS, score recomputation, best-run replacement, and rate limiting. It prints its generated test alias for targeted cleanup in the local database. Browser verification completed the optimal route with arrow keys and published it to the preview board.
+1. Write the engine in `lib/arcade/<game>.ts`: a deterministic `score(week, replay)` that throws on anything a real round could not produce. Integer maths only.
+2. Register it in `GAMES`, add a `SCHEDULE` line with the week it starts, and add its screen to `components/arcade/games.tsx`. A screen gets `{ week, onRun }` and calls `onRun({ replay, score })` once per round.
+3. Add its checks to `scripts/check-arcade.ts`.
+4. Deploy the worker before the site (below), both before that Monday.
 
-## Publication remains
+Bump a game's version whenever its rules change, so old clients' runs are refused instead of mis-scored.
 
-No remote database, worker or site deployment was performed. The all-zero database ID in wrangler.jsonc is deliberately a local-only placeholder. To publish, create an isolated D1 database, record its returned ID, apply the migration remotely, deploy the worker, and build the portfolio with its real HTTPS endpoint. Remove localhost origins from the production allowlist, check the public privacy notice against the actual host/retention, then verify the live integration. Preserve generated binding types and rerun `wrangler types` after changing configuration.
+## Server
+
+Same worker (`portfolio-signal-run`) and D1 database (`SIGNAL_DB`), with new tables from `migrations/0002_weekly_arcade.sql`.
+
+- `POST /runs` takes `{ week, game, version, player, name?, replay }`. It accepts only the current week (plus five minutes' grace after Sunday midnight for a round that was already running), only that week's scheduled game and version, and recomputes the score by replaying the run. It keeps each player's best for the week.
+- `GET /leaderboard?week=` returns the top 10 (higher wins, equal scores share a place) and how many share first.
+- `GET /champions` crowns any finished week that has no champion yet, then returns the hall of fame. Every player tied on the top score is crowned (up to five), so playing first wins nothing.
+- The daily cron also crowns finished weeks, deletes weekly scores after five weeks, deletes rate-limit buckets after two hours, and deletes old Signal Run results once they pass their promised 30 days.
+- Callsigns are opt-in and filtered (`lib/arcade/callsign.ts`); otherwise the board shows a generated `PLAYER-xxxxxx` alias. Stored per score: hashed browser id, alias, score, time. No raw id, IP or replay is stored. Champions keep alias, score and week permanently.
+- Unchanged: 30 submissions per address per hour, exact origin allowlist, bounded body read, parameterised SQL.
+
+Anti-cheat is the same strength as before: the server never trusts a client score, only a replay it scores itself. It cannot stop a bot that reads the screen or computes perfect boxes from the open-source engine (a near-perfect bot scores about 19,600 this week). This is a casual board. If a champion looks implausible, delete the row by hand.
+
+## Deploy (from `game-worker/`, on Mehdi's PC)
+
+```
+npx wrangler d1 migrations apply SIGNAL_DB --remote
+npx wrangler deploy
+```
+
+Then merge the site PR. Between the two steps the live site still runs Signal Run, whose scoreboard calls will fail; the puzzle itself keeps working.
+
+## Local test
+
+From `game-worker`: `npm ci`, `npm run migrate:local`, then `npx wrangler dev --port 8788 --var ALLOWED_ORIGINS:http://127.0.0.1:4173`. From the root: `VITE_SIGNAL_API_URL=http://127.0.0.1:8788 npm run build`, then `npx vite preview --port 4173 --host 127.0.0.1`.

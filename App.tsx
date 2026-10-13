@@ -9,7 +9,7 @@ import Section from './components/Section';
 import Hobbies from './components/Hobbies';
 import Research from './components/Research';
 import Background from './components/Background';
-import SignalGame from './components/SignalGame';
+import Arcade from './components/arcade/Arcade';
 import Work3D from './components/Work3D';
 import Visualisation from './components/Visualisation';
 import Projects from './components/Projects';
@@ -88,8 +88,8 @@ const Home: React.FC = () => {
         <Section id="about" number="06" theme="ledger" variant="rail" title={<>A bit of background.</>} standfirst="How I got here, what I care about, and what I’m learning along the way.">
           <Background />
         </Section>
-        <Section id="play" number="07" theme="brut" variant="inline" title={<>Take the scenic route.</>} standfirst="Or the shortest one. A small puzzle for the part of your brain that keeps looking for a better path.">
-          <SignalGame />
+        <Section id="play" number="07" theme="brut" variant="inline" title={<>Weekly arcade.</>} standfirst="A small game, a fresh scoreboard every Monday, and the week’s top score kept for good.">
+          <Arcade />
         </Section>
 
         <Contact />
