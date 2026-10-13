@@ -1,4 +1,4 @@
-import { Project, Experience, ToolGroup, Service, Work3D } from './types';
+import { Project, Experience, ToolGroup, Work3D } from './types';
 
 export const PROFILE = {
   name: "Mehdi Acho",
@@ -18,29 +18,6 @@ export const PROFILE = {
   },
   birthDate: new Date("2002-03-18T00:00:00")
 };
-
-/**
- * What someone can actually hire him for, in the order he wants to be hired
- * for it. Rendered in the hero card, directly under the bio — a visitor who
- * came from a search for "CAD modeling Gaborone" should not have to scroll.
- */
-export const SERVICES: Service[] = [
-  { name: "Making things fit", detail: "I got into CAD and 3D printing through small things I wanted to fix. A charger plug, a key shell, the sort of part you cannot just buy on its own. The drawings and test fits are as much a part of it as the finished model.", href: "/models/", linkText: "My model notebook" },
-  { name: "Building software", detail: "I build for fun and for work. Some projects start with an annoyance I want to get rid of; others turn into something bigger. There are browser tools, apps and plenty of unfinished experiments here.", href: "#software", linkText: "Things I have been building" },
-  { name: "Machine learning", detail: "My MSc work looks at EEG inner-speech data, comparing graph networks with convolutional models. It is a different kind of building: asking a question and working out how to test it.", href: "#software", linkText: "Find the research among the projects" }
-];
-
-/**
- * How the work actually goes, in four steps. Shown under the hero with a
- * drawing against each one — it is the clearest answer to "what do you
- * actually do", and it is the thing that separates this from a print shop.
- */
-export const PROCESS: { step: string; title: string; detail: string }[] = [
-  { step: "01", title: "Measure", detail: "Calipers on the real thing. Every edge written down before I open anything." },
-  { step: "02", title: "Draw", detail: "A drawing comes first. Mistakes are cheap at this stage and expensive later." },
-  { step: "03", title: "Model", detail: "Built from those numbers. Change one and the rest of the model follows." },
-  { step: "04", title: "Print", detail: "Test fit. Adjust. Then print the real one." }
-];
 
 /**
  * Fallback project list.

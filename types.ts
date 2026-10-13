@@ -56,19 +56,6 @@ export interface Project {
 }
 
 /**
- * One thing Mehdi is hired to do. Short enough to sit in the hero card without
- * pushing the contact buttons below the fold.
- */
-export interface Service {
-  name: string;
-  detail: string;
-  /** The crawlable page that covers this in depth, if there is one. */
-  href?: string;
-  /** Link label. Written as a phrase, not "read more". */
-  linkText?: string;
-}
-
-/**
  * A piece of 3D / CAD work: a modelled part, a dimensioned blueprint, or both.
  *
  * `image` is the still that goes in the grid and is the only thing most
