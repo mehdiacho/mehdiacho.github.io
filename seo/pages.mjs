@@ -12,9 +12,9 @@ export const areaServed = [{ '@type': 'City', name: 'Gaborone' }, { '@type': 'Co
  */
 export const pages = [
   {
-    path: '/', title: 'Mehdi Acho — CAD Modeling, 3D Printing & Web Development, Gaborone',
-    description: "I'm Mehdi Acho, based in Gaborone, Botswana. A notebook of CAD models, 3D printing experiments, software projects and research, with the stories behind them.",
-    heading: 'CAD modeling, 3D printing and web development in Botswana',
+    path: '/', title: 'Mehdi Acho — Software, Research & Side Quests',
+    description: "I'm Mehdi Acho, based in Gaborone, Botswana. Software, machine learning research and CAD modeling experiments, with a few side quests and the stories behind them.",
+    heading: 'Hi, I’m Mehdi.',
   },
   {
     path: '/3d-modeling-botswana/', title: '3D Modeling in Gaborone, Botswana | Mehdi Acho',
@@ -30,13 +30,13 @@ export const pages = [
   },
   {
     path: '/cad-modeling-botswana/', title: 'CAD Modeling in Botswana — Measured Parts | Mehdi Acho',
-    description: 'CAD modeling in Botswana for replacement parts that have to fit. Measured with calipers, drawn, modelled and printed. Mehdi Acho, Gaborone.',
+    description: 'CAD modeling in Botswana for replacement parts that have to fit. Measured with calipers, drawn and modeled for later fabrication. Mehdi Acho, Gaborone.',
     heading: 'CAD modeling in Botswana', eyebrow: 'MEASURE / CONSTRAIN / ITERATE',
     intro: "A replacement part is not about looking right, it is about fitting. So I start with the measurements and the surfaces that have to mate, and let those drive the model. When a test fit tells me something new, the model changes with it instead of being rebuilt.",
     sections: [
       ['Calipers before software', "I measure the original and draw it before I model anything. Clearances, wall thickness and the faces that have to meet are written down as numbers, not buried in a finished mesh where nobody can find them later."],
       ['From the drawing to something you can print', "The charger brace and the flip key below are both this process. Measure, map how it comes apart, model the pieces, then look at whether it can actually be made that way. If a part has only been modelled, the label says modelled. A finished print is a separate thing and I will not pretend otherwise."],
-      ['What to send me', "Photos, any measurements you already have, what material it needs to be, and how the part gets used. Dropped? Loaded? Hot? That changes the answer. We settle on what you get back, whether that is a drawing, a model you can keep editing or files that go straight to a printer, and then fix the fit with prototypes."],
+      ['What to send me', "Photos, any measurements you already have, what material it needs to be, and how the part gets used. Dropped? Loaded? Hot? That changes the answer. We settle on what you get back, whether that is a drawing, a model you can keep editing or files that go straight to a printer, with physical prototyping arranged separately. I do not currently own a 3D printer."],
     ],
     work: true,
   },
@@ -57,12 +57,12 @@ export function structuredData(page) {
   const person = `${origin}/#person`, service = `${origin}/#professional-service`;
   return { '@context': 'https://schema.org', '@graph': [
     { '@type': 'Person', '@id': person, name: 'Mehdi Acho', url: origin+'/',
-      jobTitle: '3D and CAD modeler, full-stack developer',
+      jobTitle: 'Software developer and MSc student',
       homeLocation: { '@type': 'City', name: 'Gaborone', containedInPlace: { '@type': 'Country', name: 'Botswana' } },
       knowsAbout: ['3D modeling', 'CAD modeling', '3D printing', 'Web development', 'Machine learning'],
       alumniOf: { '@type': 'CollegeOrUniversity', name: 'Botswana International University of Science and Technology' },
       sameAs: ['https://github.com/mehdiacho', 'https://linkedin.com/in/mehdiacho'] },
-    { '@type': 'ProfessionalService', '@id': service, name: 'Mehdi Acho — CAD, 3D Printing & Web Development',
+    { '@type': 'ProfessionalService', '@id': service, name: 'Mehdi Acho — Modeling & Web Development',
       url: origin+'/', image, description: pages[0].description, founder: { '@id': person }, areaServed,
       address: { '@type': 'PostalAddress', addressLocality: 'Gaborone', addressCountry: 'BW' },
       hasOfferCatalog: { '@type': 'OfferCatalog', name: 'Design and development services', itemListElement: pages.slice(1).map(p=>({ '@type': 'Offer', itemOffered: { '@type': 'Service', name:p.heading, url:origin+p.path, areaServed, provider:{'@id':service} } })) } },

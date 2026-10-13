@@ -28,6 +28,7 @@
     "noEmit": true
   },
   "exclude": [
+    "game-worker",
     "worker",
     "node_modules",
     "dist"

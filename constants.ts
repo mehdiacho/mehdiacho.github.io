@@ -2,14 +2,14 @@ import { Project, Experience, ToolGroup, Service, Work3D } from './types';
 
 export const PROFILE = {
   name: "Mehdi Acho",
-  role: "3D and CAD modeling · Web development",
+  role: "Software · Machine learning · Side quests",
   location: "Gaborone, Botswana",
   coordinates: "24.6282° S, 25.9231° E",
   status: "ONLINE",
   statusSub: "Available for work",
   /** Also the meta description. Changing it changes what Google shows. */
-  bio: "I'm Mehdi Acho. I do CAD modeling, 3D printing and web development in Gaborone, Botswana.",
-  bioSub: "I'm doing an MSc at BIUST and building things in between. Mostly replacement parts for things that broke and nobody sells any more, plus software that people actually end up using. If you've got something that needs measuring and printing, or a site that needs building, send me a photo of it.",
+  bio: "I'm Mehdi Acho. I build software, study machine learning and make CAD models in Gaborone, Botswana.",
+  bioSub: "I'm doing an MSc at BIUST and building things in between. Mostly replacement parts for things that broke and nobody sells any more, plus software that people actually end up using. This notebook brings together my software, research and modeling experiments.",
   mission: "I do research. I build software. For money. For fun. For the future.",
   email: "mehdiacho@gmail.com",
   socials: {
@@ -289,7 +289,7 @@ export const TIMELINE: Experience[] = [
     role: "MSc Computer Science",
     company: "BIUST",
     period: "Feb 2025 - Present",
-    description: "Deep learning architectures. My thesis benchmarks graph networks against CNNs on EEG inner-speech data. Finishing late 2026."
+    description: "Deep learning architectures. My thesis benchmarks graph networks against CNNs on EEG inner-speech data."
   },
   {
     id: "E2",
@@ -310,7 +310,7 @@ export const TIMELINE: Experience[] = [
     role: "BSc Computer Science",
     company: "BIUST",
     period: "Aug 2020 - May 2024",
-    description: "Four years of software engineering. Graduated 2024, straight into the MSc."
+    description: "Four years of software engineering. Graduated in 2024; returned for an MSc in 2025."
   }
 ];
 
@@ -321,8 +321,8 @@ export const TIMELINE: Experience[] = [
  */
 export const TOOLKIT: ToolGroup[] = [
   {
-    group: "Modeling and printing",
-    items: ["Fusion 360", "Parametric models in Python", "Caliper surveys and drawings", "PETG on an Ender-3"]
+    group: "Modeling",
+    items: ["Fusion 360", "Parametric models in Python", "Caliper surveys and drawings", "Designing for fabrication"]
   },
   {
     group: "Web",

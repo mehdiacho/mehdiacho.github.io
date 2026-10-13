@@ -2,7 +2,8 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 const exec = promisify(execFile);
-const directory = 'reports/personal-2026-10-10';
+const directory = process.env.AUDIT_DIR || 'reports/personal-2026-10-12';
+try { const response = await fetch('http://127.0.0.1:4173/'); if (!response.ok) throw Error(String(response.status)); } catch { throw Error('Start the production preview first: npm run preview -- --host 127.0.0.1 --port 4173'); }
 await mkdir(directory, {recursive:true});
 const results = [];
 const routes = process.argv.slice(2);

@@ -6,10 +6,15 @@ import {writeServicePages} from '../seo/static-pages.mjs';
 const server=await createServer({server:{middlewareMode:true},appType:'custom'});
 try {
  const {render,WORKS_3D,CAD_STORIES}=await server.ssrLoadModule('/entry-server.tsx');
- const template=await readFile('dist/index.html','utf8');
+ const builtTemplate=await readFile('dist/index.html','utf8');
+ const css=builtTemplate.match(/href="([^"]+\.css)"/)[1];
+ // The stylesheet is ~12 KB compressed. Inline it on hydrated entry pages to
+ // remove a blocking request on slow mobile connections, using the built CSS
+ // so the server output and client never maintain separate styling copies.
+ const cssText=await readFile('dist'+css,'utf8');
+ const template=builtTemplate.replace(/<link\b[^>]*rel="stylesheet"[^>]*>/,`<style>${cssText}</style>`);
  if(!template.includes('<!-- seo:start -->'))throw Error('Missing metadata boundary');
  await writeFile('dist/index.html',template.replace(/<!-- seo:start -->[\s\S]*?<!-- seo:end -->/,metadata(pages[0])).replace('<div id="root"></div>',`<div id="root">${render()}</div>`));
- const css=template.match(/href="([^"]+\.css)"/)[1];
  await writeServicePages('dist',css,WORKS_3D);
  // Portable content snapshot for the new portfolio; refresh deliberately when work changes.
  await writeFile('seo/work-samples.json',JSON.stringify(WORKS_3D,null,2)+'\n');

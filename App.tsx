@@ -1,15 +1,17 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 
 import CadPages from './components/CadPages';
+import PrivacyPreferences from './components/PrivacyPreferences';
 import SiteHeader from './components/SiteHeader';
 import Hero from './components/Hero';
 import Section from './components/Section';
-import Services from './components/Services';
+import Hobbies from './components/Hobbies';
+import Research from './components/Research';
+import Background from './components/Background';
+import SignalGame from './components/SignalGame';
 import Work3D from './components/Work3D';
 import Visualisation from './components/Visualisation';
 import Projects from './components/Projects';
-import Skills from './components/Skills';
-import Timeline from './components/Timeline';
 import Contact from './components/Contact';
 import SiteFooter from './components/SiteFooter';
 
@@ -56,7 +58,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen">
       <a
-        href="#services"
+        href="#hobbies"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:border-[3px] focus:border-ink focus:bg-paper focus:px-4 focus:py-2"
       >
         Skip to content
@@ -67,69 +69,26 @@ const Home: React.FC = () => {
       <main>
         <Hero />
 
-        <Section
-          id="services"
-          number="01"
-          theme="riso"
-          variant="banner"
-          title={<>Things I keep coming back to</>}
-          standfirst="Making things, writing software and trying to understand how things work."
-        >
-          <Services />
+        <Section id="hobbies" number="01" theme="riso" variant="banner" title={<>Side quests</>} standfirst="The things I get into when I follow my curiosity. Pick a card and come a little closer.">
+          <Hobbies />
         </Section>
-
-        <Section
-          id="cad"
-          number="02"
-          theme="blueprint"
-          variant="rail"
-          title={<>3D printing and CAD modeling in Botswana</>}
-          standfirst="Small fixes for my own things. You can turn the models around here, then open the drawings and the notes behind each one."
-        >
-          <Work3D />
-        </Section>
-
-        <Section
-          id="visualisation"
-          number="03"
-          theme="soft"
-          variant="inline"
-          title={<>3D visualisation</>}
-          standfirst="A work in progress: turning my desk into a place you can explore in a browser."
-        >
-          <Visualisation />
-        </Section>
-
-        <Section
-          id="software"
-          number="04"
-          theme="swiss"
-          variant="banner"
-          title={<>Software and web work</>}
-          standfirst="Everything I have built. Some of it is live, plenty of it is not finished, and the labels say which is which."
-        >
+        <Section id="software" number="02" theme="swiss" variant="banner" title={<>Built from an idea.</>} standfirst="Software I’m making, from useful little tools to experiments that grew legs. Live projects and works in progress, with room for what comes next.">
           <Projects />
         </Section>
-
-        {/* The "about me" itself is in the hero, where he asked for it. This
-            is the rest of the file: what he reaches for, and where he has been. */}
-        <Section
-          id="about"
-          number="05"
-          theme="ledger"
-          variant="rail"
-          title={<>Background</>}
-          standfirst="What I reach for, and where I have been so far."
-        >
-          <h3 className="label text-accent">What I work with</h3>
-          <div className="mt-5">
-            <Skills />
-          </div>
-
-          <h3 className="label mt-16 text-accent">Where I&rsquo;ve been</h3>
-          <div className="mt-5">
-            <Timeline />
-          </div>
+        <Section id="research" number="03" theme="brut" variant="inline" title={<>Questions worth testing.</>} standfirst="Machine learning, graph networks, and the work behind the result.">
+          <Research />
+        </Section>
+        <Section id="cad" number="04" theme="blueprint" variant="rail" title={<>The model notebook.</>} standfirst="A hobby in dimensions. Replacement parts, small fixes, and the drawings behind them. I’m focused on modeling; physical tests are a separate step.">
+          <Work3D />
+        </Section>
+        <Section id="visualisation" number="05" theme="soft" variant="inline" title={<>A room of my own.</>} standfirst="Turning my desk into a little place you can explore in a browser. Still taking shape.">
+          <Visualisation />
+        </Section>
+        <Section id="about" number="06" theme="ledger" variant="rail" title={<>A bit of background.</>} standfirst="How I got here, what I care about, and what I’m learning along the way.">
+          <Background />
+        </Section>
+        <Section id="play" number="07" theme="brut" variant="inline" title={<>Take the scenic route.</>} standfirst="Or the shortest one. A small puzzle for the part of your brain that keeps looking for a better path.">
+          <SignalGame />
         </Section>
 
         <Contact />
@@ -154,6 +113,6 @@ const Home: React.FC = () => {
 
 export default function App({ path = typeof window === 'undefined' ? '/' : window.location.pathname }: { path?: string }) {
   const normalized = path.endsWith('/') ? path : path + '/';
-  if (normalized === '/models/' || normalized === '/models/charger-brace/' || normalized === '/models/mazda-flip-key/') return <CadPages path={normalized} />;
-  return <Home />;
+  const modelPage = normalized === '/models/' || normalized === '/models/charger-brace/' || normalized === '/models/mazda-flip-key/';
+  return <>{modelPage ? <CadPages path={normalized} /> : <Home />}<PrivacyPreferences /></>;
 }

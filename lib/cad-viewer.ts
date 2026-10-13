@@ -35,14 +35,14 @@ export async function createCadViewer(host: HTMLElement, src: string, alt: strin
   const canvas = renderer.domElement;
   canvas.tabIndex = 0; canvas.setAttribute('role', 'img');
   canvas.setAttribute('aria-label', `${alt}. Drag or use arrow keys to rotate; plus and minus to zoom; Home to reset.`);
-  canvas.style.cssText = 'display:block;width:100%;height:100%';
+  canvas.style.cssText = 'display:block;width:100%;height:100%;visibility:hidden';
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5)); host.append(canvas);
   const controls = new OrbitControls(camera, canvas);
   canvas.style.touchAction = 'pan-y';
   controls.minDistance = 1; controls.maxDistance = 12;
   controls.enableDamping = false; controls.enableZoom = false;
-  let frame = 0, disposed = false;
-  const draw = () => { if (!disposed && !frame) frame = requestAnimationFrame(() => { frame = 0; renderer.render(scene, camera); }); };
+  let frame = 0, disposed = false, ready = false;
+  const draw = () => { if (ready && !disposed && !frame) frame = requestAnimationFrame(() => { frame = 0; renderer.render(scene, camera); canvas.style.visibility = 'visible'; }); };
   const reset = () => {
     controls.target.set(0, 0, 0);
     camera.position.setFromSpherical(new Spherical(Math.min(10, 4.5 / Math.min(camera.aspect, 1)), 65 * Math.PI / 180, 35 * Math.PI / 180));
@@ -75,9 +75,17 @@ export async function createCadViewer(host: HTMLElement, src: string, alt: strin
   canvas.addEventListener('keydown', keys); canvas.addEventListener('webglcontextlost', lost);
   const observer = new ResizeObserver(resize); observer.observe(host);
   resize(); reset();
-  return { reset, zoom, dispose() {
+  const dispose = () => {
+    if (disposed) return;
     disposed = true; cancelAnimationFrame(frame); observer.disconnect(); controls.dispose();
     canvas.removeEventListener('keydown', keys); canvas.removeEventListener('webglcontextlost', lost);
     release(gltf.scene); renderer.dispose(); renderer.forceContextLoss(); canvas.remove();
-  } };
+  };
+  try {
+    // Use parallel shader compilation where supported, keeping the poster visible.
+    await renderer.compileAsync(scene, camera);
+    if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
+    ready = true; draw();
+    return { reset, zoom, dispose };
+  } catch (error) { dispose(); throw error; }
 }

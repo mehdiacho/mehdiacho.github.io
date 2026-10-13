@@ -17,7 +17,7 @@ export default function CadPages({ path }: { path: string }) {
           <button aria-pressed={view === 'model'} onClick={() => setView('model')}>3D model</button>
           <button aria-pressed={view === 'blueprint'} onClick={() => setView('blueprint')}>Interactive blueprint</button>
         </div>
-        {view === 'model' ? <InlineModel src={story.model} poster={story.poster} alt={story.alt} /> :
+        {view === 'model' ? <InlineModel priority src={story.model} poster={story.poster} alt={story.alt} /> :
           <iframe className="blueprint-frame" title={`${story.title} — interactive measurement blueprint`} src={story.blueprint} sandbox="allow-scripts" />}
         <div className="cad-links"><a href={story.blueprint} target="_blank" rel="noopener">Open blueprint in its own tab ↗</a><a href={story.model} download>Download model (.glb)</a></div>
         <div className="cad-story">{story.sections.map(([title,text]) => <section key={title}><h2>{title}</h2><p>{text}</p></section>)}</div>

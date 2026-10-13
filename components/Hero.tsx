@@ -1,20 +1,35 @@
-import React from 'react';
-import { ABOUT } from '../constants';
-import { CaliperMeasuring } from './Drawings';
+import React, { useEffect, useState } from 'react';
+import { Volume2 } from 'lucide-react';
 import RoleWheel from './RoleWheel';
-
 export default function Hero() {
+  const [supported, setSupported] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
+  const [message, setMessage] = useState('');
+  useEffect(() => {
+    setSupported('speechSynthesis' in window);
+    return () => { if ('speechSynthesis' in window) speechSynthesis.cancel(); };
+  }, []);
+  const pronounce = () => {
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance('Meh dee');
+    utterance.lang = 'en-GB'; utterance.rate = .8;
+    utterance.onend = () => setSpeaking(false);
+    utterance.onerror = () => { setSpeaking(false); setMessage('Audio unavailable here. Pronounced MEH-dee.'); };
+    setMessage(''); setSpeaking(true); speechSynthesis.speak(utterance);
+  };
   return <section id="top" data-theme="brut">
     <div className="bleed hero-personal">
-      <div className="dimline flex justify-between gap-5 pt-3"><p className="label text-accent">Gaborone, Botswana</p><p className="label text-ink-soft">A few things I’m into</p></div>
+      <div className="hero-topline"><a href="#top" className="font-mark">MA.</a><p className="label text-ink-soft">A personal notebook / Gaborone, Botswana</p><a href="#contact" className="label text-accent">Say hello ↗</a></div>
       <div className="hero-composition">
-        <div><h1 className="hero-name">I’m Mehdi<br />Acho.</h1><RoleWheel />
-          <p className="hero-intro">I’m doing an MSc at BIUST and making things in between. Sometimes that means software, sometimes a replacement part for something I own. This is where I keep the projects, experiments and things I’m still figuring out.</p>
-          <a className="hero-explore" href="#cad">Come have a look ↓</a>
-        </div>
-        <aside className="hero-note"><span className="label text-accent">Currently on the workbench</span><CaliperMeasuring className="w-full text-accent" /><p>A charger brace.<br />A replacement key shell.<br />A few fit tests to get right.</p><a href="/models/">Open the model notebook ↗</a></aside>
+        <p className="label text-accent">Software, questions, and a few side quests.</p>
+        <h1 className="hero-name">Hi, I’m <span>Mehdi.</span></h1>
+        <div className="name-pronunciation"><span>MEH-dee</span><button type="button" disabled={!supported || speaking} onClick={pronounce} aria-label="Hear Mehdi pronounced, synthetic voice" title="Synthetic pronunciation"><Volume2 size={17} aria-hidden="true" /><span>{speaking ? 'Playing…' : 'Hear it'}</span></button><span className="pronunciation-note">synthetic voice</span></div>
+        <span className="sr-only" role="status">{message}</span>
+        <RoleWheel />
+        <div className="hero-bottom"><p className="hero-intro">I write software and study how machines learn. I’m doing an MSc at BIUST; outside of that, I’m usually following an idea into a project, a model, or another question.</p><a className="hero-explore" href="#hobbies">Take a look around <span aria-hidden="true">↘</span></a></div>
       </div>
-      <div className="hero-longer"><p className="label text-accent">A little more about me</p><div className="grid gap-7 mt-7 md:grid-cols-2 xl:grid-cols-4">{ABOUT.map(paragraph => <p key={paragraph.slice(0,32)} className="leading-relaxed text-ink-soft">{paragraph}</p>)}</div></div>
+      <div className="hero-footnote"><span>Some things work. Some are still experiments.</span><span>Scroll to get to know me ↓</span></div>
     </div>
   </section>;
 }
+

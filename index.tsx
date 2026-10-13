@@ -4,7 +4,7 @@ import App from './App';
 import './index.css';
 import { initAnalytics } from './lib/firebase';
 
-// Analytics is optional and starts after the document has loaded.
+// The initializer does nothing unless the visitor explicitly opted in.
 window.addEventListener('load', () => {
   if ('requestIdleCallback' in window) window.requestIdleCallback(() => initAnalytics());
   else setTimeout(() => initAnalytics(), 0);
