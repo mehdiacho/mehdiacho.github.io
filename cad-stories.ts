@@ -3,7 +3,7 @@ export const CAD_STORIES = [
     id: 'M01', slug: 'charger-brace', title: 'Laptop charger brace',
     description: 'A two-part brace for my laptop charger plug: why I modelled it, the untested first version, and the interactive model and blueprint.',
     model: '/portfolio-3d/models/charger-brace.glb',
-    poster: '/portfolio-3d/charger-brace-v1.png',
+    poster: '/portfolio-3d/renders/charger-brace.webp',
     blueprint: '/portfolio-3d/blueprints/charger-brace.html',
     alt: 'A ribbed charger-plug sleeve with a mounting plate and a hook for the laptop rear edge',
     status: 'V1 modelled · print and fit unconfirmed',

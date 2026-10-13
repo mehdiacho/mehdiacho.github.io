@@ -12,6 +12,7 @@
  * never break the page.
  */
 import type { Analytics } from 'firebase/analytics';
+import { analyticsAllowed, saveAnalyticsChoice, clearAnalyticsCookies } from './analytics-choice';
 
 // Project: mehdi-00. Public web config — safe to commit.
 const DEFAULT_CONFIG = {
@@ -49,28 +50,39 @@ let initStarted = false;
  * browser). Loads the SDK lazily so it never blocks first paint.
  */
 export async function initAnalytics(): Promise<void> {
-  if (!isConfigured || initStarted) return;
+  if (!isConfigured || analytics || initStarted || !analyticsAllowed()) return;
   initStarted = true;
   try {
     const [{ initializeApp }, { getAnalytics, isSupported }] = await Promise.all([
       import('firebase/app'),
       import('firebase/analytics'),
     ]);
-    if (await isSupported()) {
+    if (await isSupported() && analyticsAllowed()) {
       analytics = getAnalytics(initializeApp(firebaseConfig));
     }
   } catch (err) {
     // Never let analytics break the page.
     console.warn('[analytics] init skipped:', err);
-  }
+  } finally { initStarted = false; }
+}
+
+export async function setAnalyticsChoice(enabled: boolean): Promise<void> {
+  saveAnalyticsChoice(enabled);
+  // Stop collection synchronously, including while the SDK is loading.
+  Reflect.set(window, `ga-disable-${firebaseConfig.measurementId}`, !enabled);
+  if (!enabled) clearAnalyticsCookies();
+  if (analytics) {
+    const { setAnalyticsCollectionEnabled } = await import('firebase/analytics');
+    setAnalyticsCollectionEnabled(analytics, analyticsAllowed());
+  } else if (enabled) await initAnalytics();
 }
 
 /** Fire a custom analytics event if analytics is active; no-op otherwise. */
 export async function track(event: string, params?: Record<string, unknown>): Promise<void> {
-  if (!analytics) return;
+  if (!analytics || !analyticsAllowed()) return;
   try {
     const { logEvent } = await import('firebase/analytics');
-    logEvent(analytics, event, params);
+    if (analyticsAllowed()) logEvent(analytics, event, params);
   } catch {
     /* swallow */
   }

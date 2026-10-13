@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { createCadViewer } from '../lib/cad-viewer';
 type Viewer = Awaited<ReturnType<typeof createCadViewer>>;
 
-export default function InlineModel({ src, poster, alt }: { src: string; poster: string; alt: string }) {
+export default function InlineModel({ src, poster, alt, priority = false }: { src: string; poster: string; alt: string; priority?: boolean }) {
   const host = useRef<HTMLDivElement>(null);
   const viewer = useRef<Viewer | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -33,7 +33,7 @@ export default function InlineModel({ src, poster, alt }: { src: string; poster:
   }, [src, alt, attempt]);
   return <div className="inline-model">
     <div className="model-stage">
-      {!loaded && <img src={poster} alt={alt} width="900" height="675" loading="lazy" />}
+      {!loaded && <img src={poster} alt={alt} width="900" height="675" loading={priority ? 'eager' : 'lazy'} fetchPriority={priority ? 'high' : 'auto'} />}
       <div ref={host} className="model-canvas" />
     </div>
     <div className="model-tools">

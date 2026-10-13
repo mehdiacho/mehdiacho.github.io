@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 
 import { useProjects } from '../lib/projects-store';
 import { Project, ProjectStatus } from '../types';
+import ProjectIdeas from './ProjectIdeas';
 
 /** Plain words again. "WIP" means nothing to someone outside software. */
 const STATUS_META: Record<ProjectStatus, { label: string; className: string }> = {
@@ -183,25 +184,32 @@ const arrowClass =
 const Projects: React.FC = () => {
   const { projects } = useProjects();
   const [page, setPage] = useState(0);
+  const [filter, setFilter] = useState('All work');
+  const filters = ['All work', 'AI & research', 'Tools & apps', 'Games'];
+  const ai = ['GRIDS_TO_GRAPHS', 'YAP', 'TETHER', 'FILMARR', 'AGENTIC_BROWSER', 'BIBVERIFY'];
+  const games = ['MACHINE_STRIKE', 'HIGHRISE'];
+  const filtered = projects.filter(p => filter === 'All work' || (filter === 'AI & research' ? ai.includes(p.title) : filter === 'Games' ? games.includes(p.title) : !ai.includes(p.title) && !games.includes(p.title)));
 
-  const pages = Math.max(1, Math.ceil(projects.length / PER_PAGE));
+  const pages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
   // Firestore can return fewer projects than the page we are sitting on.
   const current = Math.min(page, pages - 1);
 
   const slice = useMemo(
-    () => projects.slice(current * PER_PAGE, current * PER_PAGE + PER_PAGE),
-    [projects, current],
+    () => filtered.slice(current * PER_PAGE, current * PER_PAGE + PER_PAGE),
+    [filtered, current],
   );
 
   if (projects.length === 0) return null;
 
   return (
     <div>
+      <div className="project-toolbar"><div role="group" aria-label="Filter projects">{filters.map(name => <button key={name} aria-pressed={filter === name} onClick={() => { setFilter(name); setPage(0); }}>{name}</button>)}</div><p className="label" role="status">{filtered.length} projects / {filter}</p></div>
       <ul className="bento list-none p-0">
         {slice.map((project, index) => (
           <ProjectCard key={project.id} project={project} span={SPANS[index]} />
         ))}
       </ul>
+      {filtered.length === 0 && <p>No projects in this group yet.</p>}
 
       {pages > 1 && (
         <div className="mt-10 flex flex-wrap items-center justify-between gap-6 border-t border-ink pt-6">
@@ -209,7 +217,7 @@ const Projects: React.FC = () => {
             Page {current + 1} of {pages}
             <span className="sr-only">
               {' '}
-              — showing {slice.length} of {projects.length} projects
+              — showing {slice.length} of {filtered.length} projects
             </span>
           </p>
 
@@ -252,6 +260,7 @@ const Projects: React.FC = () => {
           </div>
         </div>
       )}
+      <ProjectIdeas />
     </div>
   );
 };
