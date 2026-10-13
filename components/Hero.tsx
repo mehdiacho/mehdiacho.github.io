@@ -26,7 +26,7 @@ export default function Hero() {
         <div className="name-pronunciation"><span>MEH-dee</span><button type="button" disabled={!supported || speaking} onClick={pronounce} aria-label="Hear Mehdi pronounced, synthetic voice" title="Synthetic pronunciation"><Volume2 size={17} aria-hidden="true" /><span>{speaking ? 'Playing…' : 'Hear it'}</span></button><span className="pronunciation-note">synthetic voice</span></div>
         <span className="sr-only" role="status">{message}</span>
         <RoleWheel />
-        <div className="hero-bottom"><p className="hero-intro">I write software and study how machines learn. I’m doing an MSc at BIUST; outside of that, I’m usually following an idea into a project, a model, or another question.</p><a className="hero-explore" href="#hobbies">Take a look around <span aria-hidden="true">↘</span></a></div>
+        <div className="hero-bottom"><p className="hero-intro">I write software and study how machines learn. I’m doing an MSc at BIUST; outside of that, I’m usually following an idea into a project, a model, or another question.</p><a className="hero-explore" href="#software">Take a look around <span aria-hidden="true">↘</span></a></div>
       </div>
       <div className="hero-footnote"><span>Some things work. Some are still experiments.</span><span>Scroll to get to know me ↓</span></div>
     </div>

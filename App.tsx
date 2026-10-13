@@ -59,7 +59,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen">
       <a
-        href="#hobbies"
+        href="#software"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:border-[3px] focus:border-ink focus:bg-paper focus:px-4 focus:py-2"
       >
         Skip to content
@@ -70,23 +70,23 @@ const Home: React.FC = () => {
       <main>
         <Hero />
 
-        <Section id="hobbies" number="01" theme="riso" variant="banner" title={<>Side quests</>} standfirst="The things I get into when I follow my curiosity. Pick a card and come a little closer.">
-          <Hobbies />
-        </Section>
-        <Section id="software" number="02" theme="swiss" variant="banner" title={<>Built from an idea.</>} standfirst="Software I’m making, from useful little tools to experiments that grew legs. Live projects and works in progress, with room for what comes next.">
+        <Section id="software" number="01" theme="swiss" variant="banner" title={<>Built from an idea.</>} standfirst="Software I’m making, from useful little tools to experiments that grew legs. Live projects and works in progress, with room for what comes next.">
           <Projects />
         </Section>
-        <Section id="research" number="03" theme="brut" variant="inline" title={<>Questions worth testing.</>} standfirst="Machine learning, graph networks, and the work behind the result.">
+        <Section id="research" number="02" theme="brut" variant="inline" title={<>Questions worth testing.</>} standfirst="Machine learning, graph networks, and the work behind the result.">
           <Research />
         </Section>
-        <Section id="cad" number="04" theme="blueprint" variant="rail" title={<>Models, on the side.</>} standfirst="A hobby with calipers. Small fixes, the drawings behind them and the questions that are still open.">
+        <Section id="cad" number="03" theme="blueprint" variant="rail" title={<>Models, on the side.</>} standfirst="A hobby with calipers. Small fixes, the drawings behind them and the questions that are still open.">
           <Work3D />
         </Section>
-        <Section id="visualisation" number="05" theme="soft" variant="inline" title={<>A room of my own.</>} standfirst="Turning my desk into a little place you can explore in a browser. Still taking shape.">
+        <Section id="visualisation" number="04" theme="soft" variant="inline" title={<>A room of my own.</>} standfirst="Turning my desk into a little place you can explore in a browser. Still taking shape.">
           <Visualisation />
         </Section>
-        <Section id="about" number="06" theme="ledger" variant="rail" title={<>A bit of background.</>} standfirst="How I got here, what I care about, and what I’m learning along the way.">
+        <Section id="about" number="05" theme="ledger" variant="rail" title={<>A bit of background.</>} standfirst="How I got here, what I care about, and what I’m learning along the way.">
           <Background />
+        </Section>
+        <Section id="hobbies" number="06" theme="riso" variant="banner" title={<>Side quests</>} standfirst="The things I get into when I follow my curiosity. Pick a disc and come a little closer.">
+          <Hobbies />
         </Section>
         <Section id="play" number="07" theme="brut" variant="inline" title={<>Weekly arcade.</>} standfirst="A small game, a fresh scoreboard every Monday, and the week’s top score kept for good.">
           <Arcade />
