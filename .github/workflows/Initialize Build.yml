@@ -39,6 +39,9 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+        env:
+          # Shared Signal Run rankings (game-worker/). Public HTTPS URL, not a secret.
+          VITE_SIGNAL_API_URL: https://portfolio-signal-run.mehdiacho.workers.dev
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact

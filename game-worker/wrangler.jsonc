@@ -6,6 +6,6 @@
   "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true, "head_sampling_rate": 0.1 },
   "vars": { "ALLOWED_ORIGINS": "https://mehdiacho.tech,https://www.mehdiacho.tech,http://127.0.0.1:4173,http://localhost:4173" },
-  "d1_databases": [{ "binding": "SIGNAL_DB", "database_name": "portfolio-signal-run", "database_id": "00000000-0000-0000-0000-000000000000", "migrations_dir": "migrations" }],
+  "d1_databases": [{ "binding": "SIGNAL_DB", "database_name": "portfolio-signal-run", "database_id": "c544c4b4-87fc-4c45-87a0-068abbd18ebc", "migrations_dir": "migrations" }],
   "triggers": { "crons": ["15 0 * * *"] }
 }
