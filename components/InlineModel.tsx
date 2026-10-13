@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { createCadViewer } from '../lib/cad-viewer';
 type Viewer = Awaited<ReturnType<typeof createCadViewer>>;
 
-export default function InlineModel({ src, poster, alt, priority = false }: { src: string; poster: string; alt: string; priority?: boolean }) {
+export default function InlineModel({ src, poster, alt, priority = false }: { src: string; poster?: string; alt: string; priority?: boolean }) {
   const host = useRef<HTMLDivElement>(null);
   const viewer = useRef<Viewer | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -33,11 +33,11 @@ export default function InlineModel({ src, poster, alt, priority = false }: { sr
   }, [src, alt, attempt]);
   return <div className="inline-model">
     <div className="model-stage">
-      {!loaded && <img src={poster} alt={alt} width="900" height="675" loading={priority ? 'eager' : 'lazy'} fetchPriority={priority ? 'high' : 'auto'} />}
+      {!loaded && poster && <img src={poster} alt={alt} width="900" height="675" loading={priority ? 'eager' : 'lazy'} fetchPriority={priority ? 'high' : 'auto'} />}
       <div ref={host} className="model-canvas" />
     </div>
     <div className="model-tools">
-      <span>{failed ? 'The 3D view could not load. The still is shown.' : loaded ? 'Drag / arrow keys to rotate · right-drag / two fingers to pan' : '3D view loads when in view. A still is shown while it loads.'}</span>
+      <span>{failed ? `The 3D view could not load.${poster ? ' The still is shown.' : ''}` : loaded ? 'Drag / arrow keys to rotate · right-drag / two fingers to pan' : `3D view loads when in view.${poster ? ' A still is shown while it loads.' : ''}`}</span>
       <div className="model-buttons">{failed ? <button onClick={() => setAttempt(a => a + 1)}>Retry 3D view</button> : <>
         <button aria-label="Zoom out" disabled={!loaded} onClick={() => viewer.current?.zoom(1.15)}>−</button>
         <button aria-label="Zoom in" disabled={!loaded} onClick={() => viewer.current?.zoom(1 / 1.15)}>+</button>

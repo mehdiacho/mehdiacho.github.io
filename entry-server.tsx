@@ -4,4 +4,4 @@ import App from './App';
 export const render = (path = "/") => renderToString(<App path={path} />);
 export { WORKS_3D } from './constants';
 
-export { CAD_STORIES } from './cad-stories';
+export { CAD_PAGES } from './lib/prints';

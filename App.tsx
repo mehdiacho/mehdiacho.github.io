@@ -1,6 +1,7 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 
 import CadPages from './components/CadPages';
+import { CAD_PAGES } from './lib/prints';
 import PrivacyPreferences from './components/PrivacyPreferences';
 import SiteHeader from './components/SiteHeader';
 import Hero from './components/Hero';
@@ -113,6 +114,6 @@ const Home: React.FC = () => {
 
 export default function App({ path = typeof window === 'undefined' ? '/' : window.location.pathname }: { path?: string }) {
   const normalized = path.endsWith('/') ? path : path + '/';
-  const modelPage = normalized === '/models/' || normalized === '/models/charger-brace/' || normalized === '/models/mazda-flip-key/';
+  const modelPage = normalized === '/models/' || CAD_PAGES.some(p => p.path === normalized);
   return <>{modelPage ? <CadPages path={normalized} /> : <Home />}<PrivacyPreferences /></>;
 }
