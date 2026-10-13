@@ -102,7 +102,7 @@ site does not use. When borrowing one:
 3. Swap `motion/react` imports for `framer-motion`.
 4. No WebGL, shader or canvas effect on initial page load. Load it on
    interaction or when scrolled into view, the way `InlineModel` loads the
-   CAD viewer.
+   CAD viewer and `Hobbies` loads the side quests room.
 5. Run the checks below before pushing.
 
 ## Performance budget
@@ -114,8 +114,9 @@ Lighthouse sits at 97–100 and should stay there. `node scripts/check-budget.mj
 |---|---|---|
 | Main entry JS (`index-*.js`) | 110 KB | 95.2 KB |
 | All CSS | 20 KB | 14.8 KB |
-| Any other chunk except the CAD viewer | 60 KB | 43.9 KB (Vault) |
-| CAD viewer (lazy, three.js) | 160 KB | 141.9 KB |
+| Any other chunk except the two below | 60 KB | 43.9 KB (Vault) |
+| three.js (`three.module-*.js`, lazy, shared by the CAD viewer and the side quests room) | 140 KB | 125.6 KB |
+| CAD viewer (lazy, loaders and controls on top of three.js) | 160 KB | 18.0 KB |
 
 Analytics stay opt-in only. No new third-party script loads before consent.
 

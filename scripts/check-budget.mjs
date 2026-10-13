@@ -20,6 +20,8 @@ const css = files.filter((f) => f.endsWith('.css'));
 
 for (const f of js) {
   if (/^index-[\w-]+\.js$/.test(f)) check(f, gz(f), 110 * KB);
+  // three.js itself, shared by the CAD viewer and the side quests room.
+  else if (f.startsWith('three.module-')) check(f, gz(f), 140 * KB);
   else if (f.startsWith('cad-viewer-')) check(f, gz(f), 160 * KB);
   else check(f, gz(f), 60 * KB);
 }
