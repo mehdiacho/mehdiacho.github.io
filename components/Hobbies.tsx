@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import type { FloppyScene, Phase, ScreenRect } from '../lib/floppy-scene';
+import type { FloppyScene, Phase, Rect } from '../lib/floppy-scene';
 import { createPortal } from 'react-dom';
 import { Gamepad2, BookOpen, Network, Cuboid, ArrowUpRight, X } from 'lucide-react';
 
@@ -138,10 +138,10 @@ function FlatDeck({ routing }: { routing: boolean }) {
 const discs = hobbies.map(({ id, name, number, kicker, color, info }) => ({ id, name, number, kicker, color, info }));
 
 /**
- * The 3D room: the discs float over a desk in front of an old PC. Pick one up
- * to read its back, insert it, and its page comes up on the monitor. The page
- * itself is plain HTML laid over the monitor glass, so it stays readable,
- * selectable and reachable by keyboard.
+ * The 3D room: the discs float in a row with a disc port fixed on the right
+ * edge. Pick one up to read its back, insert it, and its page boots up over
+ * the room. The page itself is plain HTML, so it stays readable, selectable
+ * and reachable by keyboard.
  */
 function FloppyRoom({ onReady, onFail }: { onReady(): void; onFail(): void }) {
   const host = useRef<HTMLDivElement>(null);
@@ -149,7 +149,7 @@ function FloppyRoom({ onReady, onFail }: { onReady(): void; onFail(): void }) {
   const [phase, setPhase] = useState<Phase>('deck');
   const [active, setActive] = useState<string | null>(null);
   const [hover, setHover] = useState<string | null>(null);
-  const [rect, setRect] = useState<ScreenRect | null>(null);
+  const [port, setPort] = useState<Rect | null>(null);
   const [ready, setReady] = useState(false);
   const pushed = useRef(false), instant = useRef(false), lastActive = useRef<string | null>(null);
   const insertButton = useRef<HTMLButtonElement>(null), ejectButton = useRef<HTMLButtonElement>(null);
@@ -166,10 +166,11 @@ function FloppyRoom({ onReady, onFail }: { onReady(): void; onFail(): void }) {
         const s = await createFloppyScene(host.current!, discs, {
           onHover: setHover,
           onPhase: (next, id) => { setPhase(next); setActive(id); if (id) lastActive.current = id; },
+          onLayout: () => scene.current && setPort({ ...scene.current.portRect() }),
           onError: onFail,
         });
         if (disposed) { s.dispose(); return; }
-        scene.current = s; setReady(true); onReady();
+        scene.current = s; setPort({ ...s.portRect() }); setReady(true); onReady();
         const linked = fromHash();
         if (linked) { instant.current = true; s.openInstant(linked.id); }
       } catch { if (!disposed) onFail(); }
@@ -181,29 +182,25 @@ function FloppyRoom({ onReady, onFail }: { onReady(): void; onFail(): void }) {
       const s = scene.current, linked = fromHash();
       if (!s) return;
       pushed.current = false;
-      if (!linked && s.phase === 'screen') s.eject();
+      if (!linked && (s.phase === 'screen' || s.phase === 'loading')) s.eject();
       else if (linked && s.phase === 'deck') { instant.current = true; s.openInstant(linked.id); }
     };
     addEventListener('popstate', onPop);
     return () => { disposed = true; observer.disconnect(); removeEventListener('popstate', onPop); scene.current?.dispose(); scene.current = null; };
   }, []);
 
-  // The monitor page follows the glass when the stage resizes.
+  // A loaded disc gets its own address, so the back button ejects it.
   useEffect(() => {
-    if (phase !== 'screen') { setRect(null); return; }
-    const measure = () => requestAnimationFrame(() => scene.current && setRect(scene.current.screenRect()));
-    measure();
+    if (phase !== 'loading' && phase !== 'screen') return;
     if (!instant.current && active && !pushed.current) { history.pushState({ sideQuest: active }, '', HASH + active); pushed.current = true; }
     instant.current = false;
-    const observer = new ResizeObserver(measure); observer.observe(host.current!);
-    return () => observer.disconnect();
   }, [phase]);
 
   useEffect(() => {
     if (phase === 'inspect') insertButton.current?.focus({ preventScroll: true });
-    if (phase === 'screen' && rect) ejectButton.current?.focus({ preventScroll: true });
-    if (phase === 'deck' && lastActive.current && host.current?.contains(document.activeElement) === false && document.activeElement === document.body) indexButtons.current[lastActive.current]?.focus({ preventScroll: true });
-  }, [phase, rect]);
+    if (phase === 'screen') ejectButton.current?.focus({ preventScroll: true });
+    if (phase === 'deck' && lastActive.current && document.activeElement === document.body) indexButtons.current[lastActive.current]?.focus({ preventScroll: true });
+  }, [phase]);
 
   const eject = useCallback((jumpTo?: string) => {
     const s = scene.current;
@@ -225,10 +222,14 @@ function FloppyRoom({ onReady, onFail }: { onReady(): void; onFail(): void }) {
   }, [phase, eject]);
 
   const hobby = hobbies.find(h => h.id === active);
+  const drive = phase === 'loading' || phase === 'screen';
   return <div className="floppy-room" data-ready={ready} data-phase={phase}>
     <div ref={host} className="floppy-canvas" />
     {ready && <>
-      <p className="floppy-hint label" aria-hidden="true">{phase === 'inspect' ? 'Insert it into the PC to load it' : phase === 'deck' ? 'Pick a disc to take a closer look' : ''}</p>
+      {port && <div className="floppy-port" data-busy={drive} aria-hidden="true" style={{ left: port.left, top: port.top, width: port.width, height: port.height }}>
+        <span className="floppy-port-slot" /><span className="floppy-port-led" /><span className="floppy-port-label">A:</span>
+      </div>}
+      <p className="floppy-hint label" aria-hidden="true">{phase === 'inspect' ? 'Insert it into the port on the right' : phase === 'deck' ? 'Pick a disc to take a closer look' : ''}</p>
       {phase === 'deck' && <ol className="floppy-index" aria-label="Side quest discs">{hobbies.map(h => <li key={h.id}>
         <button ref={el => { indexButtons.current[h.id] = el; }} data-hot={hover === h.id} style={{ '--quest-color': h.color } as React.CSSProperties}
           onClick={() => scene.current?.select(h.id)} onMouseEnter={() => scene.current?.hover(h.id)} onMouseLeave={() => scene.current?.hover(null)}
@@ -240,17 +241,22 @@ function FloppyRoom({ onReady, onFail }: { onReady(): void; onFail(): void }) {
         <button ref={insertButton} className="btn" onClick={() => scene.current?.insert()}>Insert disc</button>
         <button className="btn-hollow" onClick={() => scene.current?.putBack()}>Put it back</button>
       </div>}
-      {phase === 'screen' && hobby && rect && <div className="floppy-monitor" data-theme="brut" role="region" aria-labelledby="floppy-monitor-heading"
-        style={{ left: rect.left, top: rect.top, width: rect.width, height: rect.height }}>
-        <div className="floppy-monitor-bar"><span>A:\QUEST{hobby.number}.EXE</span><button ref={ejectButton} onClick={() => eject()} aria-label="Eject the disc and go back to the desk">Eject ⏏</button></div>
+      {drive && hobby && <div className="floppy-monitor" data-theme="brut" data-phase={phase} role="region" aria-labelledby="floppy-monitor-heading"
+        style={port ? { right: `calc(100% - ${port.left - 16}px)` } : undefined}>
+        <div className="floppy-monitor-bar"><span>A:\QUEST{hobby.number}.EXE</span>{phase === 'screen' && <button ref={ejectButton} onClick={() => eject()} aria-label="Eject the disc and go back to the discs">Eject ⏏</button>}</div>
+        {phase === 'loading' ? <pre className="floppy-boot" aria-live="polite">{`A:\\>QUEST${hobby.number}\nReading side quest ${hobby.number}...\n[################]`}</pre> :
         <div className="floppy-monitor-body">
-          <p className="label text-accent">{hobby.kicker}</p>
-          <h3 id="floppy-monitor-heading">{hobby.title}</h3>
-          <p className="floppy-monitor-lead">{hobby.intro}</p>
-          {hobby.image && <img src={hobby.image} width="900" height="674" alt="The modeled charger brace" />}
-          {hobby.notes.map(note => <p key={note}>{note}</p>)}
-          {hobby.href && <a className="floppy-monitor-link" href={hobby.href} onClick={hobby.href.startsWith('#') ? event => { event.preventDefault(); eject(hobby.href); } : undefined}>{hobby.link} ↗</a>}
-        </div>
+          <div>
+            <p className="label text-accent">{hobby.kicker}</p>
+            <h3 id="floppy-monitor-heading">{hobby.title}</h3>
+            <p className="floppy-monitor-lead">{hobby.intro}</p>
+            {hobby.href && <a className="floppy-monitor-link" href={hobby.href} onClick={hobby.href.startsWith('#') ? event => { event.preventDefault(); eject(hobby.href); } : undefined}>{hobby.link} ↗</a>}
+          </div>
+          <div>
+            {hobby.image && <img src={hobby.image} width="900" height="674" alt="The modeled charger brace" />}
+            {hobby.notes.map(note => <p key={note}>{note}</p>)}
+          </div>
+        </div>}
       </div>}
     </>}
   </div>;

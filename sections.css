@@ -117,7 +117,18 @@
 .floppy-index button span { padding: 1px 5px; background: var(--quest-color); color: #172321; }
 .floppy-index button[data-hot='true'] { background: var(--color-ink); color: var(--color-paper); }
 .floppy-controls { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); display: flex; gap: 12px; }
-.floppy-monitor { position: absolute; display: flex; flex-direction: column; overflow: hidden; background: #111512; color: #f4f1e8; border-radius: 3% / 4%; box-shadow: inset 0 0 50px #000b; transform-origin: center; animation: floppy-power .5s cubic-bezier(.2,.8,.2,1); }
+.floppy-monitor { position: absolute; top: 14px; bottom: 14px; left: clamp(1.1rem, 3.2vw, 4.5rem); right: 150px; z-index: 2; display: flex; flex-direction: column; overflow: hidden; background: #111512; color: #f4f1e8; border: 3px solid var(--color-ink); box-shadow: inset 0 0 60px #000b, 10px 10px 0 #ff4b12; transform-origin: right center; animation: floppy-power .5s cubic-bezier(.2,.8,.2,1); }
+.floppy-boot { flex: 1; margin: 0; padding: clamp(16px, 3%, 36px); font: 15px/1.9 var(--font-label); color: #ccff00; white-space: pre; animation: floppy-type .9s steps(3) both; }
+@keyframes floppy-type { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+.floppy-monitor-body { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); column-gap: clamp(20px, 4vw, 60px); align-content: start; animation: floppy-in .35s ease-out both; }
+@keyframes floppy-in { from { opacity: 0; } }
+@media (max-width: 1000px) { .floppy-monitor-body { grid-template-columns: minmax(0, 1fr); } }
+.floppy-port { position: absolute; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 10px 0; background: linear-gradient(90deg, #cfc4ad, #e9e0cc 40%, #c2b69c); border: 2px solid var(--color-ink); border-radius: 4px; box-shadow: 6px 6px 0 #1a141030; }
+.floppy-port-slot { flex: 1; width: 8px; margin: 4px 0 10px; background: #141210; border-radius: 2px; box-shadow: inset 2px 0 0 #000, 1px 0 0 #fff8; }
+.floppy-port-led { width: 10px; height: 6px; background: #4a3a2c; border-radius: 1px; }
+.floppy-port[data-busy='true'] .floppy-port-led { background: #ff4b12; box-shadow: 0 0 8px #ff4b12; animation: floppy-led .18s steps(2) 6; }
+@keyframes floppy-led { 50% { background: #4a3a2c; box-shadow: none; } }
+.floppy-port-label { margin-top: 6px; font: 10px var(--font-label); color: var(--color-ink); }
 .floppy-monitor::after { content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: repeating-linear-gradient(#0000 0 2px, #0000002e 2px 4px); }
 @keyframes floppy-power { from { opacity: 0; transform: scale(1, .02); } 55% { opacity: 1; transform: scale(1, 1.02); } to { transform: none; } }
 .floppy-monitor-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 14px; border-bottom: 1px solid #ccff0055; font: 12px var(--font-label); color: #ccff00; }
@@ -127,6 +138,6 @@
 .floppy-monitor-body h3 { margin: 10px 0 12px; font-size: clamp(22px, 2.3vw, 40px); font-weight: 700; line-height: 1.05; letter-spacing: -.03em; max-width: 18ch; }
 .floppy-monitor-body p { margin: 0 0 12px; max-width: 62ch; font-size: 15px; line-height: 1.65; color: #c7cbbf; }
 .floppy-monitor-body .floppy-monitor-lead { font-size: clamp(15px, 1.25vw, 19px); line-height: 1.5; color: #f4f1e8; }
-.floppy-monitor-body img { display: block; max-width: min(360px, 70%); height: auto; margin: 12px 0 16px; border: 1px solid #ccff0066; }
-.floppy-monitor-link { display: inline-block; margin-top: 6px; padding: 9px 15px; font-weight: 700; background: #ccff00; color: #141619; }
-@media (prefers-reduced-motion: reduce) { .floppy-monitor { animation: none; } }
+.floppy-monitor-body img { display: block; max-width: 100%; height: auto; margin: 12px 0 16px; border: 1px solid #ccff0066; }
+.floppy-monitor-link { display: inline-block; margin-top: 10px; padding: 9px 15px; font-weight: 700; background: #ccff00; color: #141619; }
+

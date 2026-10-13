@@ -1,25 +1,28 @@
 import {
-  BoxGeometry, CanvasTexture, Color, DirectionalLight, Fog, Group, HemisphereLight, Mesh, MeshBasicMaterial,
-  MeshStandardMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Quaternion, Raycaster, SRGBColorSpace,
-  Scene, Texture, Vector2, Vector3, WebGLRenderer, Euler,
+  CanvasTexture, Color, CylinderGeometry, DirectionalLight, Fog, Group, HemisphereLight, Mesh,
+  MeshBasicMaterial, MeshStandardMaterial, Object3D, PerspectiveCamera, Plane, PlaneGeometry, BoxGeometry, Quaternion,
+  Raycaster, SRGBColorSpace, Scene, Texture, Vector2, Vector3, WebGLRenderer, Euler,
 } from 'three';
 
 /**
- * The side quests room: four floppy discs floating over a desk, and an old
- * beige PC behind them. Pick a disc up, it flips (each one its own way) to
- * show a short note on the back; insert it and the PC boots it onto the
- * monitor, where the page takes over as HTML laid exactly over the glass.
+ * The side quests room: four 3.5" floppy discs floating in a neat row. Pick
+ * one up and it flips (each its own way) to a short note on the back; insert
+ * it and it slides into a disc port fixed on the right edge of the stage, and
+ * its page boots up over the room.
  *
- * Everything is boxes, planes and canvas textures: no model files to fetch.
+ * Everything is boxes, planes and canvas textures: no model files.
  */
 
 export type DiscInfo = { id: string; name: string; number: string; kicker: string; color: string; info: string };
-export type Phase = 'deck' | 'moving' | 'inspect' | 'screen';
-export type ScreenRect = { left: number; top: number; width: number; height: number };
-type Events = { onHover(id: string | null): void; onPhase(phase: Phase, id: string | null): void; onError(): void };
+export type Phase = 'deck' | 'moving' | 'inspect' | 'loading' | 'screen';
+export type Rect = { left: number; top: number; width: number; height: number };
+type Events = { onHover(id: string | null): void; onPhase(phase: Phase, id: string | null): void; onLayout(): void; onError(): void };
 
-const PAPER = '#f8f0e1', INK = '#1a1410', HOT = '#ff4b12', ACID = '#ccff00', CRT = '#111512';
+const PAPER = '#f8f0e1', INK = '#1a1410', HOT = '#ff4b12';
 const DISPLAY = 'Grotesk, Arial, sans-serif', MONO = "'Fira Code Variable', ui-monospace, monospace";
+/** The port sits left of the checkpoint rail (fixed 14px from the right, 48px wide). */
+const PORT_WIDTH = 40, PORT_RIGHT = 92;
+const DISC_W = .9, DISC_H = .94, DISC_D = .032;
 
 // -- easing ---------------------------------------------------------------
 const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
@@ -33,25 +36,24 @@ const X = (a: number) => axisQ(1, 0, 0, a), Y = (a: number) => axisQ(0, 1, 0, a)
 
 /**
  * Every flip ends on the same pose (turned half way round Y, back to you) but
- * takes its own road there, so no two discs come out of the deck alike.
+ * takes its own road there, so no two discs come out of the row alike.
  */
 const FLIPS: ((u: number) => Quaternion)[] = [
-  u => Y(Math.PI * outBack(span(u, .15, 1))),                                         // a plain flip that overshoots and settles
-  u => X(Math.PI * inOut(span(u, .1, .85))).multiply(Z(Math.PI * inOut(span(u, .1, .85)))), // over the top edge, righting itself on the way
-  u => Z(Math.PI * 2 * inOut(span(u, 0, .9))).multiply(Y(Math.PI * inOut(span(u, .2, 1)))),   // a full spin with the flip inside it
-  u => Y(Math.PI * outBack(span(u, .3, 1))).multiply(X(Math.sin(Math.PI * u) * 1.1)),    // tips back, then a late flip
+  u => Y(Math.PI * outBack(span(u, .15, 1))),                                                    // a plain flip that overshoots and settles
+  u => X(Math.PI * inOut(span(u, .1, .85))).multiply(Z(Math.PI * inOut(span(u, .1, .85)))),    // over the top edge, righting itself on the way
+  u => Z(Math.PI * 2 * inOut(span(u, 0, .9))).multiply(Y(Math.PI * inOut(span(u, .2, 1)))),    // a full spin with the flip inside it
+  u => Y(Math.PI * outBack(span(u, .3, 1))).multiply(X(Math.sin(Math.PI * u) * 1.1)),           // tips back, then a late flip
 ];
-const ROUTES = [new Vector3(0, .9, 0), new Vector3(-1.4, .2, .6), new Vector3(.2, -.55, .8), new Vector3(0, 1.5, -.5)];
+const ROUTES = [new Vector3(0, .8, 0), new Vector3(-1.2, .2, .5), new Vector3(.2, -.5, .7), new Vector3(0, 1.3, -.4)];
 
 // -- materials and textures ---------------------------------------------------
 const mat = (color: string, extra: Partial<MeshStandardMaterial> = {}) => Object.assign(new MeshStandardMaterial({ color, roughness: .75 }), extra);
-const box = (w: number, h: number, d: number, m: MeshStandardMaterial | MeshBasicMaterial) => new Mesh(new BoxGeometry(w, h, d), m);
 
-function paint(w: number, h: number, draw: (g: CanvasRenderingContext2D) => void, texture?: CanvasTexture) {
-  const canvas = (texture?.image as HTMLCanvasElement | undefined) ?? Object.assign(document.createElement('canvas'), { width: w, height: h });
+function paint(w: number, h: number, draw: (g: CanvasRenderingContext2D) => void) {
+  const canvas = Object.assign(document.createElement('canvas'), { width: w, height: h });
   draw(canvas.getContext('2d')!);
-  const t = texture ?? new CanvasTexture(canvas);
-  t.colorSpace = SRGBColorSpace; t.anisotropy = 4; t.needsUpdate = true;
+  const t = new CanvasTexture(canvas);
+  t.colorSpace = SRGBColorSpace; t.anisotropy = 4;
   return t;
 }
 
@@ -67,69 +69,44 @@ function wrap(g: CanvasRenderingContext2D, text: string, x: number, y: number, w
 }
 
 function frontLabel(disc: DiscInfo) {
-  return paint(512, 360, g => {
-    g.fillStyle = '#f7f2e6'; g.fillRect(0, 0, 512, 360);
-    g.fillStyle = disc.color; g.fillRect(0, 0, 512, 18);
-    g.strokeStyle = '#1a141022'; g.lineWidth = 2;
-    for (let y = 150; y < 330; y += 44) { g.beginPath(); g.moveTo(28, y); g.lineTo(484, y); g.stroke(); }
-    g.fillStyle = INK; g.font = `500 21px ${MONO}`; g.fillText(`SIDE QUEST ${disc.number}`, 28, 60);
-    g.textAlign = 'right'; g.fillText('1.44 MB', 484, 60); g.textAlign = 'left';
-    g.font = `700 58px ${DISPLAY}`; wrap(g, disc.name, 28, 136, 450, 60);
-    g.fillStyle = HOT; g.font = `500 19px ${MONO}`; g.fillText(disc.kicker.toUpperCase(), 28, 330);
+  return paint(512, 346, g => {
+    g.fillStyle = '#f7f2e6'; g.fillRect(0, 0, 512, 346);
+    g.fillStyle = INK; g.fillRect(0, 0, 512, 54);
+    g.fillStyle = '#f7f2e6'; g.font = `700 26px ${DISPLAY}`; g.fillText('SIDE QUEST', 26, 37);
+    g.font = `500 19px ${MONO}`; g.textAlign = 'right'; g.fillText(`${disc.number} · 1.44 MB`, 486, 35); g.textAlign = 'left';
+    g.strokeStyle = '#1a141020'; g.lineWidth = 2;
+    for (let y = 150; y < 320; y += 42) { g.beginPath(); g.moveTo(26, y); g.lineTo(486, y); g.stroke(); }
+    g.fillStyle = INK; g.font = `700 54px ${DISPLAY}`; wrap(g, disc.name, 26, 130, 460, 56);
+    g.fillStyle = HOT; g.font = `500 18px ${MONO}`; g.fillText(disc.kicker.toUpperCase(), 26, 322);
   });
 }
 
 function backLabel(disc: DiscInfo) {
-  return paint(512, 380, g => {
-    g.fillStyle = '#f7f2e6'; g.fillRect(0, 0, 512, 380);
-    g.fillStyle = INK; g.font = `500 20px ${MONO}`; g.fillText(`DISC ${disc.number} / READ ME`, 28, 46);
-    g.fillRect(28, 62, 456, 3);
-    g.font = `700 36px ${DISPLAY}`; const y = wrap(g, disc.name, 28, 112, 456, 40);
-    g.font = `400 27px ${DISPLAY}`; wrap(g, disc.info, 28, y + 8, 456, 36);
-    g.fillStyle = HOT; g.font = `500 19px ${MONO}`; g.fillText('INSERT TO LOAD ▸', 28, 352);
+  return paint(512, 198, g => {
+    g.fillStyle = '#f7f2e6'; g.fillRect(0, 0, 512, 198);
+    g.fillStyle = INK; g.font = `700 25px ${DISPLAY}`; g.fillText(disc.name, 20, 36);
+    g.fillStyle = HOT; g.font = `500 15px ${MONO}`; g.textAlign = 'right'; g.fillText('INSERT TO LOAD ▸', 492, 34); g.textAlign = 'left';
+    g.fillStyle = INK; g.fillRect(20, 48, 472, 2);
+    g.font = `400 23px ${DISPLAY}`; wrap(g, disc.info, 20, 82, 472, 30);
+  });
+}
+
+/** The moulded marks on the front: the insert arrow (top left) and HD (top right). */
+function marks() {
+  return paint(256, 32, g => {
+    g.fillStyle = '#ffffff';
+    g.beginPath(); g.moveTo(14, 4); g.lineTo(4, 26); g.lineTo(24, 26); g.closePath(); g.fill();
+    g.font = `700 24px ${DISPLAY}`; g.textAlign = 'right'; g.fillText('HD', 250, 25);
   });
 }
 
 function shadowTexture() {
   return paint(128, 128, g => {
     const r = g.createRadialGradient(64, 64, 4, 64, 64, 62);
-    r.addColorStop(0, 'rgba(26,20,16,.55)'); r.addColorStop(1, 'rgba(26,20,16,0)');
+    r.addColorStop(0, 'rgba(26,20,16,.5)'); r.addColorStop(1, 'rgba(26,20,16,0)');
     g.fillStyle = r; g.fillRect(0, 0, 128, 128);
   });
 }
-
-function keyboardTexture() {
-  return paint(512, 176, g => {
-    g.fillStyle = '#cbbd9f'; g.fillRect(0, 0, 512, 176);
-    g.fillStyle = '#e8dfca'; g.strokeStyle = '#8f8266';
-    const rows = [[14, 1], [14, 1], [13, 1.1], [12, 1.2]];
-    rows.forEach(([n, w], r) => { for (let i = 0; i < n; i++) { const x = 12 + i * 26 * w + r * 6, y = 12 + r * 32; g.fillRect(x, y, 22 * w, 26); g.strokeRect(x, y, 22 * w, 26); } });
-    g.fillRect(110, 142, 200, 24); g.strokeRect(110, 142, 200, 24);
-    for (let r = 0; r < 4; r++) for (let i = 0; i < 4; i++) { g.fillRect(400 + i * 26, 12 + r * 32, 22, 26); g.strokeRect(400 + i * 26, 12 + r * 32, 22, 26); }
-  });
-}
-
-function badgeTexture() {
-  return paint(256, 48, g => {
-    g.fillStyle = '#c4b799'; g.fillRect(0, 0, 256, 48);
-    g.fillStyle = INK; g.font = `700 22px ${DISPLAY}`; g.fillText('MA-486', 10, 32);
-    g.font = `500 14px ${MONO}`; g.fillText('DX2 · TURBO', 110, 31);
-  });
-}
-
-/** The CRT's own picture: a DOS prompt, then the boot log while a disc loads. */
-function drawScreen(texture: CanvasTexture | undefined, lines: string[], cursor: boolean) {
-  return paint(640, 480, g => {
-    g.fillStyle = CRT; g.fillRect(0, 0, 640, 480);
-    g.fillStyle = ACID; g.font = `500 24px ${MONO}`;
-    lines.forEach((line, i) => g.fillText(line + (cursor && i === lines.length - 1 ? '_' : ''), 34, 56 + i * 34));
-    g.fillStyle = 'rgba(0,0,0,.22)'; for (let y = 0; y < 480; y += 4) g.fillRect(0, y, 640, 2);
-    const v = g.createRadialGradient(320, 240, 160, 320, 240, 420);
-    v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.55)');
-    g.fillStyle = v; g.fillRect(0, 0, 640, 480);
-  }, texture);
-}
-const IDLE = ['MA-DOS 6.22', '', 'Four side quest discs found.', 'Pick one up and insert it.', '', 'C:\\>'];
 
 function release(root: Object3D) {
   root.traverse(object => {
@@ -156,6 +133,7 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
 
   const renderer = new WebGLRenderer({ antialias: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+  renderer.localClippingEnabled = true;
   const canvas = renderer.domElement;
   canvas.setAttribute('aria-hidden', 'true');
   canvas.style.cssText = 'display:block;width:100%;height:100%;touch-action:pan-y';
@@ -163,99 +141,96 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
 
   const scene = new Scene();
   scene.background = new Color(PAPER);
-  scene.fog = new Fog(PAPER, 9, 20);
+  scene.fog = new Fog(PAPER, 8, 18);
   const camera = new PerspectiveCamera(34, 1, .05, 60);
   scene.add(new HemisphereLight(0xfff6e6, 0x8a7a66, 1.9));
   const key = new DirectionalLight(0xfff1dc, 2.6); key.position.set(3, 6, 5); scene.add(key);
   const rim = new DirectionalLight(0xff9a6a, 1.1); rim.position.set(-5, 2, -3); scene.add(rim);
 
-  const desk = new Mesh(new PlaneGeometry(40, 40), mat('#eee3cd', { roughness: 1 }));
-  desk.rotation.x = -Math.PI / 2; scene.add(desk);
+  // The ground is the section's own paper, so only the shadows show.
+  const ground = new Mesh(new PlaneGeometry(40, 40), new MeshBasicMaterial({ color: PAPER }));
+  ground.rotation.x = -Math.PI / 2; scene.add(ground);
   const shadowMap = shadowTexture();
-  const blob = (w: number, d: number, opacity = 1) => {
-    const m = new Mesh(new PlaneGeometry(w, d), new MeshBasicMaterial({ map: shadowMap, transparent: true, depthWrite: false, opacity }));
-    m.rotation.x = -Math.PI / 2; m.position.y = .003; return m;
-  };
 
-  // The PC: a flat desktop case with the monitor sitting on it.
-  const beige = mat('#d9cdb1', { roughness: .85 }), beigeDark = mat('#c6b99b', { roughness: .85 }), slotInk = mat('#1b1611', { roughness: 1 });
-  const pc = new Group(); pc.position.set(0, 0, -2.2); scene.add(pc);
-  const pcShadow = blob(4.4, 3.2, .8); pcShadow.position.set(0, .003, -2.2); scene.add(pcShadow);
-  const add = (parent: Object3D, mesh: Mesh, x: number, y: number, z: number) => { mesh.position.set(x, y, z); parent.add(mesh); return mesh; };
-  add(pc, box(2.8, .62, 2, beige), 0, .31, 0);
-  add(pc, box(2.7, .5, .02, beigeDark), 0, .31, 1.01);
-  add(pc, box(1.1, .24, .03, beige), .7, .37, 1.025);
-  add(pc, box(.98, .05, .05, slotInk), .7, .38, 1.03);
-  add(pc, box(.09, .05, .03, mat('#b5a789')), 1.08, .3, 1.04);
-  const driveLed = add(pc, box(.06, .025, .02, mat('#3a2a1c', { emissive: new Color(HOT), emissiveIntensity: 0 })), .32, .3, 1.04).material as MeshStandardMaterial;
-  add(pc, box(.13, .13, .03, beige), -1.12, .36, 1.025);
-  add(pc, box(.04, .02, .02, mat('#1c3a12', { emissive: new Color('#43d84a'), emissiveIntensity: 1.2 })), -1.12, .2, 1.03);
-  add(pc, box(.04, .02, .02, mat('#3a2a1c', { emissive: new Color('#ffb020'), emissiveIntensity: 1 })), -.98, .2, 1.03);
-  const badge = new Mesh(new PlaneGeometry(.64, .12), new MeshStandardMaterial({ map: badgeTexture(), roughness: .9 }));
-  add(pc, badge, -.5, .4, 1.022);
-  for (let i = 0; i < 6; i++) add(pc, box(.5, .012, .01, slotInk), -.5, .3 - i * .03, 1.022);
+  // Anything right of the port's mouth is cut away, so a disc vanishes into it.
+  const portClip = new Plane(new Vector3(-1, 0, 0), 100);
+  const clipping = { clippingPlanes: [portClip] };
 
-  const monitor = new Group(); monitor.position.set(0, .62, .05); pc.add(monitor);
-  add(monitor, box(.9, .06, .8, beigeDark), 0, .03, 0);
-  add(monitor, box(.42, .12, .42, beigeDark), 0, .12, 0);
-  add(monitor, box(2.05, 1.62, 1.3, beige), 0, .99, 0);
-  add(monitor, box(1.45, 1.15, .8, beige), 0, .95, -.95);
-  add(monitor, box(1.84, 1.42, .04, beigeDark), 0, 1.03, .66);
-  add(monitor, box(.08, .05, .03, beigeDark), .7, .25, .66);
-  const screenTexture = drawScreen(undefined, IDLE, true);
-  const screen = add(monitor, new Mesh(new PlaneGeometry(1.52, 1.14), new MeshBasicMaterial({ map: screenTexture, toneMapped: false })), 0, 1.04, .685);
-  const keyboard = new Mesh(new BoxGeometry(2.3, .07, .8), [beigeDark, beigeDark, new MeshStandardMaterial({ map: keyboardTexture(), roughness: .9 }), beigeDark, beigeDark, beigeDark]);
-  add(scene, keyboard, -.2, .035, -.6).rotation.y = .04;
-  const kbShadow = blob(2.6, 1.1, .5); kbShadow.position.set(-.2, .003, -.6); scene.add(kbShadow);
+  // The discs. Local +z is the label side; the shutter is at +y.
+  const bodyGeometry = new BoxGeometry(DISC_W, DISC_H, DISC_D);
+  const metal = mat('#d5d9de', { metalness: .4, roughness: .35, ...clipping });
+  const hole = mat('#141210', { roughness: 1, ...clipping });
+  const media = mat('#4a3a2c', { roughness: .6, ...clipping });
+  const marking = marks();
+  const place = (parent: Object3D, mesh: Mesh, x: number, y: number, z: number) => { mesh.position.set(x, y, z); parent.add(mesh); return mesh; };
+  const face = DISC_D / 2 + .0035;
 
-  // The discs. Local +z is the label side, the shutter is at +y.
-  const shutter = mat('#d4d8dd', { metalness: .35, roughness: .4 });
   const list: Disc[] = discs.map((info, index) => {
     const group = new Group();
-    const body = mat(info.color, { roughness: .45, emissive: new Color(HOT), emissiveIntensity: 0 });
-    group.add(box(.9, .9, .034, body));
-    add(group, box(.4, .3, .04, shutter), .06, .3, 0);
-    add(group, box(.1, .18, .042, slotInk), .12, .31, 0);
-    add(group, box(.06, .06, .036, slotInk), -.37, .37, 0);
-    add(group, new Mesh(new PlaneGeometry(.74, .52), new MeshStandardMaterial({ map: frontLabel(info), roughness: .9 })), 0, -.15, .0175);
-    add(group, new Mesh(new PlaneGeometry(.8, .6), new MeshStandardMaterial({ map: backLabel(info), roughness: .9 })), 0, -.13, -.0175).rotation.y = Math.PI;
+    const body = mat(info.color, { roughness: .42, emissive: new Color(HOT), emissiveIntensity: 0, ...clipping });
+    const shade = mat(new Color(info.color).multiplyScalar(.82).getStyle(), { roughness: .5, ...clipping });
+    group.add(new Mesh(bodyGeometry, body));
+    // Front: shutter with its window, label, the moulded marks, and the two corner holes.
+    place(group, new Mesh(new BoxGeometry(.6, .33, DISC_D + .004), shade), .03, .305, 0);
+    place(group, new Mesh(new BoxGeometry(.44, .33, DISC_D + .008), metal), .05, .305, 0);
+    place(group, new Mesh(new BoxGeometry(.1, .21, DISC_D + .009), media), .16, .3, 0);
+    place(group, new Mesh(new PlaneGeometry(.74, .47), mat('#ffffff', { map: frontLabel(info), roughness: .9, ...clipping })), 0, -.15, face);
+    place(group, new Mesh(new PlaneGeometry(.84, .105), new MeshBasicMaterial({ map: marking, transparent: true, opacity: .55, depthWrite: false, ...clipping })), 0, .38, face);
+    place(group, new Mesh(new BoxGeometry(.045, .045, DISC_D + .006), hole), -.39, -.42, 0);
+    place(group, new Mesh(new BoxGeometry(.045, .045, DISC_D + .006), hole), .39, -.42, 0);
+    // Back: the metal hub and a sticker with the short note.
+    const hub = place(group, new Mesh(new CylinderGeometry(.125, .125, .004, 40), metal), 0, .02, -face);
+    hub.rotation.x = Math.PI / 2;
+    place(group, new Mesh(new BoxGeometry(.05, .05, .006), hole), 0, .02, -face);
+    place(group, new Mesh(new BoxGeometry(.035, .06, .006), hole), .07, .055, -face);
+    place(group, new Mesh(new PlaneGeometry(.8, .31), mat('#ffffff', { map: backLabel(info), roughness: .9, ...clipping })), 0, -.28, -face).rotation.y = Math.PI;
     group.traverse(o => { o.userData.disc = info.id; });
     scene.add(group);
-    const shadow = blob(1.3, 1.3); scene.add(shadow);
+    const shadow = new Mesh(new PlaneGeometry(1.3, 1.3), new MeshBasicMaterial({ map: shadowMap, transparent: true, depthWrite: false }));
+    shadow.rotation.x = -Math.PI / 2; scene.add(shadow);
     return { info, index, group, body, shadow, pos: new Vector3(), vel: new Vector3(), rot: new Vector3(), rvel: new Vector3(), scale: 1, svel: 0, glow: 0, tween: null, held: false };
   });
 
   // -- layout -------------------------------------------------------------------
-  const home = { pos: new Vector3(), target: new Vector3(0, 1.2, -1.2) };
-  const cam = { pos: new Vector3(), target: new Vector3(), tween: null as Tween | null };
-  let spread = 1.2, aspect = 1;
-  const slot = new Vector3(.7, .38, -1.17);
-  const screenCenter = new Vector3(), screenSize = new Vector2(1.52, 1.14);
-  screen.updateWorldMatrix(true, false); screen.getWorldPosition(screenCenter);
+  const home = { pos: new Vector3(), target: new Vector3(0, .82, 0) };
+  let spread = 1.15, width = 1, height = 1;
+  const DECK_Y = 1, DECK_Z = .8;
+  const port = { mouth: new Vector3(), rect: { left: 0, top: 0, width: PORT_WIDTH, height: 0 } as Rect };
+
+  /** Where a point on screen meets the plane the row floats in. */
+  const onDeckPlane = (px: number, py: number) => {
+    const ray = new Raycaster(); ray.setFromCamera(new Vector2(px / width * 2 - 1, 1 - py / height * 2), camera);
+    const t = (DECK_Z - ray.ray.origin.z) / ray.ray.direction.z;
+    return ray.ray.at(t, new Vector3());
+  };
+  const toScreen = (v: Vector3) => { const p = v.clone().project(camera); return new Vector2((p.x + 1) / 2 * width, (1 - p.y) / 2 * height); };
 
   const layout = () => {
-    const { clientWidth: w, clientHeight: h } = host;
-    if (!w || !h) return;
-    aspect = w / h;
-    renderer.setSize(w, h, false);
+    width = host.clientWidth; height = host.clientHeight;
+    if (!width || !height) return;
+    const aspect = width / height;
+    renderer.setSize(width, height, false);
     camera.aspect = aspect; camera.updateProjectionMatrix();
-    spread = Math.min(1.25, Math.max(.98, aspect * .5));
-    home.pos.set(0, 1.75, 6.1 * Math.max(1, 1.75 / aspect));
-    if (!cam.tween && phase !== 'screen') { cam.pos.copy(home.pos); cam.target.copy(home.target); }
-    if (phase === 'screen') { cam.pos.copy(screenView()); cam.target.copy(screenCenter); }
+    spread = Math.min(1.2, Math.max(1, aspect * .48));
+    home.pos.set(0, 1.5, 5.4 * Math.max(1, 1.85 / aspect));
+    camera.position.copy(home.pos); camera.lookAt(home.target); camera.updateMatrixWorld();
+    // The port: a fixed slot on the right edge, as tall as a disc on screen.
+    const centre = toScreen(new Vector3(0, DECK_Y, DECK_Z));
+    const discHeight = toScreen(new Vector3(0, DECK_Y - DISC_W / 2, DECK_Z)).y - toScreen(new Vector3(0, DECK_Y + DISC_W / 2, DECK_Z)).y;
+    const left = width - PORT_RIGHT - PORT_WIDTH;
+    port.rect = { left, top: centre.y - discHeight / 2 - 14, width: PORT_WIDTH, height: discHeight + 28 };
+    port.mouth.copy(onDeckPlane(left + 6, centre.y));
+    const top = onDeckPlane(left + 6, 0), bottom = onDeckPlane(left + 6, height);
+    portClip.setFromCoplanarPoints(home.pos, top, bottom);
+    if (portClip.distanceToPoint(new Vector3(0, DECK_Y, DECK_Z)) < 0) portClip.negate();
+    events.onLayout();
     wake();
   };
-  const deckRest = (d: Disc) => new Vector3((d.index - 1.5) * spread, .95, 1.4);
-  const deckEuler = (d: Disc) => new Vector3(-.12, -(d.index - 1.5) * .14, [.09, -.05, .07, -.1][d.index % 4]);
+  const deckPose = (d: Disc): Pose => ({ pos: new Vector3((d.index - 1.5) * spread, DECK_Y, DECK_Z), quat: new Quaternion().setFromEuler(new Euler(-.1, 0, 0)) });
+  const facing = (pos: Vector3) => { const o = new Object3D(); o.position.copy(pos); o.lookAt(home.pos); return o.quaternion.clone(); };
   const holdPose = (): Pose => {
-    const pos = new Vector3().subVectors(home.target, home.pos).normalize().multiplyScalar(2.8).add(home.pos);
-    const face = new Object3D(); face.position.copy(pos); face.lookAt(home.pos);
-    return { pos, quat: face.quaternion.clone() };
-  };
-  const screenView = () => {
-    const fit = Math.tan((camera.fov * Math.PI) / 360);
-    const d = Math.max(screenSize.y / (2 * fit * .76), screenSize.x / (2 * fit * aspect * .84));
-    return screenCenter.clone().add(new Vector3(0, 0, d));
+    const pos = new Vector3().subVectors(home.target, home.pos).normalize().multiplyScalar(2.45).add(home.pos);
+    return { pos, quat: facing(pos) };
   };
 
   // -- state --------------------------------------------------------------------
@@ -263,7 +238,6 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
   let selected: Disc | null = null;
   let hovered: Disc | null = null;
   const pointer = new Vector2(), lean = new Vector2();
-  let boot: { start: number; disc: DiscInfo } | null = null;
   const setPhase = (next: Phase) => { phase = next; events.onPhase(next, selected?.info.id ?? null); wake(); };
   const setHover = (disc: Disc | null) => {
     if (hovered === disc) return;
@@ -273,15 +247,11 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
   const settle = (d: Disc) => {
     d.tween = null; d.pos.copy(d.group.position);
     const e = new Euler().setFromQuaternion(d.group.quaternion); d.rot.set(e.x, e.y, e.z);
-    d.vel.set(0, 0, 0); d.rvel.set(0, 0, 0);
+    d.vel.set(0, 0, 0); d.rvel.set(0, 0, 0); d.scale = d.group.scale.x; d.svel = 0;
   };
   const now = () => performance.now() / 1000;
-  const deckPose = (d: Disc): Pose => {
-    const r = deckEuler(d);
-    return { pos: deckRest(d), quat: new Quaternion().setFromEuler(new Euler(r.x, r.y, r.z)) };
-  };
 
-  /** Bring a disc out of the deck, up to you, and turn it over. */
+  /** Bring a disc out of the row, up to you, and turn it over. */
   const flightTo = (d: Disc, reverse: boolean, done: () => void) => {
     const from = deckPose(d), to = holdPose();
     const route = new Vector3().addVectors(from.pos, to.pos).multiplyScalar(.5).add(ROUTES[d.index % 4].clone().multiply(new Vector3(Math.sign(d.index - 1.5) || 1, 1, 1)));
@@ -298,8 +268,12 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
     };
   };
 
-  const insertQuat = X(-Math.PI / 2);
-  const preSlot = () => slot.clone().add(new Vector3(0, 0, .52));
+  // Slot-ready pose: label to you, shutter edge pointing into the port.
+  const slotPose = () => {
+    const pre = port.mouth.clone().add(new Vector3(-DISC_H / 2 - .06, 0, 0));
+    return { pre, inside: port.mouth.clone().add(new Vector3(DISC_H / 2 + .2, 0, 0)), quat: facing(pre).multiply(Z(-Math.PI / 2)) };
+  };
+
   const select = (id: string) => {
     const d = list.find(x => x.info.id === id);
     if (!d || phase !== 'deck') return;
@@ -310,74 +284,59 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
     const d = selected;
     if (!d || phase !== 'inspect') return;
     d.held = false; setPhase('moving');
-    flightTo(d, true, () => { settle(d); d.group.scale.setScalar(1); selected = null; setPhase('deck'); });
+    flightTo(d, true, () => { settle(d); selected = null; setPhase('deck'); });
   };
+  let loading: ReturnType<typeof setTimeout> | undefined;
   const insert = () => {
     const d = selected;
     if (!d || phase !== 'inspect') return;
     d.held = false; setPhase('moving');
-    const fromPos = d.group.position.clone(), fromQuat = d.group.quaternion.clone(), pre = preSlot();
-    const approach = slot.clone().add(new Vector3(-.2, .7, 1.6));
-    const inside = slot.clone().add(new Vector3(0, 0, -.5));
+    const fromPos = d.group.position.clone(), fromQuat = d.group.quaternion.clone(), slot = slotPose();
+    const approach = new Vector3().addVectors(fromPos, slot.pre).multiplyScalar(.5).add(new Vector3(0, .6, .3));
     d.tween = {
-      start: now(), duration: 1.7,
+      start: now(), duration: 1.55,
       step(u) {
-        if (u < .62) {
-          const t = inOut(u / .62);
-          bezier(fromPos, approach, pre, t, d.group.position);
-          d.group.quaternion.slerpQuaternions(fromQuat, insertQuat, inOut(span(u, .05, .55)));
+        if (u < .6) {
+          bezier(fromPos, approach, slot.pre, inOut(u / .6), d.group.position);
+          d.group.quaternion.slerpQuaternions(fromQuat, slot.quat, inOut(span(u, .05, .55)));
+          d.group.scale.setScalar(1);
         } else {
-          const t = span(u, .7, 1);
-          d.group.position.lerpVectors(pre, inside, t * t * (3 - 2 * t));
-          d.group.quaternion.copy(insertQuat);
+          const t = span(u, .66, 1);
+          d.group.position.lerpVectors(slot.pre, slot.inside, t * t * (3 - 2 * t));
+          d.group.quaternion.copy(slot.quat);
         }
-        d.group.scale.setScalar(1);
       },
-      done() { d.tween = null; d.group.visible = false; d.shadow.visible = false; boot = { start: now(), disc: d.info }; toScreen(1.5); },
-    };
-  };
-  const toScreen = (duration: number) => {
-    const fromPos = cam.pos.clone(), fromTarget = cam.target.clone(), toPos = screenView();
-    cam.tween = {
-      start: now() + .45, duration,
-      step(u) { const t = inOut(u); cam.pos.lerpVectors(fromPos, toPos, t); cam.target.lerpVectors(fromTarget, screenCenter, t); },
-      done() { cam.tween = null; setPhase('screen'); },
+      done() {
+        d.group.visible = false; d.shadow.visible = false; setPhase('loading');
+        loading = setTimeout(() => setPhase('screen'), 950);
+      },
     };
   };
   const eject = () => {
     const d = selected;
-    if (!d || phase !== 'screen') return;
-    setPhase('moving'); boot = null;
-    drawScreen(screenTexture, IDLE, true);
-    const fromPos = cam.pos.clone(), fromTarget = cam.target.clone();
-    cam.tween = {
-      start: now(), duration: 1.1,
-      step(u) { const t = inOut(u); cam.pos.lerpVectors(fromPos, home.pos, t); cam.target.lerpVectors(fromTarget, home.target, t); },
-      done() {
-        cam.tween = null;
-        d.group.visible = true; d.shadow.visible = true;
-        const inside = slot.clone().add(new Vector3(0, 0, -.5)), pre = preSlot(), rest = deckPose(d);
-        const lift = new Vector3().addVectors(pre, rest.pos).multiplyScalar(.5).add(new Vector3(0, 1.1, .4));
-        d.tween = {
-          start: now(), duration: 1.4,
-          step(u) {
-            if (u < .25) { d.group.position.lerpVectors(inside, pre, inOut(u / .25)); d.group.quaternion.copy(insertQuat); return; }
-            const t = inOut(span(u, .25, 1));
-            bezier(pre, lift, rest.pos, t, d.group.position);
-            d.group.quaternion.slerpQuaternions(insertQuat, rest.quat, t).multiply(Z(Math.PI * 2 * t * (d.index % 2 ? 1 : -1)));
-          },
-          done() { settle(d); selected = null; setPhase('deck'); },
-        };
+    if (!d || (phase !== 'screen' && phase !== 'loading')) return;
+    clearTimeout(loading);
+    setPhase('moving');
+    d.group.visible = true; d.shadow.visible = true;
+    const slot = slotPose(), rest = deckPose(d);
+    const lift = new Vector3().addVectors(slot.pre, rest.pos).multiplyScalar(.5).add(new Vector3(0, .9, .4));
+    d.group.position.copy(slot.inside); d.group.quaternion.copy(slot.quat); d.group.scale.setScalar(1);
+    d.tween = {
+      start: now() + .15, duration: 1.4,
+      step(u) {
+        if (u < .3) { d.group.position.lerpVectors(slot.inside, slot.pre, inOut(u / .3)); d.group.quaternion.copy(slot.quat); return; }
+        const t = inOut(span(u, .3, 1));
+        bezier(slot.pre, lift, rest.pos, t, d.group.position);
+        d.group.quaternion.slerpQuaternions(slot.quat, rest.quat, t);
       },
+      done() { settle(d); selected = null; setPhase('deck'); },
     };
   };
-  /** For a link straight to a disc: skip the show, land on the monitor. */
+  /** For a link straight to a disc: skip the show, land on its page. */
   const openInstant = (id: string) => {
     const d = list.find(x => x.info.id === id);
     if (!d || phase !== 'deck') return;
     selected = d; d.group.visible = false; d.shadow.visible = false;
-    boot = { start: now() - 10, disc: d.info };
-    cam.pos.copy(screenView()); cam.target.copy(screenCenter);
     setPhase('screen');
   };
 
@@ -407,7 +366,7 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
   canvas.addEventListener('pointerleave', onLeave);
 
   // -- loop ---------------------------------------------------------------------
-  let frame = 0, last = now(), visible = true, lastBootLines = -1, lastCursor = true;
+  let frame = 0, last = now(), visible = true;
   const K = 42, C = 8.5; // springs a little under critical damping, so a disc has some weight to it
   const tick = () => {
     frame = 0;
@@ -421,21 +380,15 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
         if (u >= 1) { const done = d.tween.done; d.tween = null; done?.(); }
       } else if (d.held) {
         const hold = holdPose(), φ = d.index * 1.7;
-        d.group.position.copy(hold.pos).add(new Vector3(.02 * Math.sin(t * 1.1 + φ), .035 * Math.sin(t * 1.4 + φ) + .012 * Math.sin(t * 3.1), 0));
+        d.group.position.copy(hold.pos).add(new Vector3(.02 * Math.sin(t * 1.1 + φ), .03 * Math.sin(t * 1.4 + φ) + .01 * Math.sin(t * 3.1), 0));
         d.group.quaternion.copy(hold.quat).multiply(Y(Math.PI)).multiply(X(-lean.y * .22 + .04 * Math.sin(t * 1.2 + φ))).multiply(Y(lean.x * .3 + .05 * Math.sin(t * .9 + φ)));
       } else if (d.group.visible) {
-        const φ = d.index * 2.3, over = hovered === d ? 1 : 0;
-        // While one disc is out, the rest shuffle aside and sink a little.
-        const aside = selected && selected !== d ? 1 : 0, side = Math.sign(d.index - 1.5);
-        const target = deckRest(d).add(new Vector3(aside * side * .95, -aside * .3, -aside * .2)).add(new Vector3(
-          .025 * Math.sin(t * .6 + φ * 3),
-          .055 * Math.sin(t * .8 + φ) + .025 * Math.sin(t * 1.9 + φ * 2) + over * .3,
-          over * .4,
-        ));
-        const r = deckEuler(d).multiplyScalar(1 - over);
-        r.x += .035 * Math.sin(t * 1.1 + φ * 2) - lean.y * .08 * (1 - over) + over * -.04;
-        r.y += lean.x * .14;
-        r.z += .045 * Math.sin(t * .7 + φ) + .02 * Math.sin(t * 1.6 + φ * 1.3);
+        // The row keeps its line: one slow wave runs along it, and the discs
+        // all lean the same way towards the pointer.
+        const wave = t * 1.1 - d.index * .75, over = hovered === d ? 1 : 0;
+        const aside = selected && selected !== d ? 1 : 0;
+        const target = deckPose(d).pos.add(new Vector3(0, .045 * Math.sin(wave) + .015 * Math.sin(wave * 2.3) + over * .28 - aside * .22, over * .35 - aside * .3));
+        const r = new Vector3(-.1 + .03 * Math.sin(wave + 1) - lean.y * .1 + over * .06, lean.x * .16, .02 * Math.sin(wave * .8));
         d.vel.addScaledVector(target.sub(d.pos), K * dt).multiplyScalar(Math.exp(-C * dt)); d.pos.addScaledVector(d.vel, dt);
         d.rvel.addScaledVector(r.sub(d.rot), K * dt).multiplyScalar(Math.exp(-C * dt)); d.rot.addScaledVector(d.rvel, dt);
         d.svel += ((1 + over * .07) - d.scale) * K * dt; d.svel *= Math.exp(-C * dt); d.scale += d.svel * dt;
@@ -443,39 +396,19 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
       }
       d.glow += ((hovered === d || selected === d && phase === 'inspect' ? .16 : 0) - d.glow) * (1 - Math.exp(-dt * 10));
       d.body.emissiveIntensity = d.glow;
-      // A soft shadow on the desk that spreads and fades as the disc lifts.
+      // A soft shadow on the ground that spreads and fades as the disc lifts.
       const h = d.group.position.y;
       d.shadow.position.set(d.group.position.x, .004, d.group.position.z);
-      d.shadow.scale.setScalar(.7 + h * .35);
-      (d.shadow.material as MeshBasicMaterial).opacity = Math.max(0, .75 - h * .28);
+      d.shadow.scale.setScalar(.75 + h * .3);
+      (d.shadow.material as MeshBasicMaterial).opacity = Math.max(0, .7 - h * .25);
     }
 
-    if (cam.tween) {
-      const u = clamp01((t - cam.tween.start) / cam.tween.duration);
-      cam.tween.step(u);
-      if (u >= 1) { const done = cam.tween.done; cam.tween = null; done?.(); }
-    }
     const sway = phase === 'deck' || phase === 'inspect' ? 1 : 0;
-    camera.position.copy(cam.pos).add(new Vector3(lean.x * .3 * sway, lean.y * .14 * sway, 0));
-    camera.lookAt(cam.target);
-
-    // The drive light and the boot log.
-    if (boot) {
-      const e = Math.max(0, t - boot.start), name = boot.disc.name.toUpperCase().replace(/[^A-Z0-9]+/g, '').slice(0, 8);
-      driveLed.emissiveIntensity = e < 1.6 ? (Math.sin(e * 40) > 0 ? 2 : .3) : 0;
-      const log = ['MA-DOS 6.22', '', 'C:\\>A:', `A:\\>${name}.EXE`, `Loading side quest ${boot.disc.number}...`, `[${'#'.repeat(Math.min(16, Math.floor(e * 11)))}${'.'.repeat(Math.max(0, 16 - Math.floor(e * 11)))}]`];
-      const shown = Math.min(log.length, 2 + Math.floor(e * 4));
-      const key = shown * 100 + Math.min(16, Math.floor(e * 11));
-      if (key !== lastBootLines) { lastBootLines = key; drawScreen(screenTexture, log.slice(0, shown), false); }
-    } else {
-      driveLed.emissiveIntensity = 0;
-      const cursor = Math.floor(t * 2) % 2 === 0;
-      if (cursor !== lastCursor || lastBootLines !== -1) { lastCursor = cursor; lastBootLines = -1; drawScreen(screenTexture, IDLE, cursor); }
-    }
-
+    camera.position.copy(home.pos).add(new Vector3(lean.x * .25 * sway, lean.y * .12 * sway, 0));
+    camera.lookAt(home.target);
     renderer.render(scene, camera);
-    // Once the page is up on the monitor nothing moves, so stop drawing.
-    if (visible && !(phase === 'screen' && !cam.tween)) frame = requestAnimationFrame(tick);
+    // Once a page is up nothing in the room moves, so stop drawing.
+    if (visible && phase !== 'screen') frame = requestAnimationFrame(tick);
   };
   const wake = () => { if (!frame && visible) { last = now(); frame = requestAnimationFrame(tick); } };
 
@@ -494,18 +427,10 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
     hover(id: string | null) { if (phase === 'deck') setHover(list.find(d => d.info.id === id) ?? null); },
     select, putBack, insert, eject, openInstant,
     get phase() { return phase; },
-    /** Where the monitor's glass sits in the canvas, in CSS pixels. */
-    screenRect(): ScreenRect {
-      camera.updateMatrixWorld();
-      const half = screenSize.clone().multiplyScalar(.5);
-      const corners = [[-1, -1], [1, 1]].map(([sx, sy]) => screenCenter.clone().add(new Vector3(sx * half.x, sy * half.y, 0)).project(camera));
-      const w = host.clientWidth, h = host.clientHeight;
-      const left = (corners[0].x + 1) / 2 * w, right = (corners[1].x + 1) / 2 * w;
-      const top = (1 - corners[1].y) / 2 * h, bottom = (1 - corners[0].y) / 2 * h;
-      return { left, top, width: right - left, height: bottom - top };
-    },
+    /** The disc port's place on the stage, in CSS pixels. */
+    portRect(): Rect { return port.rect; },
     dispose() {
-      cancelAnimationFrame(frame); frame = 0; resize.disconnect(); seen.disconnect();
+      cancelAnimationFrame(frame); frame = 0; clearTimeout(loading); resize.disconnect(); seen.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
       canvas.removeEventListener('webglcontextlost', onLost);
       release(scene); shadowMap.dispose(); renderer.dispose(); canvas.remove();
