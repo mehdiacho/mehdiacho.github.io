@@ -18,11 +18,15 @@ const OUT = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'public', 'co
 
 const W = 800;
 const H = 400;
-const BG = '#09090b';     // zinc-950, matches the card
-const GRID = '#18181b';   // zinc-900
-const DIM = '#3f3f46';    // zinc-700
-const INK = '#a1a1aa';    // zinc-400
-const ACCENT = '#06b6d4'; // cyan-500
+// Printed on the software section's white stock rather than the old terminal
+// black. Each card group gets one spot colour, so the grid reads by kind of
+// work before you read a single title.
+let BG = '#f6f5f1';
+let GRID = '#e7e5de';
+let DIM = '#b9b7ae';
+let INK = '#4a4c50';
+let ACCENT = '#e5231b';
+const ACCENTS = { ai: '#11508f', tools: '#e5231b', games: '#6b3fa0' };
 
 /** Deterministic PRNG, so regenerating never reshuffles a cover. */
 function rng(seed) {
@@ -392,7 +396,7 @@ const motifs = {
     for (let i = 0; i < 6; i++) {
       const y = 118 + i * 30;
       const changed = i === 1 || i === 4;
-      out += `<rect x="88" y="${y}" width="272" height="20" fill="none" stroke="${changed ? '#71717a' : DIM}" stroke-width="1"/>`;
+      out += `<rect x="88" y="${y}" width="272" height="20" fill="none" stroke="${changed ? INK : DIM}" stroke-width="1"/>`;
       out += `<rect x="98" y="${y + 7}" width="${76 + Math.floor(r() * 150)}" height="5" fill="${INK}" opacity="0.42"/>`;
       out += `<rect x="440" y="${y}" width="272" height="20" fill="none" stroke="${changed ? ACCENT : DIM}" stroke-width="${changed ? 1.5 : 1}"/>`;
       out += `<rect x="450" y="${y + 7}" width="${76 + Math.floor(r() * 150)}" height="5" fill="${changed ? ACCENT : INK}" opacity="${changed ? 0.9 : 0.42}"/>`;
@@ -414,7 +418,8 @@ const motifs = {
 const VB_H = 264;          // ~3:1 against the 800-wide field, matching the card
 const VB_Y = (H - VB_H) / 2;
 
-function cover({ slug, id, label, motif }) {
+function cover({ slug, id, label, motif, kind }) {
+  ACCENT = ACCENTS[kind];
   const body = motifs[motif](rng(slug));
   const top = VB_Y;
   const bottom = VB_Y + VB_H;
@@ -442,26 +447,26 @@ function cover({ slug, id, label, motif }) {
 // Order and ids must match `PROJECTS` in `constants.ts` — the id is baked into
 // the artwork, so reordering the cards means re-running this script.
 const COVERS = [
-  { slug: 'yap',             id: 'P01', label: 'YAP',             motif: 'voice' },
-  { slug: 'tether',          id: 'P02', label: 'TETHER',          motif: 'handshake' },
-  { slug: 'dither',          id: 'P03', label: 'DITHER',          motif: 'dither' },
-  { slug: 'machine-strike',  id: 'P04', label: 'MACHINE_STRIKE',  motif: 'hexfield' },
-  { slug: 'grids-to-graphs', id: 'P05', label: 'GRIDS_TO_GRAPHS', motif: 'wave' },
-  { slug: 'fpx-now',         id: 'P06', label: 'FPX_NOW',         motif: 'prompt' },
-  { slug: 'filmarr',         id: 'P07', label: 'FILMARR',         motif: 'deck' },
-  { slug: 'kinkeep',         id: 'P08', label: 'KINKEEP',         motif: 'vaultDocs' },
-  { slug: 'secure-vault',    id: 'P09', label: 'SECURE_VAULT',    motif: 'seal' },
-  { slug: 'highrise',        id: 'P10', label: 'HIGHRISE',        motif: 'board' },
-  { slug: 'fish-player',     id: 'P11', label: 'FISH_PLAYER',     motif: 'relay' },
-  { slug: 'blackwall',       id: 'P12', label: 'BLACKWALL',       motif: 'receipt' },
-  { slug: 'drafting-table',  id: 'P13', label: 'DRAFTING_TABLE',  motif: 'sheet' },
-  { slug: 'tally',           id: 'P14', label: 'TALLY',           motif: 'counter' },
-  { slug: 'bibverify',       id: 'P15', label: 'BIBVERIFY',       motif: 'diff' },
-  { slug: 'aistudio-sync',   id: 'P16', label: 'AISTUDIO_SYNC',   motif: 'pull' },
-  { slug: 'a-testers',       id: 'P17', label: 'A_TESTERS',       motif: 'seats' },
-  { slug: 'smartspend',      id: 'P18', label: 'SMARTSPEND',      motif: 'forecast' },
-  { slug: 'mmila',           id: 'P19', label: 'MMILA',           motif: 'chain' },
-  { slug: 'agentic-browser', id: 'P20', label: 'AGENTIC_BROWSER', motif: 'boundary' },
+  { slug: 'yap',             id: 'P01', label: 'YAP',             motif: 'voice', kind: 'ai' },
+  { slug: 'tether',          id: 'P02', label: 'TETHER',          motif: 'handshake', kind: 'ai' },
+  { slug: 'dither',          id: 'P03', label: 'DITHER',          motif: 'dither', kind: 'tools' },
+  { slug: 'machine-strike',  id: 'P04', label: 'MACHINE_STRIKE',  motif: 'hexfield', kind: 'games' },
+  { slug: 'grids-to-graphs', id: 'P05', label: 'GRIDS_TO_GRAPHS', motif: 'wave', kind: 'ai' },
+  { slug: 'fpx-now',         id: 'P06', label: 'FPX_NOW',         motif: 'prompt', kind: 'tools' },
+  { slug: 'filmarr',         id: 'P07', label: 'FILMARR',         motif: 'deck', kind: 'ai' },
+  { slug: 'kinkeep',         id: 'P08', label: 'KINKEEP',         motif: 'vaultDocs', kind: 'tools' },
+  { slug: 'secure-vault',    id: 'P09', label: 'SECURE_VAULT',    motif: 'seal', kind: 'tools' },
+  { slug: 'highrise',        id: 'P10', label: 'HIGHRISE',        motif: 'board', kind: 'games' },
+  { slug: 'fish-player',     id: 'P11', label: 'FISH_PLAYER',     motif: 'relay', kind: 'tools' },
+  { slug: 'blackwall',       id: 'P12', label: 'BLACKWALL',       motif: 'receipt', kind: 'tools' },
+  { slug: 'drafting-table',  id: 'P13', label: 'DRAFTING_TABLE',  motif: 'sheet', kind: 'tools' },
+  { slug: 'tally',           id: 'P14', label: 'TALLY',           motif: 'counter', kind: 'tools' },
+  { slug: 'bibverify',       id: 'P15', label: 'BIBVERIFY',       motif: 'diff', kind: 'ai' },
+  { slug: 'aistudio-sync',   id: 'P16', label: 'AISTUDIO_SYNC',   motif: 'pull', kind: 'tools' },
+  { slug: 'a-testers',       id: 'P17', label: 'A_TESTERS',       motif: 'seats', kind: 'tools' },
+  { slug: 'smartspend',      id: 'P18', label: 'SMARTSPEND',      motif: 'forecast', kind: 'tools' },
+  { slug: 'mmila',           id: 'P19', label: 'MMILA',           motif: 'chain', kind: 'tools' },
+  { slug: 'agentic-browser', id: 'P20', label: 'AGENTIC_BROWSER', motif: 'boundary', kind: 'ai' },
 ];
 
 mkdirSync(OUT, { recursive: true });

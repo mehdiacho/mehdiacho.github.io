@@ -1,6 +1,7 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 
 import CadPages from './components/CadPages';
+import { CAD_PAGES } from './lib/prints';
 import PrivacyPreferences from './components/PrivacyPreferences';
 import SiteHeader from './components/SiteHeader';
 import Hero from './components/Hero';
@@ -8,7 +9,7 @@ import Section from './components/Section';
 import Hobbies from './components/Hobbies';
 import Research from './components/Research';
 import Background from './components/Background';
-import SignalGame from './components/SignalGame';
+import Arcade from './components/arcade/Arcade';
 import Work3D from './components/Work3D';
 import Visualisation from './components/Visualisation';
 import Projects from './components/Projects';
@@ -78,7 +79,7 @@ const Home: React.FC = () => {
         <Section id="research" number="03" theme="brut" variant="inline" title={<>Questions worth testing.</>} standfirst="Machine learning, graph networks, and the work behind the result.">
           <Research />
         </Section>
-        <Section id="cad" number="04" theme="blueprint" variant="rail" title={<>The model notebook.</>} standfirst="A hobby in dimensions. Replacement parts, small fixes, and the drawings behind them. I’m focused on modeling; physical tests are a separate step.">
+        <Section id="cad" number="04" theme="blueprint" variant="rail" title={<>Models, on the side.</>} standfirst="A hobby with calipers. Small fixes, the drawings behind them and the questions that are still open.">
           <Work3D />
         </Section>
         <Section id="visualisation" number="05" theme="soft" variant="inline" title={<>A room of my own.</>} standfirst="Turning my desk into a little place you can explore in a browser. Still taking shape.">
@@ -87,8 +88,8 @@ const Home: React.FC = () => {
         <Section id="about" number="06" theme="ledger" variant="rail" title={<>A bit of background.</>} standfirst="How I got here, what I care about, and what I’m learning along the way.">
           <Background />
         </Section>
-        <Section id="play" number="07" theme="brut" variant="inline" title={<>Take the scenic route.</>} standfirst="Or the shortest one. A small puzzle for the part of your brain that keeps looking for a better path.">
-          <SignalGame />
+        <Section id="play" number="07" theme="brut" variant="inline" title={<>Weekly arcade.</>} standfirst="A small game, a fresh scoreboard every Monday, and the week’s top score kept for good.">
+          <Arcade />
         </Section>
 
         <Contact />
@@ -113,6 +114,6 @@ const Home: React.FC = () => {
 
 export default function App({ path = typeof window === 'undefined' ? '/' : window.location.pathname }: { path?: string }) {
   const normalized = path.endsWith('/') ? path : path + '/';
-  const modelPage = normalized === '/models/' || normalized === '/models/charger-brace/' || normalized === '/models/mazda-flip-key/';
+  const modelPage = normalized === '/models/' || CAD_PAGES.some(p => p.path === normalized);
   return <>{modelPage ? <CadPages path={normalized} /> : <Home />}<PrivacyPreferences /></>;
 }

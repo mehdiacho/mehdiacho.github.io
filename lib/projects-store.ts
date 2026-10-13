@@ -16,7 +16,7 @@
  */
 import { useEffect, useState } from 'react';
 import { PROJECTS } from '../constants';
-import type { Project, ProjectStatus } from '../types';
+import type { Project, ProjectCategory, ProjectStatus } from '../types';
 
 import { firebaseConfig } from './firebase';
 
@@ -24,6 +24,7 @@ import { firebaseConfig } from './firebase';
 export type ProjectSource = 'firestore' | 'fallback';
 
 const STATUSES: ProjectStatus[] = ['live', 'wip', 'concept'];
+const CATEGORIES: ProjectCategory[] = ['ai', 'tools', 'games'];
 
 /**
  * Firestore documents are user-entered and may predate a schema change, so
@@ -55,10 +56,20 @@ function toProject(id: string, raw: Record<string, unknown>): Project | null {
     if (text && (href || vault)) action = vault ? { text, vault: true } : { text, href };
   }
 
+  // The descriptions were rewritten in this repo (2026-10-13) and Firestore
+  // still holds the older ones. For the projects the bundled list knows, its
+  // copy wins until the same words are saved from admin; then the entry in
+  // constants.ts can stay as the fallback it was always meant to be.
+  const bundled = PROJECTS.find((p) => p.title === title);
+  const category = CATEGORIES.includes(raw.category as ProjectCategory)
+    ? (raw.category as ProjectCategory)
+    : bundled?.category ?? 'tools';
+
   return {
     id: str(raw.id) ?? id,
     title,
-    pitch,
+    pitch: bundled?.pitch ?? pitch,
+    category,
     stack,
     image: str(raw.image) ?? '/covers/placeholder.svg',
     link: str(raw.link),

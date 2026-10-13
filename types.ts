@@ -1,5 +1,8 @@
 export type ProjectStatus = 'live' | 'wip' | 'concept';
 
+/** Which filter a card sits under on the home page. */
+export type ProjectCategory = 'ai' | 'tools' | 'games';
+
 /**
  * A card's call to action. Ultimately everything is a link plus a label — the
  * label matters because "Launch" and "Join the test" are not the same promise.
@@ -41,6 +44,8 @@ export interface Project {
    * 'concept' - idea / not started yet (placeholder)
    */
   status: ProjectStatus;
+  /** Filter group. Firestore documents without one fall back to the bundled list, then 'tools'. */
+  category?: ProjectCategory;
   /**
    * Sort key. Only set on documents coming from Firestore, where insertion
    * order means nothing; the local fallback list is already in display order.

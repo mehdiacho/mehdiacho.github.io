@@ -1,9 +1,25 @@
 import React from 'react';
-import { CAD_STORIES } from '../cad-stories';
-import InlineModel from './InlineModel';
+import { useCadEntries } from '../lib/prints';
+import { entryHref } from './CadPages';
+
+/**
+ * CAD is a hobby now, so the home page only points at the notebook. Renders,
+ * not live viewers: the 3D models and drawings load on the model pages, where
+ * someone has chosen to look at them.
+ */
 export default function Work3D() {
- return <><div className="grid grid-cols-1 gap-8 lg:grid-cols-2">{CAD_STORIES.map(story => <article className="panel ticked overflow-hidden" key={story.id}>
-   <InlineModel src={story.model} poster={story.poster} alt={story.alt} />
-   <div className="p-6"><p className="label text-accent">{story.status}</p><h3 className="font-display text-3xl mt-4">{story.title}</h3><p className="mt-4 leading-relaxed text-ink-soft">{story.intro}</p><a className="cad-story-link mt-6 inline-block" href={`/models/${story.slug}/`}>The story and blueprint →</a></div>
- </article>)}</div><p className="mt-9 leading-relaxed max-w-[70ch]">These are my own projects, and I’m still learning through them. Have something similar in mind? <a className="underline underline-offset-4" href="/cad-modeling-botswana/">Here’s how I approach CAD requests</a>, or <a className="underline underline-offset-4" href="/models/">browse the model notebook</a>.</p></>;
+  const entries = useCadEntries();
+  return <div className="model-shelf">
+    <div className="model-shelf-copy">
+      <p>When something of mine breaks and nobody sells the part, I measure it and model a new one. I don’t own a 3D printer, so a finished model and a tested part are two different milestones, and each page says which one it has reached.</p>
+      <a className="cad-story-link" href="/models/">Open the model notebook →</a>
+    </div>
+    <ul className="model-shelf-items">{entries.slice(0, 4).map(entry => <li key={entry.id}>
+      <a href={entryHref(entry)}>
+        {entry.poster ? <img src={entry.poster} alt="" width="900" height="675" loading="lazy" decoding="async" /> : <span className="model-shelf-blank" aria-hidden="true">Drawing only</span>}
+        <span className="model-shelf-title">{entry.title}</span>
+        <span className="label">{entry.status}</span>
+      </a>
+    </li>)}</ul>
+  </div>;
 }

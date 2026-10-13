@@ -1,0 +1,61 @@
+/*
+ * Section additions from the 2026-10-13 pass: project kinds, the research
+ * method and reading list, the background story and the model shelf.
+ * Kept out of index.css so they don't collide with work happening there.
+ */
+
+/* -- Software: one spot colour per kind, matching the covers ---------- */
+.project-card { --kind: #e5231b; border-top: 4px solid var(--kind); }
+.project-card[data-category='ai'] { --kind: #11508f; }
+.project-card[data-category='games'] { --kind: #6b3fa0; }
+.project-kind { color: var(--kind); font-size: 10px; margin: 0 0 6px; }
+
+/* -- Research ---------------------------------------------------------- */
+.research-stack { display: grid; gap: clamp(48px, 7vw, 90px); }
+.research-stack .idea-lab { margin-top: 0; border-top-color: #67695f; }
+.research-subhead { font: 11px var(--font-label); text-transform: uppercase; letter-spacing: .1em; color: #ccff00; margin: 34px 0 6px; }
+.research-method { margin: 0 0 28px; }
+.research-method > div { border-top: 1px solid #67695f; padding: 16px 0; display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: 18px; }
+.research-method dt { font-weight: 700; color: #f4f1e8; }
+.research-method dd { margin: 0; line-height: 1.7; color: #c7cbbf; }
+.research-reading { display: grid; grid-template-columns: 1fr 1.4fr; gap: clamp(28px, 6vw, 90px); }
+.research-reading h3 { font-size: clamp(26px, 3vw, 38px); font-weight: 700; line-height: 1.12; margin: 16px 0 18px; }
+.research-reading p { line-height: 1.75; color: #c7cbbf; }
+.research-reading a { text-decoration: underline; text-underline-offset: 4px; }
+.research-reading ol { list-style: none; margin: 0; padding: 0; }
+.research-reading li { border-top: 1px solid #67695f; padding: 20px 0; }
+.research-reading li a { font-size: 18px; color: #f4f1e8; }
+.research-reading li span { display: block; font: 11px var(--font-label); color: #ccff00; margin-top: 8px; }
+.research-reading li p { font-size: 15px; margin-top: 8px; }
+
+/* -- Background -------------------------------------------------------- */
+.background-story { display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; margin-bottom: 60px; }
+.background-side h3 { font-size: 36px; font-weight: 700; line-height: 1.08; max-width: 12ch; margin-top: 20px; }
+.background-facts { margin: 32px 0 0; }
+.background-facts > div { border-top: 1px solid var(--color-rule); padding: 12px 0; }
+.background-facts dt { font: 10px var(--font-label); text-transform: uppercase; letter-spacing: .08em; color: var(--color-ink-soft); }
+.background-facts dd { margin: 4px 0 0; line-height: 1.5; }
+.background-body p { line-height: 1.8; margin-bottom: 20px; max-width: 64ch; }
+.background-quote { margin: 32px 0; padding: 4px 0 4px 24px; border-left: 4px solid var(--color-accent); }
+.background-quote p { font-family: var(--font-display); font-size: clamp(20px, 2.2vw, 26px); line-height: 1.45; margin: 0; }
+.background-link { text-decoration: underline; text-underline-offset: 4px; }
+
+/* -- Models: a shelf, not a showroom ----------------------------------- */
+.model-shelf { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: clamp(24px, 5vw, 64px); align-items: start; }
+.model-shelf-copy p { line-height: 1.75; margin: 0 0 24px; max-width: 46ch; }
+.model-shelf-items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.model-shelf-items a { display: flex; flex-direction: column; gap: 8px; height: 100%; }
+.model-shelf-items img, .model-shelf-blank { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: 1px solid var(--color-rule); background: var(--color-paper-lift); }
+.model-shelf-blank { display: grid; place-items: center; font: 11px var(--font-label); color: var(--color-ink-soft); }
+.model-shelf-title { font-weight: 700; line-height: 1.25; }
+.model-shelf-items .label { font-size: 10px; color: var(--color-ink-soft); }
+.model-shelf-items a:hover .model-shelf-title, .model-shelf-items a:focus-visible .model-shelf-title { text-decoration: underline; text-underline-offset: 4px; }
+
+@media (max-width: 1100px) {
+  .model-shelf { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .research-reading, .background-story { grid-template-columns: minmax(0, 1fr); }
+  .research-method > div { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .model-shelf-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
