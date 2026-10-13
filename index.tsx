@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
+import './sections.css';
 import { initAnalytics } from './lib/firebase';
 
 // The initializer does nothing unless the visitor explicitly opted in.

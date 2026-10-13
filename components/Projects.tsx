@@ -1,10 +1,15 @@
 import React, { useMemo, useState } from 'react';
 
 import { useProjects } from '../lib/projects-store';
-import { Project, ProjectStatus } from '../types';
-import ProjectIdeas from './ProjectIdeas';
+import { Project, ProjectCategory, ProjectStatus } from '../types';
 
 /** Plain words again. "WIP" means nothing to someone outside software. */
+const CATEGORY_META: Record<ProjectCategory, { label: string; filter: string }> = {
+  ai: { label: 'AI & research', filter: 'AI & research' },
+  tools: { label: 'Tool / app', filter: 'Tools & apps' },
+  games: { label: 'Game', filter: 'Games' },
+};
+
 const STATUS_META: Record<ProjectStatus, { label: string; className: string }> = {
   live: { label: 'Live', className: 'text-accent' },
   wip: { label: 'In progress', className: 'text-ink-soft' },
@@ -66,9 +71,10 @@ const linkClass =
 const ProjectCard: React.FC<{ project: Project; span: string }> = ({ project, span }) => {
   const status = STATUS_META[project.status];
   const roomy = span === 'hero' || span === 'tall';
+  const category = project.category ?? 'tools';
 
   return (
-    <li data-span={span} className="panel-lift flex min-h-0 flex-col overflow-hidden">
+    <li data-span={span} data-category={category} className="panel-lift project-card flex min-h-0 flex-col overflow-hidden">
       <div className="relative min-h-0 flex-1 overflow-hidden border-b border-rule bg-white">
         <img
           src={project.image}
@@ -83,6 +89,7 @@ const ProjectCard: React.FC<{ project: Project; span: string }> = ({ project, sp
       </div>
 
       <div className="flex shrink-0 flex-col p-5">
+        <p className="project-kind label">{CATEGORY_META[category].label}</p>
         <h3 className="font-display text-xl font-bold leading-tight tracking-tight text-ink">
           {prettyTitle(project.title)}
         </h3>
@@ -186,9 +193,7 @@ const Projects: React.FC = () => {
   const [page, setPage] = useState(0);
   const [filter, setFilter] = useState('All work');
   const filters = ['All work', 'AI & research', 'Tools & apps', 'Games'];
-  const ai = ['GRIDS_TO_GRAPHS', 'YAP', 'TETHER', 'FILMARR', 'AGENTIC_BROWSER', 'BIBVERIFY'];
-  const games = ['MACHINE_STRIKE', 'HIGHRISE'];
-  const filtered = projects.filter(p => filter === 'All work' || (filter === 'AI & research' ? ai.includes(p.title) : filter === 'Games' ? games.includes(p.title) : !ai.includes(p.title) && !games.includes(p.title)));
+  const filtered = projects.filter(p => filter === 'All work' || CATEGORY_META[p.category ?? 'tools'].filter === filter);
 
   const pages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
   // Firestore can return fewer projects than the page we are sitting on.
@@ -260,7 +265,6 @@ const Projects: React.FC = () => {
           </div>
         </div>
       )}
-      <ProjectIdeas />
     </div>
   );
 };

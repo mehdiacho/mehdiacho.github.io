@@ -11,8 +11,9 @@ The separate shared service is implemented in `game-worker/` and verified locall
 ## Server behavior
 
 - Recomputes scores from the daily route; rejects missing relays, disconnected steps, post-finish moves, oversized JSON and dates other than today for submissions.
-- Keeps the best score per day and random browser identifier; generated ROUTE aliases avoid free-text public names. A local callsign is never sent.
-- Stores the hashed identifier, generated alias, score/cost and server timestamp. No raw route, raw identifier or raw IP is stored. Hourly rate buckets are derived from the edge-provided address and hour; this is pseudonymization, not a claim of anonymity.
+- Keeps the best score per day and random browser identifier. The player may opt in to showing their callsign (3–12 letters or numbers, run through `publicCallsign` in `lib/signal-game.ts`: a word filter with leetspeak folding and reserved prefixes such as ROUTE and MEHDI). Otherwise the board shows a generated ROUTE alias. Re-publishing updates the name but keeps the best score.
+- Equal costs share a place (competition ranking, 1, 1, 3). `GET /leaderboard` also returns `tiedForFirst`.
+- Stores the hashed identifier, the alias or chosen callsign, score/cost and server timestamp. No raw route, raw identifier or raw IP is stored. Hourly rate buckets are derived from the edge-provided address and hour; this is pseudonymization, not a claim of anonymity.
 - Limits submission attempts to 30 per address per hour. Bounded reads (4 KB), parameterized SQL, exact origin allowlist, request timeouts, failure feedback and retry controls.
 - Daily cleanup removes expired rate buckets and results older than 30 days. No authentication: a cleared browser is a new player, and automated optimal solvers remain possible. This is a casual board, not a prize competition.
 - Isolated from the existing vault and Firestore content rules.

@@ -110,6 +110,30 @@ export function normalizeName(input: unknown): string {
   return name;
 }
 
+/**
+ * A word filter for the public board. Short on purpose: it catches the
+ * obvious and the obvious spelled with digits, and reserves the generated
+ * ROUTE- aliases and the site owner's name so nobody can pass as either.
+ * Anything it misses can be removed from the database by hand.
+ */
+const BLOCKED = ['FUCK', 'SHIT', 'CUNT', 'BITCH', 'NIGG', 'FAG', 'RAPE', 'NAZI', 'HITLER', 'WHORE', 'SLUT', 'DICK', 'COCK', 'PUSSY', 'PENIS', 'VAGIN', 'ASSHOLE', 'KKK', 'PORN', 'TWAT', 'WANK', 'RETARD'];
+const RESERVED = ['ROUTE', 'ADMIN', 'MEHDI', 'ACHO'];
+const LEET: Record<string, string> = { '0': 'O', '1': 'I', '3': 'E', '4': 'A', '5': 'S', '7': 'T', '8': 'B' };
+
+/** A callsign that may appear publicly, or an error saying why not. */
+export function publicCallsign(input: unknown): string {
+  const name = normalizeName(input);
+  const plain = name.replace(/[0-9]/g, digit => LEET[digit] ?? digit);
+  if (BLOCKED.some(word => plain.includes(word)) || RESERVED.some(word => plain.startsWith(word)))
+    throw new Error('Pick a different callsign for the public board.');
+  return name;
+}
+
+/** Standard competition ranking: equal costs share a place, so 1, 1, 3. */
+export function sharedRanks(costs: number[]): number[] {
+  return costs.map(cost => 1 + costs.filter(other => other < cost).length);
+}
+
 /** Stored scores are never authoritative, even locally: rederive them from the route. */
 export function readLocalRuns(raw: string | null): LocalRun[] {
   if (!raw) return [];

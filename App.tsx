@@ -79,7 +79,7 @@ const Home: React.FC = () => {
         <Section id="research" number="03" theme="brut" variant="inline" title={<>Questions worth testing.</>} standfirst="Machine learning, graph networks, and the work behind the result.">
           <Research />
         </Section>
-        <Section id="cad" number="04" theme="blueprint" variant="rail" title={<>The model notebook.</>} standfirst="A hobby in dimensions. Replacement parts, small fixes, and the drawings behind them. I’m focused on modeling; physical tests are a separate step.">
+        <Section id="cad" number="04" theme="blueprint" variant="rail" title={<>Models, on the side.</>} standfirst="A hobby with calipers. Small fixes, the drawings behind them and the questions that are still open.">
           <Work3D />
         </Section>
         <Section id="visualisation" number="05" theme="soft" variant="inline" title={<>A room of my own.</>} standfirst="Turning my desk into a little place you can explore in a browser. Still taking shape.">

@@ -9,7 +9,7 @@ export const PROFILE = {
   statusSub: "Available for work",
   /** Also the meta description. Changing it changes what Google shows. */
   bio: "I'm Mehdi Acho. I build software, study machine learning and make CAD models in Gaborone, Botswana.",
-  bioSub: "I'm doing an MSc at BIUST and building things in between. Mostly replacement parts for things that broke and nobody sells any more, plus software that people actually end up using. This notebook brings together my software, research and modeling experiments.",
+  bioSub: "I'm doing an MSc at BIUST and building things in between: software people actually use, research on how models read brain signals, and the odd CAD model when something of mine breaks.",
   mission: "I do research. I build software. For money. For fun. For the future.",
   email: "mehdiacho@gmail.com",
   socials: {
@@ -62,7 +62,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P01",
     title: "YAP",
-    pitch: "Voice-first idea capture for Android. Speak the thought and get it back structured, with the title, sections and action items pulled out. Kotlin + Compose on Firebase, with a desktop companion on the same library.",
+    pitch: "I talk faster than I type, so I built an Android app that listens. Say the idea out loud and it comes back as a note with a title, sections and action items. A desktop companion runs on the same library.",
+    category: "ai",
     stack: ["Kotlin", "Compose", "Firebase"],
     image: "/covers/yap.svg",
     status: "wip",
@@ -71,7 +72,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P02",
     title: "TETHER",
-    pitch: "A human-in-the-loop layer for AI agents: ask(), not notify(). A self-hosted MCP endpoint an agent blocks on, plus an Android app that rings like an actual phone call.",
+    pitch: "AI agents are good at reporting what they did and bad at asking first. Tether lets an agent stop, ask a person and wait for the answer. A self-hosted MCP endpoint sits on one side, and an Android app that rings like a phone call sits on the other.",
+    category: "ai",
     stack: ["TypeScript", "MCP", "Kotlin"],
     image: "/covers/tether.svg",
     status: "wip",
@@ -80,7 +82,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P03",
     title: "DITHER",
-    pitch: "1-bit dithering in the browser. Atkinson, Floyd-Steinberg, Bayer and plain threshold. Group images with independent presets and export a ZIP. Nothing is ever uploaded.",
+    pitch: "Turn photos into 1-bit art in the browser with Atkinson, Floyd–Steinberg, Bayer or a plain threshold. Group images, give each group its own settings and download the lot as a ZIP. Nothing is uploaded.",
+    category: "tools",
     stack: ["Canvas", "Vanilla JS", "Pages"],
     image: "/covers/dither.svg",
     status: "live",
@@ -90,7 +93,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P04",
     title: "MACHINE_STRIKE",
-    pitch: "The Horizon tactics board game, rebuilt for the browser. Turn-based combat on a hex grid. The machine roster, the terrain and the overpower rules all come out of data files, in a typed monorepo running on Cloudflare Workers.",
+    pitch: "The tactics board game from Horizon, rebuilt so you can play it in a browser. Turn-based fights on a hex grid, with the machines, the terrain and the overpower rules all read from data files. It runs on Cloudflare Workers.",
+    category: "games",
     stack: ["TypeScript", "Workers", "Monorepo"],
     image: "/covers/machine-strike.svg",
     status: "wip",
@@ -99,7 +103,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P05",
     title: "GRIDS_TO_GRAPHS",
-    pitch: "MSc research. Benchmarks a graph convolutional network against EEGNet on 3-class inner-speech vowel decoding, to find out whether the real electrode layout beats the square grid a CNN assumes.",
+    pitch: "My MSc research. EEG electrodes sit on a curved head, but a CNN reads them as a flat grid. I’m testing whether a graph network that knows the real electrode layout decodes inner-speech vowels better than EEGNet.",
+    category: "ai",
     stack: ["PyTorch", "GNN", "EEG"],
     image: "/covers/grids-to-graphs.svg",
     status: "wip",
@@ -108,7 +113,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P06",
     title: "FPX_NOW",
-    pitch: "Published npm CLI. Caches and aliases the npx invocations you keep retyping, so a long build incantation collapses into a two-word command.",
+    pitch: "A small command-line tool on npm. It remembers the long npx commands you keep retyping and gives them short names, so a build incantation becomes two words.",
+    category: "tools",
     stack: ["Node", "CLI", "npm"],
     image: "/covers/fpx-now.svg",
     status: "live",
@@ -118,7 +124,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P07",
     title: "FILMARR",
-    pitch: "Swipe-first film and TV tracker. Tinder-style triage feeding a graph recommender, with Letterboxd export. Native Kotlin + Compose on a Firebase and Cloud Run backend.",
+    pitch: "Swipe through films and shows to sort out what you actually want to watch, and a graph-based recommender learns from the swipes. Exports to Letterboxd. Native Android, with Firebase and Cloud Run behind it.",
+    category: "ai",
     stack: ["Kotlin", "Compose", "Cloud Run"],
     image: "/covers/filmarr.svg",
     status: "wip",
@@ -127,7 +134,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P08",
     title: "KINKEEP",
-    pitch: "A family's papers, kept somewhere they can be found, checked and eventually handed on. Whether a document is still valid, and who gets it next, are built into it rather than written on a sticky note. Encrypted so that only the family can read it.",
+    pitch: "Somewhere for a family’s important papers to live, so they can be found, checked and eventually handed on. Whether a document is still valid, and who receives it next, are part of the record instead of a note on the fridge. Encrypted so only the family can read it.",
+    category: "tools",
     stack: ["React", "Firebase", "Kotlin"],
     image: "/covers/kinkeep.svg",
     status: "wip",
@@ -136,7 +144,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P09",
     title: "SECURE_VAULT",
-    pitch: "Share a password or a config file without the server ever being able to read it. Everything is encrypted in your browser first; what you send is a link that can expire or be opened a set number of times. Cloudflare Workers and KV.",
+    pitch: "Share a password or a config file without the server ever being able to read it. It’s encrypted in your browser before it leaves, and the link can expire or stop working after a set number of opens. You can try it right here.",
+    category: "tools",
     stack: ["React", "WebCrypto", "Cloudflare"],
     image: "/covers/secure-vault.svg",
     status: "live",
@@ -145,7 +154,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P10",
     title: "HIGHRISE",
-    pitch: "A Monopoly-shaped multiplayer board game for two to four players, with bots to fill the empty seats. The server has the only real copy of the game, and both ends run the same rules engine over Socket.io.",
+    pitch: "A Monopoly-style board game for two to four players online, with bots for the empty seats. The server keeps the only real copy of the game, and both ends run the same rules engine over Socket.io.",
+    category: "games",
     stack: ["TypeScript", "Fastify", "Socket.io"],
     image: "/covers/highrise.svg",
     status: "wip",
@@ -154,7 +164,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P11",
     title: "FISH_PLAYER",
-    pitch: "Type a line on your phone, hear it in your own cloned voice from a speaker in another building. The server renders and holds the queue; the PC long-polls, so no port is ever opened.",
+    pitch: "Type a line on my phone and hear it in my own cloned voice from a speaker in another building. The server renders the audio and holds the queue; the PC checks in for new lines, so no port is ever opened.",
+    category: "tools",
     stack: ["TypeScript", "Docker", "Tailnet"],
     image: "/covers/fish-player.svg",
     status: "live",
@@ -163,7 +174,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P12",
     title: "BLACKWALL",
-    pitch: "Receipt generator that encrypts in the browser, so the contents never leave it in the clear. Cyberpunk print aesthetic, exports print-ready output.",
+    pitch: "A receipt maker with a Cyberpunk print look. Everything is encrypted in the browser, so the contents never leave it readable, and it exports print-ready pages.",
+    category: "tools",
     stack: ["React", "WebCrypto", "Vite"],
     image: "/covers/blackwall.svg",
     status: "live",
@@ -173,7 +185,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P13",
     title: "DRAFTING_TABLE",
-    pitch: "A design system for technical drawing sets that get printed, pinned to a wall and read for months. Extracted from an 18-sheet A2 greenhouse blueprint set, and it carries that job's rule: never let a guess look like a fact.",
+    pitch: "A design system for technical drawings that get printed, pinned to a wall and read for months. I pulled it out of an 18-sheet greenhouse blueprint set, and it keeps that job’s rule: never let a guess look like a fact.",
+    category: "tools",
     stack: ["Design System", "Tokens", "Print"],
     image: "/covers/drafting-table.svg",
     status: "wip",
@@ -182,7 +195,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P14",
     title: "TALLY",
-    pitch: "An installable counter PWA. Tap +/−, the count persists offline, runs from the home screen. No accounts, no network, no build step.",
+    pitch: "A counter you can install on your phone. Tap plus or minus and the count stays put, even offline. No account, no network and no build step.",
+    category: "tools",
     stack: ["PWA", "Vanilla JS", "Pages"],
     image: "/covers/tally.svg",
     status: "live",
@@ -192,7 +206,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P15",
     title: "BIBVERIFY",
-    pitch: "Paste a .bib file and check every entry against the official DOI registry. Field-by-field diff against CrossRef/DataCite, accept-or-keep per field, export a clean file.",
+    pitch: "Paste in a .bib file and check every reference against the official DOI records at CrossRef and DataCite. See what differs field by field, choose what to keep and download a clean file.",
+    category: "ai",
     stack: ["React", "Express", "CrossRef"],
     image: "/covers/bibverify.svg",
     status: "wip",
@@ -201,7 +216,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P16",
     title: "AISTUDIO_SYNC",
-    pitch: "Google AI Studio can push prompts to GitHub but never pull them back. This adds a Pull button straight into its toolbar, so edits made in any local editor sync in.",
+    pitch: "Google AI Studio can push prompts to GitHub but can’t pull them back. This Chrome extension adds a Pull button to its toolbar, so edits made in my own editor come back in.",
+    category: "tools",
     stack: ["Chrome MV3", "TypeScript"],
     image: "/covers/aistudio-sync.svg",
     status: "wip",
@@ -210,7 +226,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P17",
     title: "A_TESTERS",
-    pitch: "A seat exchange for Google Play closed testing. Test another developer's app to earn seats, spend seats to get your own tested. It exists because of the twelve-testers-for-fourteen-days wall that every solo developer runs into.",
+    pitch: "Google Play wants twelve testers for fourteen days before a solo developer can publish. A-Testers is a seat exchange: test someone else’s app to earn seats, then spend them to get your own app tested.",
+    category: "tools",
     stack: ["TypeScript", "Kotlin", "Firebase"],
     image: "/covers/a-testers.svg",
     status: "wip",
@@ -219,7 +236,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P18",
     title: "SMARTSPEND",
-    pitch: "Bridges the weekly shop and the semester budget. Built for buying in bulk: compare unit prices, see what the month looks like before you commit. Installs to the home screen and works with no signal.",
+    pitch: "Somewhere between the weekly shop and the semester budget. Compare unit prices when buying in bulk, and see what the month looks like before you spend. It installs to your home screen and works without signal.",
+    category: "tools",
     stack: ["React", "Firebase", "PWA"],
     image: "/covers/smartspend.svg",
     status: "wip",
@@ -228,7 +246,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P19",
     title: "MMILA",
-    pitch: "Procurement transparency for a Gaborone residential development. Awarding anything but the cheapest compliant quote demands a written justification, appended to a hash-chained ledger.",
+    pitch: "Procurement you can see into, for a residential development in Gaborone. If anything other than the cheapest compliant quote wins, someone has to write down why, and that note goes into a hash-chained record.",
+    category: "tools",
     stack: ["FastAPI", "Postgres", "Claude"],
     image: "/covers/mmila.svg",
     status: "wip",
@@ -237,7 +256,8 @@ export const PROJECTS: Project[] = [
   {
     id: "P20",
     title: "AGENTIC_BROWSER",
-    pitch: "An early prototype where the architecture is the point: the agent half of it physically cannot reach into the browser half. That is checked by the build rather than by a reviewer noticing, which means the browser underneath can be swapped out later.",
+    pitch: "An early prototype where the architecture is the point. The AI agent side can’t reach into the browser side, and the build checks that instead of relying on a reviewer to notice. That should let me swap out the browser underneath later.",
+    category: "ai",
     stack: ["Electron", "TypeScript", "React"],
     image: "/covers/agentic-browser.svg",
     status: "concept",

@@ -18,12 +18,14 @@ async function request(path: string, options?: RequestInit) {
   if (!response.ok) throw new Error(body.error || 'Rankings are unavailable.');
   return body;
 }
-export async function loadRankings(day: string): Promise<SharedRun[]> {
+export type SharedBoard = { runs: SharedRun[]; tiedForFirst?: number };
+export async function loadRankings(day: string): Promise<SharedBoard> {
   const body = await request('/leaderboard?day=' + encodeURIComponent(day));
   if (!Array.isArray(body.runs)) throw new Error('Rankings could not be read.');
-  return body.runs;
+  return { runs: body.runs, tiedForFirst: typeof body.tiedForFirst === 'number' ? body.tiedForFirst : undefined };
 }
-export async function publishRun(day: string, path: number[]): Promise<string> {
-  const body = await request('/runs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ day, path, version: RULES_VERSION, player: playerId() }) });
+/** Publishes under the callsign when one is given; the service falls back to a generated alias. */
+export async function publishRun(day: string, path: number[], name?: string): Promise<string> {
+  const body = await request('/runs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ day, path, version: RULES_VERSION, player: playerId(), ...(name ? { name } : {}) }) });
   return body.alias;
 }
