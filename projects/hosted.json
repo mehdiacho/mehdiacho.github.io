@@ -1,0 +1,14 @@
+{
+  "fdr": {
+    "kind": "static",
+    "repo": "mehdiacho/ZEUS",
+    "build": "cd web && npm ci && npm run build:demo (output web/dist-demo)",
+    "updated": "2026-10-19"
+  },
+  "nightly": {
+    "kind": "proxy",
+    "repo": "mehdiacho/Nightly",
+    "origin": "https://nightly-origin.mehdiacho.tech",
+    "status": "not live yet: needs its server and tunnel"
+  }
+}

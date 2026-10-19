@@ -1,0 +1,12 @@
+{
+  // Sends mehdiacho.tech/projects/<name>/* to an app that needs its own server
+  // (static apps don't come through here: they live in public/projects/).
+  // Deploy from this folder with `npx wrangler deploy`. See ../projects/README.md.
+  "name": "mehdiacho-projects-proxy",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-01",
+  "routes": [
+    // One route per server app. Add the app to ORIGINS in src/index.js as well.
+    { "pattern": "mehdiacho.tech/projects/nightly*", "zone_name": "mehdiacho.tech" }
+  ]
+}
