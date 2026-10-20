@@ -26,6 +26,10 @@ export const app = getApps()[0] ?? initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+// The SDK's default is to keep retrying a failed upload for ten minutes with
+// a spinner and no error. Fail fast enough to be told what went wrong.
+storage.maxUploadRetryTime = 30_000;
+storage.maxOperationRetryTime = 30_000;
 
 /** The only account the rules will accept writes from. */
 export const OWNER_EMAIL = 'mehdiacho@gmail.com';

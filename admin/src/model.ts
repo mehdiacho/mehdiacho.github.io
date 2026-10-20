@@ -104,7 +104,8 @@ export function formToDoc(f: FormState): Omit<ProjectDoc, 'updatedAt'> {
     title: t(f.title),
     pitch: t(f.pitch),
     stack: f.stack.split(',').map(t).filter(Boolean).slice(0, 4),
-    image: t(f.image),
+    // Sleeve art alone is enough; reuse it so nothing that reads `image` breaks.
+    image: t(f.image) || t(f.poster),
     category: f.category,
     status: f.status,
     order: Number(f.order) || 0,
@@ -131,7 +132,7 @@ export function validate(f: FormState): Record<string, string> {
   const e: Record<string, string> = {};
   const t = (s: string) => s.trim();
 
-  if (!t(f.id)) e.id = 'Needed — this is the code shown on the card, e.g. P21.';
+  if (!t(f.id)) e.id = 'Needed: the catalogue number printed on the record, e.g. P21.';
   if (!t(f.title)) e.title = 'Give it a name.';
   else if (t(f.title).length > 60) e.title = 'Keep it under 60 characters.';
 
@@ -139,9 +140,9 @@ export function validate(f: FormState): Record<string, string> {
   else if (t(f.pitch).length > 600) e.pitch = 'Too long — 600 characters maximum.';
 
   const stack = f.stack.split(',').map(t).filter(Boolean);
-  if (stack.length > 4) e.stack = 'Four tags at most — they sit in one row on the card.';
+  if (stack.length > 4) e.stack = 'Four tracks at most: that is all the sleeve back has room for.';
 
-  if (!t(f.image)) e.image = 'Pick a cover image or paste a path.';
+  if (!t(f.image) && !t(f.poster)) e.image = 'Add a cover image or sleeve art (upload, or paste a path).';
 
   for (const [k, v] of [['poster', f.poster], ['link', f.link], ['github', f.github], ['actionHref', f.actionHref]] as const) {
     if (t(v) && !/^https?:\/\/|^\//.test(t(v))) e[k] = 'Must start with https:// or /';
