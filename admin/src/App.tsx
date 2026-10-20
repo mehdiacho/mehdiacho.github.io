@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   onAuthStateChanged, signInWithPopup, signOut, type User,
 } from 'firebase/auth';
@@ -13,8 +13,8 @@ import {
 
 import { auth, db, googleProvider, OWNER_EMAIL, storage } from './firebase';
 import {
-  docToForm, emptyForm, formToDoc, validate,
-  type FormState, type ProjectDoc, type ProjectStatus,
+  docToForm, emptyForm, formToDoc, untouchedFields, validate,
+  type FormState, type ProjectCategory, type ProjectDoc, type ProjectStatus,
 } from './model';
 
 const COLLECTION = 'projects';
@@ -26,6 +26,15 @@ const STATUS: { value: ProjectStatus; label: string; cls: string }[] = [
   { value: 'concept', label: 'CONCEPT', cls: 'border-zinc-700 text-zinc-400' },
 ];
 
+// Same groups and wording as the filter buttons on the site.
+const CATEGORIES: { value: ProjectCategory; label: string }[] = [
+  { value: 'ai', label: 'AI & research' },
+  { value: 'tools', label: 'Tools & apps' },
+  { value: 'games', label: 'Games' },
+];
+
+type MediaField = 'image' | 'poster';
+
 /* ------------------------------------------------------------------ atoms -- */
 
 const label = 'block font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-500 mb-1.5';
@@ -35,7 +44,7 @@ const input =
 
 function Field({
   id, children, error, hint,
-}: { id: string; children: React.ReactNode; error?: string; hint?: string }) {
+}: { id: string; children: ReactNode; error?: string; hint?: string }) {
   return (
     <div>
       {children}
@@ -63,8 +72,9 @@ export default function App() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState<MediaField | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const posterRef = useRef<HTMLInputElement>(null);
 
   const isOwner = !!user && user.email === OWNER_EMAIL;
 
@@ -130,7 +140,12 @@ export default function App() {
       // The card code (P07) is the document id, so a rename moves the document
       // rather than leaving a duplicate behind.
       const targetId = form.id.trim();
-      const payload = { ...formToDoc(form), updatedAt: serverTimestamp() };
+      const original = rows.find((r) => r.docId === form.docId)?.data;
+      const payload = {
+        ...untouchedFields(original),
+        ...formToDoc(form),
+        updatedAt: serverTimestamp(),
+      };
       await setDoc(doc(db, COLLECTION, targetId), payload);
       if (form.docId && form.docId !== targetId) await deleteDoc(doc(db, COLLECTION, form.docId));
       flash(`Saved ${targetId}. Live on the site on next load.`);
@@ -155,21 +170,22 @@ export default function App() {
     }
   }
 
-  async function upload(file: File) {
+  async function upload(file: File, field: MediaField) {
     if (!form) return;
-    setUploading(true);
+    setUploading(field);
     try {
       const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
       const path = `covers/${Date.now()}-${safe}`;
       const snap = await uploadBytes(ref(storage, path), file, { contentType: file.type });
       const url = await getDownloadURL(snap.ref);
-      setForm((f) => (f ? { ...f, image: url } : f));
-      flash('Cover uploaded.');
+      setForm((f) => (f ? { ...f, [field]: url } : f));
+      flash(field === 'poster' ? 'Sleeve art uploaded.' : 'Cover uploaded.');
     } catch (err) {
       flash(`Upload failed: ${(err as Error).message}`);
     } finally {
-      setUploading(false);
+      setUploading(null);
       if (fileRef.current) fileRef.current.value = '';
+      if (posterRef.current) posterRef.current.value = '';
     }
   }
 
@@ -272,7 +288,7 @@ export default function App() {
 
             <div className="md:col-span-2">
               <Field id="pitch" error={errors.pitch}
-                     hint={`${form.pitch.trim().length}/600 — the card clamps to three lines.`}>
+                     hint={`${form.pitch.trim().length}/600 — printed on the back of the record sleeve.`}>
                 <label htmlFor="pitch" className={label}>About</label>
                 <textarea id="pitch" rows={3} className={input} value={form.pitch}
                           onChange={(e) => set('pitch', e.target.value)} />
@@ -284,6 +300,24 @@ export default function App() {
               <input id="stack" className={input} placeholder="TypeScript, Workers, Monorepo"
                      value={form.stack} onChange={(e) => set('stack', e.target.value)} />
             </Field>
+
+            <div className="md:col-span-2 flex flex-wrap items-center gap-2">
+              <span className={label + ' mb-0 mr-1'}>Group</span>
+              {CATEGORIES.map((c) => (
+                <button
+                  key={c.value} onClick={() => set('category', c.value)}
+                  aria-pressed={form.category === c.value}
+                  className={`border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors ${
+                    form.category === c.value
+                      ? 'border-cyan-700 text-cyan-300'
+                      : 'border-zinc-800 text-zinc-600 hover:text-zinc-400'
+                  }`}
+                >
+                  {c.label}
+                </button>
+              ))}
+              <span className="text-xs text-zinc-600">Which filter the record sits under.</span>
+            </div>
 
             <Field id="order" error={errors.order} hint="Lower numbers appear first.">
               <label htmlFor="order" className={label}>Order</label>
@@ -300,12 +334,12 @@ export default function App() {
                   <input id="image" className={input} placeholder="/covers/machine-strike.svg"
                          value={form.image} onChange={(e) => set('image', e.target.value)} />
                   <input ref={fileRef} type="file" accept="image/*" className="hidden"
-                         onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
+                         onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], 'image')} />
                   <button
-                    onClick={() => fileRef.current?.click()} disabled={uploading}
+                    onClick={() => fileRef.current?.click()} disabled={!!uploading}
                     className="flex items-center gap-2 shrink-0 border border-zinc-800 px-3 font-mono text-[11px] uppercase text-zinc-400 hover:text-cyan-400 hover:border-cyan-700 transition-colors disabled:opacity-50"
                   >
-                    {uploading ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
+                    {uploading === 'image' ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
                     Upload
                   </button>
                 </div>
@@ -313,6 +347,30 @@ export default function App() {
               {form.image && (
                 <img src={form.image} alt={`Cover art preview for ${form.title || 'this project'}`}
                      className="mt-3 h-24 w-full max-w-md object-cover border border-zinc-800" />
+              )}
+            </div>
+
+            <div className="md:col-span-2">
+              <Field id="poster" error={errors.poster}
+                     hint="Optional square art for the front of the record sleeve. Without it the sleeve is laid out around the cover image above.">
+                <label htmlFor="poster" className={label}>Sleeve art</label>
+                <div className="flex gap-2">
+                  <input id="poster" className={input} placeholder="Square image, 1:1"
+                         value={form.poster} onChange={(e) => set('poster', e.target.value)} />
+                  <input ref={posterRef} type="file" accept="image/*" className="hidden"
+                         onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], 'poster')} />
+                  <button
+                    onClick={() => posterRef.current?.click()} disabled={!!uploading}
+                    className="flex items-center gap-2 shrink-0 border border-zinc-800 px-3 font-mono text-[11px] uppercase text-zinc-400 hover:text-cyan-400 hover:border-cyan-700 transition-colors disabled:opacity-50"
+                  >
+                    {uploading === 'poster' ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
+                    Upload
+                  </button>
+                </div>
+              </Field>
+              {form.poster && (
+                <img src={form.poster} alt={`Sleeve art preview for ${form.title || 'this project'}`}
+                     className="mt-3 h-32 w-32 object-cover border border-zinc-800" />
               )}
             </div>
 
@@ -478,7 +536,7 @@ export default function App() {
   );
 }
 
-function Shell({ children }: { children: React.ReactNode }) {
+function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-200 font-sans px-4 py-8 sm:px-8">
       <div className="mx-auto max-w-5xl">{children}</div>

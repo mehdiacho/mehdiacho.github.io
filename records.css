@@ -1,0 +1,480 @@
+/* ==================================================================== *
+ * The record crate and the turntable (components/Projects.tsx).
+ *
+ * Each project is a square sleeve: art on the front, notes on the back,
+ * and a record that peeks out of the open edge. Turning a sleeve over is a
+ * 3D flip; pressing play drops the record onto the platter above.
+ * Category colours match the spot colours in scripts/gen-covers.mjs.
+ * ==================================================================== */
+.records {
+  --rec-ai: #11508f;
+  --rec-tools: #e5231b;
+  --rec-games: #6b3fa0;
+  --rec-vinyl: #111214;
+}
+.records [data-category='ai']    { --rec-spot: var(--rec-ai); }
+.records [data-category='tools'] { --rec-spot: var(--rec-tools); }
+.records [data-category='games'] { --rec-spot: var(--rec-games); }
+
+/* -- the vinyl itself, shared by the crate and the deck --------------- */
+.record-disc,
+.deck-vinyl {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 0 31%, rgba(255, 255, 255, .05) 31.5% 32%, transparent 32.5%),
+    repeating-radial-gradient(circle, #1b1c1f 0 1px, var(--rec-vinyl) 1.5px 3px),
+    var(--rec-vinyl);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+}
+/* The sheen sits on top and never turns, so a spinning record looks like it. */
+.record-disc::after,
+.deck-vinyl::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 30deg, transparent 0 10%, rgba(255, 255, 255, .13) 15%, transparent 22% 58%, rgba(255, 255, 255, .1) 64%, transparent 71%);
+  pointer-events: none;
+}
+.vinyl-label {
+  position: absolute;
+  inset: 34%;
+  border-radius: 50%;
+  background: var(--rec-spot, var(--rec-tools));
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .25);
+}
+
+/* -- the crate --------------------------------------------------------- */
+.crate {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  /* Room on the right of each sleeve for its record to slide out into. */
+  gap: 44px 56px;
+  margin-top: 40px;
+  padding-right: 40px;
+}
+.record {
+  position: relative;
+  aspect-ratio: 1;
+  perspective: 1400px;
+  /* The sleeve's type and spacing scale with the sleeve (cqi), not the page. */
+  container-type: inline-size;
+}
+.record-disc {
+  position: absolute;
+  top: 3%;
+  left: 3%;
+  width: 94%;
+  height: 94%;
+  transform: translateX(12%) rotate(0deg);
+  transition: transform .45s cubic-bezier(.2, .8, .2, 1), opacity .2s;
+}
+.record:hover .record-disc,
+.record:focus-within .record-disc { transform: translateX(24%) rotate(40deg); }
+/* The record is on the turntable, or hidden behind a turned sleeve. */
+.record[data-playing] .record-disc { transform: translateX(0) scale(.9); opacity: 0; }
+.record[data-flipped] .record-disc { transform: translateX(0); opacity: 0; }
+
+.sleeve {
+  position: relative;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .6s cubic-bezier(.4, .1, .2, 1);
+}
+.record[data-flipped] .sleeve { transform: rotateY(180deg); }
+.record:not([data-flipped]):hover .sleeve { transform: rotateY(-6deg) translateY(-3px); }
+
+.sleeve-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-ink);
+  border-radius: 4px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .04), 0 14px 26px -18px rgba(0, 0, 0, .55);
+}
+.sleeve-front {
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  background: var(--rec-spot);
+  color: #fff;
+}
+.sleeve-front:focus-visible,
+.sleeve-back button:focus-visible,
+.player button:focus-visible,
+.player a:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Front laid out around the wide card cover. */
+.sleeve-layout {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  padding: 7cqi;
+  gap: 5cqi;
+}
+.sleeve-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0;
+  font-family: var(--font-label);
+  font-size: clamp(10px, 4.6cqi, 13px);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  opacity: .85;
+}
+.sleeve-band {
+  align-self: center;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, .35);
+  background: #fff;
+  aspect-ratio: 800 / 264;
+}
+.sleeve-band img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sleeve-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(22px, 13cqi, 40px);
+  line-height: .92;
+  letter-spacing: -.02em;
+  overflow-wrap: anywhere;
+}
+
+/* Front from a square poster. */
+.sleeve-poster { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sleeve-title-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 3cqi 5cqi;
+  background: rgba(0, 0, 0, .72);
+  font-family: var(--font-label);
+  font-size: clamp(11px, 4.8cqi, 14px);
+}
+
+/* A round shop sticker in the top corner. */
+.sleeve-sticker {
+  position: absolute;
+  top: 5cqi;
+  right: 5cqi;
+  display: grid;
+  place-items: center;
+  width: clamp(48px, 22cqi, 64px);
+  aspect-ratio: 1;
+  padding: 4px;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  font-family: var(--font-label);
+  font-size: clamp(8px, 3.6cqi, 10px);
+  line-height: 1.1;
+  text-align: center;
+  text-transform: uppercase;
+  transform: rotate(-12deg);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+}
+.sleeve-sticker[data-status='live'] { background: var(--c-acid); }
+.record[data-playing] .sleeve-sticker { background: #000; color: #fff; }
+/* The poster layout puts the meta line where the sticker is. */
+.sleeve-layout ~ .sleeve-sticker { top: auto; bottom: 22%; }
+
+/* The back: the liner notes. */
+.sleeve-back {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5cqi;
+  padding: 7cqi;
+  background: var(--c-paper-up);
+  color: var(--color-ink);
+  transform: rotateY(180deg);
+  border-top: 6px solid var(--rec-spot);
+}
+.sleeve-back-head .label { margin: 0; font-size: clamp(9px, 3.8cqi, 11px); }
+.sleeve-back h3 {
+  margin: 2px 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(18px, 8.5cqi, 26px);
+  line-height: 1;
+  letter-spacing: -.01em;
+}
+/* Long notes scroll inside the sleeve; the player shows them in full. */
+.sleeve-notes {
+  flex: 1;
+  min-height: 3.5em;
+  margin: 0;
+  overflow-y: auto;
+  font-size: clamp(12px, 5.2cqi, 15px);
+  line-height: 1.45;
+  color: var(--color-ink-soft);
+  scrollbar-width: thin;
+}
+.sleeve-tracks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-label);
+  font-size: clamp(10px, 4cqi, 12px);
+}
+.sleeve-tracks span { color: var(--rec-spot); }
+/* On a small sleeve the notes need the room more than the track list does. */
+@container (max-width: 290px) {
+  .sleeve-tracks { display: none; }
+  .sleeve-back { gap: 2.5cqi; padding: 6cqi; }
+}
+.sleeve-controls { display: flex; align-items: center; gap: 12px; }
+.sleeve-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 30px;
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+.sleeve-play:hover { background: var(--rec-spot); }
+.sleeve-turn {
+  font-family: var(--font-label);
+  font-size: 12px;
+  color: var(--color-ink-soft);
+  border-bottom: 1px solid var(--color-rule-soft);
+}
+.sleeve-turn:hover { color: var(--color-ink); border-color: var(--color-ink); }
+
+/* -- the turntable ------------------------------------------------------ */
+.player-anchor { scroll-margin-top: 24px; }
+.player {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  margin-top: 8px;
+  padding: 20px;
+  border: 1px solid var(--color-ink);
+  border-radius: 8px;
+  background: var(--c-paper);
+}
+@media (min-width: 900px) {
+  .player { grid-template-columns: minmax(300px, 440px) minmax(0, 1fr); padding: 28px; gap: 40px; }
+}
+
+.deck {
+  position: relative;
+  aspect-ratio: 1.12;
+  border-radius: 10px;
+  background: linear-gradient(160deg, #2a2c30, #121315);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 18px 30px -18px rgba(0, 0, 0, .6);
+  container-type: inline-size;
+}
+.platter {
+  position: absolute;
+  top: 7%;
+  left: 5%;
+  width: 72cqi;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: repeating-conic-gradient(#2f3236 0 2deg, #26282c 2deg 4deg);
+  box-shadow: 0 0 0 3px #3b3e43, 0 6px 16px rgba(0, 0, 0, .5);
+}
+.deck-vinyl {
+  position: absolute;
+  inset: 3%;
+  animation: rec-drop .55s cubic-bezier(.2, .8, .25, 1) both, rec-spin 1.8s linear .55s infinite;
+}
+.deck-vinyl .vinyl-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Text sits above the spindle hole, like a printed label. */
+  justify-content: flex-start;
+  gap: 2px;
+  padding: 18% 10% 10%;
+  color: #fff;
+  font-family: var(--font-label);
+  font-size: clamp(7px, 2.4cqi, 11px);
+  line-height: 1.15;
+  text-align: center;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+.deck-vinyl .vinyl-label span:last-child { opacity: .7; }
+.spindle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3.2cqi;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f2f2f2, #8d9096);
+  transform: translate(-50%, -50%);
+}
+/* The arm pivots from the top right corner and swings in once a record is on. */
+.tonearm {
+  position: absolute;
+  top: 9%;
+  right: 7%;
+  width: 14cqi;
+  aspect-ratio: 1;
+  transform-origin: 50% 50%;
+  transform: rotate(-24deg);
+  transition: transform .7s cubic-bezier(.4, .1, .2, 1) .35s;
+}
+.player[data-loaded] .tonearm { transform: rotate(10deg); }
+.tonearm-pivot {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #d8dadd, #6f7277);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .5);
+}
+.tonearm-arm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2cqi;
+  height: 58cqi;
+  margin-left: -1cqi;
+  border-radius: 1cqi;
+  background: linear-gradient(90deg, #9b9ea3, #e3e5e8 45%, #85888d);
+  transform-origin: 50% 0;
+  transform: rotate(18deg);
+}
+/* The headshell. */
+.tonearm-arm::after {
+  content: '';
+  position: absolute;
+  bottom: -3cqi;
+  left: -1.6cqi;
+  width: 5.2cqi;
+  height: 7cqi;
+  border-radius: 1cqi;
+  background: #1d1e21;
+  border: 1px solid #55585d;
+}
+.deck-light {
+  position: absolute;
+  left: 6%;
+  bottom: 6%;
+  width: 2.2cqi;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #3a3c40;
+}
+.player[data-loaded] .deck-light { background: var(--c-acid); box-shadow: 0 0 8px var(--c-acid); }
+.deck-badge {
+  position: absolute;
+  right: 6%;
+  bottom: 5%;
+  font-family: var(--font-label);
+  font-size: clamp(9px, 3cqi, 12px);
+  color: #8d9096;
+}
+
+.player-screen { min-width: 0; align-self: center; }
+.player-screen .label { margin: 0 0 8px; }
+.player-screen h3 {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(30px, 5vw, 54px);
+  line-height: .95;
+  letter-spacing: -.02em;
+  outline: none;
+}
+.player-cover {
+  display: block;
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border: 1px solid var(--color-ink);
+  background: #fff;
+}
+.player-notes {
+  max-width: 62ch;
+  margin: 16px 0 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-ink-soft);
+}
+.player-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.player-stack li {
+  padding: 3px 8px;
+  border: 1px solid var(--color-rule-soft);
+  font-family: var(--font-label);
+  font-size: 11px;
+  color: var(--color-ink-soft);
+}
+.player-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 24px;
+  margin-top: 22px;
+}
+.player-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.player-links a,
+.player-links button {
+  padding: 9px 16px;
+  border: 1px solid #000;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: background .15s, color .15s;
+}
+.player-links a:first-child,
+.player-links button:first-child { background: #000; color: #fff; }
+.player-links a:hover,
+.player-links button:hover { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+.player-links span { align-self: center; font-family: var(--font-label); font-size: 12px; color: var(--color-ink-faint); }
+.player-eject {
+  font-family: var(--font-label);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--color-ink-soft);
+  border-bottom: 1px solid var(--color-rule-soft);
+}
+.player-eject:hover { color: var(--color-ink); border-color: var(--color-ink); }
+
+@keyframes rec-drop {
+  from { transform: translateY(-38%) scale(1.06); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+@keyframes rec-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 680px) {
+  .crate { gap: 32px; padding-right: 28px; }
+  .record-disc { transform: translateX(8%); }
+  .record:hover .record-disc,
+  .record:focus-within .record-disc { transform: translateX(14%) rotate(40deg); }
+  .player { padding: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .record-disc,
+  .sleeve,
+  .tonearm { transition: none; }
+  .record:not([data-flipped]):hover .sleeve { transform: none; }
+  .deck-vinyl { animation: none; }
+}

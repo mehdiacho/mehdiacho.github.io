@@ -56,10 +56,7 @@ function toProject(id: string, raw: Record<string, unknown>): Project | null {
     if (text && (href || vault)) action = vault ? { text, vault: true } : { text, href };
   }
 
-  // The descriptions were rewritten in this repo (2026-10-13) and Firestore
-  // still holds the older ones. For the projects the bundled list knows, its
-  // copy wins until the same words are saved from admin; then the entry in
-  // constants.ts can stay as the fallback it was always meant to be.
+  // Older documents predate the category field; the bundled list knows theirs.
   const bundled = PROJECTS.find((p) => p.title === title);
   const category = CATEGORIES.includes(raw.category as ProjectCategory)
     ? (raw.category as ProjectCategory)
@@ -68,10 +65,11 @@ function toProject(id: string, raw: Record<string, unknown>): Project | null {
   return {
     id: str(raw.id) ?? id,
     title,
-    pitch: bundled?.pitch ?? pitch,
+    pitch,
     category,
     stack,
     image: str(raw.image) ?? '/covers/placeholder.svg',
+    poster: str(raw.poster),
     link: str(raw.link),
     github: str(raw.github),
     action,
