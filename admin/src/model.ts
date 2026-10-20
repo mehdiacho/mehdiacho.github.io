@@ -8,6 +8,8 @@
  */
 
 export type ProjectStatus = 'live' | 'wip' | 'concept';
+/** Filter group on the site. Mirrors `ProjectCategory` in the site's types.ts. */
+export type ProjectCategory = 'ai' | 'tools' | 'games';
 
 export interface ProjectDoc {
   id: string;
@@ -15,6 +17,9 @@ export interface ProjectDoc {
   pitch: string;
   stack: string[];
   image: string;
+  /** Square art for the record sleeve. Falls back to a layout built around `image`. */
+  poster?: string;
+  category: ProjectCategory;
   link?: string;
   github?: string;
   action?: { text: string; href?: string; vault?: boolean };
@@ -33,6 +38,8 @@ export interface FormState {
   pitch: string;
   stack: string;
   image: string;
+  poster: string;
+  category: ProjectCategory;
   link: string;
   github: string;
   actionText: string;
@@ -51,6 +58,8 @@ export const emptyForm = (order: number): FormState => ({
   pitch: '',
   stack: '',
   image: '',
+  poster: '',
+  category: 'tools',
   link: '',
   github: '',
   actionText: '',
@@ -70,6 +79,8 @@ export function docToForm(docId: string, d: ProjectDoc): FormState {
     pitch: d.pitch ?? '',
     stack: (d.stack ?? []).join(', '),
     image: d.image ?? '',
+    poster: d.poster ?? '',
+    category: d.category ?? 'tools',
     link: d.link ?? '',
     github: d.github ?? '',
     actionText: d.action?.text ?? '',
@@ -94,9 +105,11 @@ export function formToDoc(f: FormState): Omit<ProjectDoc, 'updatedAt'> {
     pitch: t(f.pitch),
     stack: f.stack.split(',').map(t).filter(Boolean).slice(0, 4),
     image: t(f.image),
+    category: f.category,
     status: f.status,
     order: Number(f.order) || 0,
   };
+  if (t(f.poster)) doc.poster = t(f.poster);
   if (t(f.link)) doc.link = t(f.link);
   if (t(f.github)) doc.github = t(f.github);
   if (f.isPrivate) doc.private = true;
@@ -130,7 +143,7 @@ export function validate(f: FormState): Record<string, string> {
 
   if (!t(f.image)) e.image = 'Pick a cover image or paste a path.';
 
-  for (const [k, v] of [['link', f.link], ['github', f.github], ['actionHref', f.actionHref]] as const) {
+  for (const [k, v] of [['poster', f.poster], ['link', f.link], ['github', f.github], ['actionHref', f.actionHref]] as const) {
     if (t(v) && !/^https?:\/\/|^\//.test(t(v))) e[k] = 'Must start with https:// or /';
   }
 
@@ -141,4 +154,21 @@ export function validate(f: FormState): Record<string, string> {
   if (f.order.trim() && Number.isNaN(Number(f.order))) e.order = 'Numbers only.';
 
   return e;
+}
+
+/** Every field this form owns. Anything else on a document is left as it is. */
+const FORM_FIELDS = new Set([
+  'id', 'title', 'pitch', 'stack', 'image', 'poster', 'category', 'link', 'github',
+  'action', 'private', 'status', 'order', 'draft', 'updatedAt',
+]);
+
+/**
+ * Fields on a stored document that the form doesn't know about. Saving
+ * replaces the whole document (so a cleared field really is removed), and
+ * without this a field added by a script or a newer version of the site
+ * would be wiped by the next edit here. That's how `category` was lost.
+ */
+export function untouchedFields(d: ProjectDoc | undefined): Record<string, unknown> {
+  if (!d) return {};
+  return Object.fromEntries(Object.entries(d).filter(([k]) => !FORM_FIELDS.has(k)));
 }

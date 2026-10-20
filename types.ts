@@ -25,6 +25,8 @@ export interface Project {
   pitch: string;
   stack: string[];
   image: string;
+  /** Square art for the front of the record sleeve. Without it the sleeve is laid out around `image`. */
+  poster?: string;
   link?: string;
   github?: string;
   /**
