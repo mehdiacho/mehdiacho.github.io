@@ -1,16 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
 import {
   onAuthStateChanged, signInWithPopup, signOut, type User,
 } from 'firebase/auth';
 import {
   collection, deleteDoc, doc, getDocs, serverTimestamp, setDoc,
 } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import {
   AlertCircle, Check, ExternalLink, Eye, EyeOff, Github, Loader2, LogOut,
   Plus, Save, Trash2, Upload, X,
 } from 'lucide-react';
 
+import { compressImage, formatBytes, MEDIA_BOX } from './compress';
 import { auth, db, googleProvider, OWNER_EMAIL, storage } from './firebase';
 import {
   docToForm, emptyForm, formToDoc, untouchedFields, validate,
@@ -34,6 +35,22 @@ const CATEGORIES: { value: ProjectCategory; label: string }[] = [
 ];
 
 type MediaField = 'image' | 'poster';
+
+/** Give up on an upload after this long rather than spin for the SDK's ten minutes. */
+const UPLOAD_TIMEOUT_MS = 45_000;
+
+/** Turn a Storage failure into something that says what to do next. */
+function uploadErrorMessage(err: unknown): string {
+  const code = (err as { code?: string }).code ?? '';
+  if (code === 'storage/canceled' || code === 'storage/retry-limit-exceeded') {
+    return 'Upload timed out: image storage is not reachable. Paste an image path instead for now.';
+  }
+  if (code === 'storage/unauthorized') return 'Upload refused by the storage rules (images under 5 MB only).';
+  if (code === 'storage/bucket-not-found' || code === 'storage/project-not-found') {
+    return 'There is no storage bucket on this project yet. Paste an image path instead for now.';
+  }
+  return `Upload failed: ${(err as Error).message}`;
+}
 
 /* ------------------------------------------------------------------ atoms -- */
 
@@ -82,7 +99,8 @@ export default function App() {
 
   const flash = useCallback((m: string) => {
     setToast(m);
-    window.setTimeout(() => setToast(''), 3200);
+    // Long messages are errors with something to act on: leave them up longer.
+    window.setTimeout(() => setToast(''), Math.max(3200, m.length * 70));
   }, []);
 
   const load = useCallback(async () => {
@@ -137,7 +155,7 @@ export default function App() {
 
     setSaving(true);
     try {
-      // The card code (P07) is the document id, so a rename moves the document
+      // The catalogue number (P07) is the document id, so a rename moves the document
       // rather than leaving a duplicate behind.
       const targetId = form.id.trim();
       const original = rows.find((r) => r.docId === form.docId)?.data;
@@ -174,14 +192,27 @@ export default function App() {
     if (!form) return;
     setUploading(field);
     try {
-      const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
-      const path = `covers/${Date.now()}-${safe}`;
-      const snap = await uploadBytes(ref(storage, path), file, { contentType: file.type });
-      const url = await getDownloadURL(snap.ref);
+      const small = await compressImage(file, MEDIA_BOX[field]);
+      const base = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9_-]/g, '-').slice(0, 60);
+      const path = `covers/${Date.now()}-${base}.${small.ext}`;
+      const task = uploadBytesResumable(ref(storage, path), small.blob, {
+        contentType: small.type,
+        cacheControl: 'public, max-age=31536000, immutable',
+      });
+      const timer = window.setTimeout(() => task.cancel(), UPLOAD_TIMEOUT_MS);
+      try {
+        await task;
+      } finally {
+        window.clearTimeout(timer);
+      }
+      const url = await getDownloadURL(task.snapshot.ref);
       setForm((f) => (f ? { ...f, [field]: url } : f));
-      flash(field === 'poster' ? 'Sleeve art uploaded.' : 'Cover uploaded.');
+      const what = field === 'poster' ? 'Sleeve art' : 'Cover';
+      flash(small.after < small.before
+        ? `${what} uploaded, ${formatBytes(small.before)} → ${formatBytes(small.after)}.`
+        : `${what} uploaded.`);
     } catch (err) {
-      flash(`Upload failed: ${(err as Error).message}`);
+      flash(uploadErrorMessage(err));
     } finally {
       setUploading(null);
       if (fileRef.current) fileRef.current.value = '';
@@ -191,6 +222,40 @@ export default function App() {
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setForm((f) => (f ? { ...f, [k]: v } : f));
+
+  /** One image field: a path box, an upload button and a thumbnail. */
+  function mediaInput(
+    field: MediaField, inputRef: RefObject<HTMLInputElement | null>,
+    title: string, hint: string, placeholder: string,
+  ) {
+    const value = form?.[field] ?? '';
+    return (
+      <div className="md:col-span-2">
+        <Field id={field} error={errors[field]} hint={hint}>
+          <label htmlFor={field} className={label}>{title}</label>
+          <div className="flex gap-2">
+            <input id={field} className={input} placeholder={placeholder}
+                   value={value} onChange={(e) => set(field, e.target.value)} />
+            <input ref={inputRef} type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+                   className="hidden"
+                   onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], field)} />
+            <button
+              onClick={() => inputRef.current?.click()} disabled={!!uploading}
+              className="flex items-center gap-2 shrink-0 border border-zinc-800 px-3 font-mono text-[11px] uppercase text-zinc-400 hover:text-cyan-400 hover:border-cyan-700 transition-colors disabled:opacity-50"
+            >
+              {uploading === field ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
+              {uploading === field ? 'Uploading' : 'Upload'}
+            </button>
+          </div>
+        </Field>
+        {value && (
+          <img src={value} alt={`${title} preview for ${form?.title || 'this project'}`}
+               className={`mt-3 border border-zinc-800 object-cover ${
+                 field === 'poster' ? 'h-32 w-32' : 'h-24 w-full max-w-md'}`} />
+        )}
+      </div>
+    );
+  }
 
   /* -------------------------------------------------------------- gates -- */
 
@@ -273,174 +338,151 @@ export default function App() {
             </button>
           </div>
 
-          <div className="p-5 grid gap-5 md:grid-cols-2">
-            <Field id="id" error={errors.id} hint="Shown on the card and used as the document id.">
-              <label htmlFor="id" className={label}>Card code</label>
-              <input id="id" className={input} placeholder="P21" value={form.id}
-                     onChange={(e) => set('id', e.target.value)} />
-            </Field>
-
-            <Field id="title" error={errors.title}>
-              <label htmlFor="title" className={label}>Title</label>
-              <input id="title" className={input} placeholder="MACHINE_STRIKE" value={form.title}
-                     onChange={(e) => set('title', e.target.value)} />
-            </Field>
-
-            <div className="md:col-span-2">
-              <Field id="pitch" error={errors.pitch}
-                     hint={`${form.pitch.trim().length}/600 — printed on the back of the record sleeve.`}>
-                <label htmlFor="pitch" className={label}>About</label>
-                <textarea id="pitch" rows={3} className={input} value={form.pitch}
-                          onChange={(e) => set('pitch', e.target.value)} />
-              </Field>
-            </div>
-
-            <Field id="stack" error={errors.stack} hint="Comma separated, four maximum.">
-              <label htmlFor="stack" className={label}>Tags</label>
-              <input id="stack" className={input} placeholder="TypeScript, Workers, Monorepo"
-                     value={form.stack} onChange={(e) => set('stack', e.target.value)} />
-            </Field>
-
-            <div className="md:col-span-2 flex flex-wrap items-center gap-2">
-              <span className={label + ' mb-0 mr-1'}>Group</span>
-              {CATEGORIES.map((c) => (
-                <button
-                  key={c.value} onClick={() => set('category', c.value)}
-                  aria-pressed={form.category === c.value}
-                  className={`border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors ${
-                    form.category === c.value
-                      ? 'border-cyan-700 text-cyan-300'
-                      : 'border-zinc-800 text-zinc-600 hover:text-zinc-400'
-                  }`}
-                >
-                  {c.label}
-                </button>
-              ))}
-              <span className="text-xs text-zinc-600">Which filter the record sits under.</span>
-            </div>
-
-            <Field id="order" error={errors.order} hint="Lower numbers appear first.">
-              <label htmlFor="order" className={label}>Order</label>
-              <input id="order" inputMode="numeric" className={input} value={form.order}
-                     onChange={(e) => set('order', e.target.value)} />
-            </Field>
-
-            {/* media */}
-            <div className="md:col-span-2">
-              <Field id="image" error={errors.image}
-                     hint="A generated cover under /covers/, or upload your own screenshot.">
-                <label htmlFor="image" className={label}>Cover image</label>
-                <div className="flex gap-2">
-                  <input id="image" className={input} placeholder="/covers/machine-strike.svg"
-                         value={form.image} onChange={(e) => set('image', e.target.value)} />
-                  <input ref={fileRef} type="file" accept="image/*" className="hidden"
-                         onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], 'image')} />
-                  <button
-                    onClick={() => fileRef.current?.click()} disabled={!!uploading}
-                    className="flex items-center gap-2 shrink-0 border border-zinc-800 px-3 font-mono text-[11px] uppercase text-zinc-400 hover:text-cyan-400 hover:border-cyan-700 transition-colors disabled:opacity-50"
-                  >
-                    {uploading === 'image' ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
-                    Upload
-                  </button>
+          <div className="p-5 grid gap-8 lg:grid-cols-[minmax(0,1fr)_240px]">
+            <div className="grid gap-8">
+              {/* ---------------------------------------------- sleeve front -- */}
+              <Group title="Sleeve front" note="What a visitor sees in the crate before touching anything.">
+                <div className="md:col-span-2">
+                  <Field id="title" error={errors.title} hint="Printed across the sleeve and in the player. Shown as typed.">
+                    <label htmlFor="title" className={label}>Title</label>
+                    <input id="title" className={input} placeholder="Machine Strike" value={form.title}
+                           onChange={(e) => set('title', e.target.value)} />
+                  </Field>
                 </div>
-              </Field>
-              {form.image && (
-                <img src={form.image} alt={`Cover art preview for ${form.title || 'this project'}`}
-                     className="mt-3 h-24 w-full max-w-md object-cover border border-zinc-800" />
-              )}
-            </div>
+                {mediaInput('poster', posterRef, 'Sleeve art',
+                  'Square art that fills the whole front. Optional: without it the sleeve is laid out around the cover image. Resized to 900px WebP on upload.',
+                  'Square image, 1:1')}
+                {mediaInput('image', fileRef, 'Cover image',
+                  'The wide band on the sleeve (about 3:1) and the strip in the player. Resized to 1200px WebP on upload.',
+                  '/covers/machine-strike.svg')}
+              </Group>
 
-            <div className="md:col-span-2">
-              <Field id="poster" error={errors.poster}
-                     hint="Optional square art for the front of the record sleeve. Without it the sleeve is laid out around the cover image above.">
-                <label htmlFor="poster" className={label}>Sleeve art</label>
-                <div className="flex gap-2">
-                  <input id="poster" className={input} placeholder="Square image, 1:1"
-                         value={form.poster} onChange={(e) => set('poster', e.target.value)} />
-                  <input ref={posterRef} type="file" accept="image/*" className="hidden"
-                         onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], 'poster')} />
-                  <button
-                    onClick={() => posterRef.current?.click()} disabled={!!uploading}
-                    className="flex items-center gap-2 shrink-0 border border-zinc-800 px-3 font-mono text-[11px] uppercase text-zinc-400 hover:text-cyan-400 hover:border-cyan-700 transition-colors disabled:opacity-50"
-                  >
-                    {uploading === 'poster' ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
-                    Upload
-                  </button>
+              {/* ----------------------------------------------- sleeve back -- */}
+              <Group title="Sleeve back" note="What turning the record over shows.">
+                <Field id="id" error={errors.id} hint="On the sticker and the back. Also the document id.">
+                  <label htmlFor="id" className={label}>Catalogue number</label>
+                  <input id="id" className={input} placeholder="P21" value={form.id}
+                         onChange={(e) => set('id', e.target.value)} />
+                </Field>
+
+                <div>
+                  <span className={label}>Status sticker</span>
+                  <div className="flex gap-2">
+                    {STATUS.map((s) => (
+                      <button
+                        key={s.value} onClick={() => set('status', s.value)}
+                        aria-pressed={form.status === s.value}
+                        className={`border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-colors ${
+                          form.status === s.value ? s.cls : 'border-zinc-800 text-zinc-600 hover:text-zinc-400'
+                        }`}
+                      >
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </Field>
-              {form.poster && (
-                <img src={form.poster} alt={`Sleeve art preview for ${form.title || 'this project'}`}
-                     className="mt-3 h-32 w-32 object-cover border border-zinc-800" />
-              )}
-            </div>
 
-            {/* links */}
-            <Field id="github" error={errors.github}>
-              <label htmlFor="github" className={label}>Source URL</label>
-              <input id="github" className={input} placeholder="https://github.com/mehdiacho/…"
-                     value={form.github} onChange={(e) => set('github', e.target.value)} />
-            </Field>
+                <div className="md:col-span-2">
+                  <Field id="pitch" error={errors.pitch}
+                         hint={`${form.pitch.trim().length}/600. The liner notes; about 300 characters reads best on the sleeve.`}>
+                    <label htmlFor="pitch" className={label}>Liner notes</label>
+                    <textarea id="pitch" rows={4} className={input} value={form.pitch}
+                              onChange={(e) => set('pitch', e.target.value)} />
+                  </Field>
+                </div>
 
-            <Field id="link" error={errors.link}>
-              <label htmlFor="link" className={label}>Deploy URL</label>
-              <input id="link" className={input} placeholder="https://…"
-                     value={form.link} onChange={(e) => set('link', e.target.value)} />
-            </Field>
+                <div className="md:col-span-2">
+                  <Field id="stack" error={errors.stack} hint="The tracklist: the stack, comma separated, four at most.">
+                    <label htmlFor="stack" className={label}>Tracks</label>
+                    <input id="stack" className={input} placeholder="TypeScript, Workers, Monorepo"
+                           value={form.stack} onChange={(e) => set('stack', e.target.value)} />
+                  </Field>
+                </div>
+              </Group>
 
-            {/* the action object */}
-            <div className="md:col-span-2 border border-zinc-800 bg-zinc-950/60 p-4">
-              <p className={label}>Action button</p>
-              <p className="text-xs text-zinc-600 -mt-0.5 mb-3">
-                The card's main call to action — a label plus where it goes. Leave the label empty
-                for no button.
-              </p>
-              <div className="grid gap-4 md:grid-cols-2">
-                <Field id="actionText" error={errors.actionText}>
-                  <label htmlFor="actionText" className={label}>Button text</label>
-                  <input id="actionText" className={input} placeholder="JOIN THE TEST"
-                         value={form.actionText} onChange={(e) => set('actionText', e.target.value)} />
+              {/* ---------------------------------------------------- player -- */}
+              <Group title="Player" note="The buttons under the project once the record is playing.">
+                <Field id="link" error={errors.link}>
+                  <label htmlFor="link" className={label}>Deploy URL</label>
+                  <input id="link" className={input} placeholder="https://…"
+                         value={form.link} onChange={(e) => set('link', e.target.value)} />
                 </Field>
-                <Field id="actionHref" error={errors.actionHref}>
-                  <label htmlFor="actionHref" className={label}>Button link</label>
-                  <input id="actionHref" className={input} disabled={form.actionVault}
-                         placeholder="https://groups.google.com/…"
-                         value={form.actionVault ? '' : form.actionHref}
-                         onChange={(e) => set('actionHref', e.target.value)} />
+
+                <Field id="github" error={errors.github}>
+                  <label htmlFor="github" className={label}>Source URL</label>
+                  <input id="github" className={input} placeholder="https://github.com/mehdiacho/…"
+                         value={form.github} onChange={(e) => set('github', e.target.value)} />
                 </Field>
-              </div>
-              <label className="flex items-center gap-2 mt-3 text-xs text-zinc-400 cursor-pointer">
-                <input type="checkbox" checked={form.actionVault} className="accent-cyan-500"
-                       onChange={(e) => set('actionVault', e.target.checked)} />
-                Opens Secure Vault instead of a link
-              </label>
+
+                <div className="md:col-span-2 border border-zinc-800 bg-zinc-950/60 p-4">
+                  <p className={label}>Main button</p>
+                  <p className="text-xs text-zinc-600 -mt-0.5 mb-3">
+                    A label plus where it goes, shown first. Leave the label empty for no button.
+                  </p>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <Field id="actionText" error={errors.actionText}>
+                      <label htmlFor="actionText" className={label}>Button text</label>
+                      <input id="actionText" className={input} placeholder="Join the test"
+                             value={form.actionText} onChange={(e) => set('actionText', e.target.value)} />
+                    </Field>
+                    <Field id="actionHref" error={errors.actionHref}>
+                      <label htmlFor="actionHref" className={label}>Button link</label>
+                      <input id="actionHref" className={input} disabled={form.actionVault}
+                             placeholder="https://groups.google.com/…"
+                             value={form.actionVault ? '' : form.actionHref}
+                             onChange={(e) => set('actionHref', e.target.value)} />
+                    </Field>
+                  </div>
+                  <label className="flex items-center gap-2 mt-3 text-xs text-zinc-400 cursor-pointer">
+                    <input type="checkbox" checked={form.actionVault} className="accent-cyan-500"
+                           onChange={(e) => set('actionVault', e.target.checked)} />
+                    Opens Secure Vault instead of a link
+                  </label>
+                </div>
+
+                <label className="md:col-span-2 flex items-center gap-2 text-xs text-zinc-400 cursor-pointer">
+                  <input type="checkbox" checked={form.isPrivate} className="accent-cyan-500"
+                         onChange={(e) => set('isPrivate', e.target.checked)} />
+                  Private repo: show “source on request” instead of a source link
+                </label>
+              </Group>
+
+              {/* ----------------------------------------------------- crate -- */}
+              <Group title="Crate" note="Where the record is filed.">
+                <div className="md:col-span-2">
+                  <span className={label}>Group</span>
+                  <div className="flex flex-wrap gap-2">
+                    {CATEGORIES.map((c) => (
+                      <button
+                        key={c.value} onClick={() => set('category', c.value)}
+                        aria-pressed={form.category === c.value}
+                        className={`border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-colors ${
+                          form.category === c.value
+                            ? 'border-cyan-700 text-cyan-300'
+                            : 'border-zinc-800 text-zinc-600 hover:text-zinc-400'
+                        }`}
+                      >
+                        {c.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <Field id="order" error={errors.order} hint="Lower numbers sit nearer the front of the crate.">
+                  <label htmlFor="order" className={label}>Order</label>
+                  <input id="order" inputMode="numeric" className={input} value={form.order}
+                         onChange={(e) => set('order', e.target.value)} />
+                </Field>
+
+                <label className="flex items-center gap-2 self-end pb-2 text-xs text-zinc-400 cursor-pointer">
+                  <input type="checkbox" checked={form.draft} className="accent-cyan-500"
+                         onChange={(e) => set('draft', e.target.checked)} />
+                  Draft: keep it out of the crate
+                </label>
+              </Group>
             </div>
 
-            {/* state */}
-            <div className="md:col-span-2 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <div className="flex items-center gap-2">
-                <span className={label + ' mb-0'}>Status</span>
-                {STATUS.map((s) => (
-                  <button
-                    key={s.value} onClick={() => set('status', s.value)}
-                    className={`border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider transition-colors ${
-                      form.status === s.value ? s.cls : 'border-zinc-800 text-zinc-600 hover:text-zinc-400'
-                    }`}
-                  >
-                    {s.label}
-                  </button>
-                ))}
-              </div>
-              <label className="flex items-center gap-2 text-xs text-zinc-400 cursor-pointer">
-                <input type="checkbox" checked={form.isPrivate} className="accent-cyan-500"
-                       onChange={(e) => set('isPrivate', e.target.checked)} />
-                Private repo — show “source on request”
-              </label>
-              <label className="flex items-center gap-2 text-xs text-zinc-400 cursor-pointer">
-                <input type="checkbox" checked={form.draft} className="accent-cyan-500"
-                       onChange={(e) => set('draft', e.target.checked)} />
-                Draft — hide from the site
-              </label>
-            </div>
+            <RecordPreview form={form} />
           </div>
 
           <div className="flex items-center gap-3 border-t border-zinc-800 bg-zinc-950 px-4 py-3">
@@ -481,9 +523,10 @@ export default function App() {
                 <span className="font-mono text-xs text-zinc-600 w-10 shrink-0 tabular-nums">
                   {data.order ?? '—'}
                 </span>
-                {data.image
-                  ? <img src={data.image} alt={`Cover art for ${data.title}`} className="h-10 w-20 object-cover border border-zinc-800 shrink-0" />
-                  : <div className="h-10 w-20 border border-zinc-800 shrink-0" />}
+                {data.poster || data.image
+                  ? <img src={data.poster || data.image} alt={`Cover art for ${data.title}`} loading="lazy" decoding="async"
+                         className="h-12 w-12 object-cover border border-zinc-800 shrink-0" />
+                  : <div className="h-12 w-12 border border-zinc-800 shrink-0" />}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-mono text-xs text-zinc-500">{data.id}</span>
@@ -533,6 +576,83 @@ export default function App() {
         </div>
       )}
     </Shell>
+  );
+}
+
+function Group({ title, note, children }: { title: string; note: string; children: ReactNode }) {
+  return (
+    <fieldset className="grid gap-5 md:grid-cols-2">
+      <legend className="md:col-span-2 mb-4">
+        <span className="font-mono text-xs uppercase tracking-[0.14em] text-cyan-500">{title}</span>
+        <span className="block text-xs text-zinc-600 mt-0.5">{note}</span>
+      </legend>
+      {children}
+    </fieldset>
+  );
+}
+
+// Same colours as the category sleeves on the site (records.css).
+const SLEEVE_COLOR: Record<ProjectCategory, string> = {
+  ai: '#11508f',
+  tools: '#e5231b',
+  games: '#6b3fa0',
+};
+
+/**
+ * A rough, live sketch of the record as the site will draw it, so a long
+ * title or an over-full back shows up before saving rather than after.
+ */
+function RecordPreview({ form }: { form: FormState }) {
+  const title = form.title.trim().replace(/_/g, ' ') || 'Untitled';
+  const tracks = form.stack.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 4);
+  const art = form.poster.trim();
+  const cover = form.image.trim();
+  const color = SLEEVE_COLOR[form.category];
+  const group = CATEGORIES.find((c) => c.value === form.category)?.label ?? '';
+  const status = STATUS.find((s) => s.value === form.status)?.label ?? '';
+
+  return (
+    <aside className="lg:sticky lg:top-6 self-start" aria-label="Record preview">
+      <p className={label}>Preview</p>
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
+        {/* front */}
+        <div className="relative aspect-square overflow-hidden border border-zinc-700 text-white"
+             style={{ background: color }}>
+          {art ? (
+            <>
+              <img src={art} alt="" className="absolute inset-0 h-full w-full object-cover" />
+              <span className="absolute inset-x-0 bottom-0 bg-black/70 px-2 py-1 font-mono text-[10px] uppercase truncate">
+                {title}
+              </span>
+            </>
+          ) : (
+            <div className="flex h-full flex-col justify-between p-3">
+              <p className="flex justify-between font-mono text-[9px] uppercase opacity-80">
+                <span>{form.id || 'P--'}</span><span>{group}</span>
+              </p>
+              <div className="aspect-[800/264] overflow-hidden border border-black/30 bg-white">
+                {cover && <img src={cover} alt="" className="h-full w-full object-cover" />}
+              </div>
+              <p className="font-black text-xl leading-none break-words">{title}</p>
+            </div>
+          )}
+        </div>
+        {/* back */}
+        <div className="aspect-square overflow-hidden border border-zinc-700 bg-[#f4efe4] p-3 text-zinc-900">
+          <p className="font-mono text-[9px] uppercase text-zinc-500">{form.id || 'P--'} / {status}</p>
+          <p className="mt-1 font-black text-sm leading-tight truncate">{title}</p>
+          <p className="mt-1.5 text-[11px] leading-snug line-clamp-6">
+            {form.pitch.trim() || 'Liner notes go here.'}
+          </p>
+          {tracks.length > 0 && (
+            <ol className="mt-2 space-y-0.5 font-mono text-[9px] uppercase">
+              {tracks.map((t, i) => <li key={t}><span className="text-zinc-500">A{i + 1}</span> {t}</li>)}
+            </ol>
+          )}
+        </div>
+      </div>
+      <p className="mt-2 text-[11px] text-zinc-600">A sketch. The site has the final say on fit.</p>
+    </aside>
   );
 }
 
