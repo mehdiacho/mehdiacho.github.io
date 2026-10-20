@@ -10,5 +10,13 @@
     "repo": "mehdiacho/Nightly",
     "origin": "https://nightly-origin.mehdiacho.tech",
     "status": "not live yet: needs its server and tunnel"
+  },
+  "toll-sim": {
+    "kind": "static+proxy",
+    "repo": "mehdiacho/toll-sim",
+    "origin": "https://toll-sim-origin.mehdiacho.tech",
+    "proxied": "/projects/toll-sim/live*",
+    "status": "live server on the NAS (port 8796); static viewer to follow",
+    "updated": "2026-10-20"
   }
 }

@@ -7,6 +7,8 @@
   "compatibility_date": "2026-09-01",
   "routes": [
     // One route per server app. Add the app to ORIGINS in src/index.js as well.
-    { "pattern": "mehdiacho.tech/projects/nightly*", "zone_name": "mehdiacho.tech" }
+    { "pattern": "mehdiacho.tech/projects/nightly*", "zone_name": "mehdiacho.tech" },
+    // Only the live server: the static viewer at /projects/toll-sim/ stays on Pages.
+    { "pattern": "mehdiacho.tech/projects/toll-sim/live*", "zone_name": "mehdiacho.tech" }
   ]
 }

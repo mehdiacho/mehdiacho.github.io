@@ -10,6 +10,7 @@
  */
 const ORIGINS = {
   nightly: 'https://nightly-origin.mehdiacho.tech',
+  'toll-sim': 'https://toll-sim-origin.mehdiacho.tech',
 };
 
 export default {
