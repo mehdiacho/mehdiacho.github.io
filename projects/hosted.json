@@ -1,6 +1,6 @@
 {
   "fdr": {
-    "kind": "static+proxy",
+    "kind": "static",
     "repo": "mehdiacho/ZEUS",
     "build": "cd web && npm ci && npm run build:demo (output web/dist-demo)",
     "updated": "2026-10-19"
