@@ -16,7 +16,8 @@
     "repo": "mehdiacho/toll-sim",
     "origin": "https://toll-sim-origin.mehdiacho.tech",
     "proxied": "/projects/toll-sim/live*",
-    "status": "live server on the NAS (port 8796); static viewer to follow",
-    "updated": "2026-10-20"
+    "status": "live: static viewer on Pages, live server on the NAS (port 8796) via the projects proxy",
+    "updated": "2026-10-20",
+    "build": "cd viewer && npm ci && npm run build (output viewer/dist)"
   }
 }
