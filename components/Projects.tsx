@@ -48,7 +48,9 @@ const NAME_OVERRIDES: Record<string, string> = {
 const prettyTitle = (title: string): string => {
   const known = NAME_OVERRIDES[title];
   if (known) return known;
-  // Unknown name from Firestore: do the safe part of the job only.
+  // A title typed in admin with its own casing ("Zeus FDR") is shown as
+  // typed. Only the old SHOUTED_STYLE gets the safe part of the job done.
+  if (/[a-z]/.test(title)) return title.replace(/_/g, ' ');
   const words = title.replace(/_/g, ' ').toLowerCase();
   return words.charAt(0).toUpperCase() + words.slice(1);
 };
