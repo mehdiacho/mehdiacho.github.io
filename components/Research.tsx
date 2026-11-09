@@ -25,7 +25,7 @@ export default function Research() {
       </article>
       <aside className="research-questions"><p className="label">Questions I want to explore</p><h3>Beyond one more demo.</h3><ol><li><strong>What did the model learn?</strong><p>Show the important inputs, then test whether the explanation holds up when they change.</p></li><li><strong>When does it fail?</strong><p>Keep difficult cases visible. Compare against a simple baseline before adding complexity.</p></li><li><strong>Can someone reproduce it?</strong><p>Document the data, split, compute budget and evaluation, alongside a demo people can try.</p></li></ol></aside>
     </div>
-    <div className="research-reading"><div><p className="label">Reading behind it</p><h3>Where the study starts from.</h3><p>Three papers I keep going back to. They’re other people’s work, linked so you can read them yourself. One of my own tools, <a href="#software">BibVerify</a>, checks reference lists like this one against the DOI registry.</p></div>
+    <div className="research-reading"><div><p className="label">Reading behind it</p><h3>Where the study starts from.</h3><p>Three papers I keep going back to. They’re other people’s work, linked so you can read them yourself. One of my own tools, <a href="/#software">BibVerify</a>, checks reference lists like this one against the DOI registry.</p></div>
       <ol>{reading.map(paper => <li key={paper.href}><a href={paper.href} target="_blank" rel="noopener noreferrer">{paper.title} ↗</a><span>{paper.who}</span><p>{paper.why}</p></li>)}</ol>
     </div>
     <ProjectIdeas />

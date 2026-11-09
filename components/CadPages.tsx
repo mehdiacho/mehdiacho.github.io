@@ -26,7 +26,7 @@ export default function CadPages({ path }: { path: string }) {
       <p className="cad-intro">{entry ? entry.story?.intro ?? entry.description : 'Most of these started with something of mine that needed fixing. These pages keep the model next to the drawing, with notes on why I made it and what still needs testing.'}</p>
       {entry ? <CadEntryPage entry={entry} others={entries.filter(e => e.id !== entry.id)} /> : <div className="cad-index">{entries.map(e => <article key={e.id}>
         <CadVisual entry={e} />
-        <p className="label mt-6 text-accent">{e.status}</p><h2 className="font-display text-3xl mt-3">{e.title}</h2><p className="my-5 leading-relaxed">{e.story?.intro ?? e.description}</p>
+        <h2 className="font-display text-3xl mt-6">{e.title}</h2><p className="my-5 leading-relaxed">{e.story?.intro ?? e.description}</p>
         <a className="cad-story-link" href={entryHref(e)}>{entryLinkText(e)}</a>
       </article>)}</div>}
       <section className="cad-request"><h2>Have something similar?</h2><p>I model things for myself, and I’m open to looking at requests. Send me what you have in mind; I’ll let you know whether it’s something I can take on.</p><a href="mailto:mehdiacho@gmail.com">Write to me →</a></section>
@@ -38,7 +38,6 @@ function CadEntryPage({ entry, others }: { entry: CadEntry; others: CadEntry[] }
   const [view, setView] = useState<'model' | 'blueprint'>('model');
   const showBlueprint = !!entry.blueprint && (view === 'blueprint' || !entry.model);
   return <>
-    <p className="label text-accent mb-7">{entry.status}</p>
     {entry.model && entry.blueprint && <div className="cad-tabs" role="group" aria-label="Choose a view">
       <button aria-pressed={view === 'model'} onClick={() => setView('model')}>3D model</button>
       <button aria-pressed={view === 'blueprint'} onClick={() => setView('blueprint')}>Interactive blueprint</button>

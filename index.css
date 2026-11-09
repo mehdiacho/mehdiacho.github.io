@@ -717,3 +717,65 @@ footer[data-theme='brut'] { background-color: transparent; }
   from { translate: 0 32px; }
   to   { translate: none; }
 }
+
+/* =====================================================================
+ * The rooms: the cards at the foot of the home page, and the shell each
+ * room page shares (strip, title with its coloured full stop).
+ * ==================================================================== */
+.room-cards {
+  list-style: none; margin: 18px 0 0; padding: 0;
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+}
+.room-card {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: grid; grid-template-rows: auto 1fr; min-height: 210px; height: 100%;
+  border-radius: 6px; text-decoration: none; color: var(--color-ink);
+  box-shadow: 0 1px 2px rgb(0 0 0 / .45), 0 24px 44px -26px rgb(0 0 0 / .9);
+  transition: translate .25s cubic-bezier(.22, 1, .36, 1);
+}
+.room-card[data-theme='brut'] { background-color: var(--c-ink-lift); outline: 1px solid #2c3037; outline-offset: -1px; }
+@media (hover: hover) { .room-card:hover { translate: 0 -4px; } }
+.room-card:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+.room-strip {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  font: 500 10.5px/1 var(--font-label); letter-spacing: .06em;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+.room-strip b { font-size: 17px; letter-spacing: 0; }
+.room-strip span:first-of-type { flex: 1; text-transform: uppercase; }
+.room-strip span:last-child { color: var(--color-ink-soft); }
+.room-body { display: grid; gap: 10px; align-content: end; padding: 22px 14px; position: relative; z-index: 1; }
+.room-label { font: 500 10.5px/1 var(--font-label); letter-spacing: .12em; text-transform: uppercase; color: var(--color-accent); }
+.room-title { font: 700 clamp(2rem, 3vw, 2.4rem)/.9 var(--font-display); letter-spacing: -.045em; }
+.room-title i, .room-stop { font-style: normal; color: var(--color-accent); }
+.room-line { font-size: .9rem; color: var(--color-ink-soft); }
+
+/* Each card's texture sits behind the words, bleeding off the corner. */
+.room-card::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.room-research::after { background: var(--room-tex) right -64px bottom -70px / 240px 240px no-repeat; opacity: .42; }
+.room-work::after { background: var(--room-tex) right -70px top -30px / 200px 200px no-repeat; opacity: .38; -webkit-mask-image: linear-gradient(225deg, #000 30%, transparent 75%); mask-image: linear-gradient(225deg, #000 30%, transparent 75%); }
+.room-quests::after { background: url(/textures/halftone.png) right bottom / 115% auto no-repeat; }
+.room-ascii {
+  position: absolute; right: -40px; top: 22px; margin: 0; z-index: 0;
+  font: 400 9px/1 var(--font-label); color: var(--c-forest); opacity: .3; white-space: pre;
+}
+
+/* The room shell. */
+.room-topbar {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center; gap: 18px; padding: 14px clamp(16px, 4vw, 56px);
+  border-bottom: 1px solid #ffffff1f; background: var(--c-ink);
+}
+.room-topbar .font-mark { font-size: 24px; color: var(--c-paper); text-decoration: none; }
+.room-topbar .font-mark i { font-style: normal; color: var(--c-acid); }
+.room-topbar span { flex: 1; color: var(--color-ink-soft); }
+.room-topbar a.label { color: var(--c-acid); }
+.room-sheet { position: relative; isolation: isolate; }
+.room-sheet.has-tex::before {
+  content: ''; position: absolute; z-index: -1; pointer-events: none;
+  top: -30px; right: clamp(0px, 4vw, 64px);
+  width: min(340px, 52vw); aspect-ratio: 1;
+  background: var(--room-tex) center / contain no-repeat; opacity: .5;
+  -webkit-mask-image: linear-gradient(#000 45%, transparent 85%); mask-image: linear-gradient(#000 45%, transparent 85%);
+}

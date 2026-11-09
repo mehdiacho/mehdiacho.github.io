@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 const links = [
-  ['top', 'Hello'], ['software', 'Software'], ['research', 'Research'],
-  ['cad', 'Models'], ['visualisation', 'My desk'], ['about', 'Background'],
-  ['hobbies', 'Side quests'], ['play', 'Play'], ['contact', 'Say hello'],
+  ['top', 'Hello'], ['software', 'Software'], ['about', 'Background'],
+  ['hobbies', 'Side quests'], ['rooms', 'Every room'], ['contact', 'Say hello'],
 ];
 export default function SiteHeader() {
   const [active, setActive] = useState('top');

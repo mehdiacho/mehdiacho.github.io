@@ -8,10 +8,9 @@ import Hero from './components/Hero';
 import Section from './components/Section';
 import Hobbies from './components/Hobbies';
 import Research from './components/Research';
+import RoomPage from './components/RoomPage';
+import Rooms, { eegField } from './components/Rooms';
 import Background from './components/Background';
-import Arcade from './components/arcade/Arcade';
-import Work3D from './components/Work3D';
-import Visualisation from './components/Visualisation';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import SiteFooter from './components/SiteFooter';
@@ -73,24 +72,14 @@ const Home: React.FC = () => {
         <Section id="software" number="01" theme="swiss" variant="banner" title={<>Built from an idea.</>} standfirst="Software I’m making, from useful little tools to experiments that grew legs. Live projects and works in progress, with room for what comes next.">
           <Projects />
         </Section>
-        <Section id="research" number="02" theme="brut" variant="inline" title={<>Questions worth testing.</>} standfirst="Machine learning, graph networks, and the work behind the result.">
-          <Research />
-        </Section>
-        <Section id="cad" number="03" theme="blueprint" variant="rail" title={<>Models, on the side.</>} standfirst="A hobby with calipers. Small fixes, the drawings behind them and the questions that are still open.">
-          <Work3D />
-        </Section>
-        <Section id="visualisation" number="04" theme="soft" variant="inline" title={<>A room of my own.</>} standfirst="Turning my desk into a little place you can explore in a browser. Still taking shape.">
-          <Visualisation />
-        </Section>
-        <Section id="about" number="05" theme="ledger" variant="rail" title={<>A bit of background.</>} standfirst="How I got here, what I care about, and what I’m learning along the way.">
+        <Section id="about" number="02" theme="ledger" variant="rail" title={<>A bit of background.</>} standfirst="How I got here, what I care about, and what I’m learning along the way.">
           <Background />
         </Section>
-        <Section id="hobbies" number="06" theme="riso" variant="banner" title={<>Side quests</>} standfirst="The things I get into when I follow my curiosity. Pick a disc and come a little closer.">
+        <Section id="hobbies" number="03" theme="riso" variant="banner" title={<>Side quests</>} standfirst="The things I get into when I follow my curiosity. Pick a disc and come a little closer.">
           <Hobbies />
         </Section>
-        <Section id="play" number="07" theme="brut" variant="inline" title={<>Weekly arcade.</>} standfirst="A small game, a fresh scoreboard every Monday, and the week’s top score kept for good.">
-          <Arcade />
-        </Section>
+
+        <Rooms />
 
         <Contact />
       </main>
@@ -112,8 +101,16 @@ const Home: React.FC = () => {
   );
 };
 
+/** The research room: everything that used to be section 02 of the home page. */
+const ResearchRoom: React.FC = () => (
+  <RoomPage name="Research" theme="brut" label="MSc / BIUST" title="Research" intro="My MSc, in one question." texture={eegField()}>
+    <Research />
+  </RoomPage>
+);
+
 export default function App({ path = typeof window === 'undefined' ? '/' : window.location.pathname }: { path?: string }) {
   const normalized = path.endsWith('/') ? path : path + '/';
   const modelPage = normalized === '/models/' || CAD_PAGES.some(p => p.path === normalized);
-  return <>{modelPage ? <CadPages path={normalized} /> : <Home />}<PrivacyPreferences /></>;
+  const page = normalized === '/research/' ? <ResearchRoom /> : modelPage ? <CadPages path={normalized} /> : <Home />;
+  return <>{page}<PrivacyPreferences /></>;
 }
