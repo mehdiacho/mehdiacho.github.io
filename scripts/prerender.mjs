@@ -18,7 +18,7 @@ try {
  await writeServicePages('dist',css,WORKS_3D);
  // Portable content snapshot for the new portfolio; refresh deliberately when work changes.
  await writeFile('seo/work-samples.json',JSON.stringify(WORKS_3D,null,2)+'\n');
- const modelPages=[{path:'/research/',title:'Research | Mehdi Acho',description:'My MSc at BIUST: comparing graph networks with convolutional models on EEG inner-speech data, and the reading behind it.'},{path:'/models/',title:'The Model Notebook | Mehdi Acho',description:'My CAD and 3D printing experiments: inspect the models, explore the blueprints and read what worked, what did not and what still needs testing.'},...CAD_PAGES.map(p=>({path:p.path,title:`${p.title} | The Model Notebook | Mehdi Acho`,description:p.description}))];
+ const modelPages=[{path:'/research/',title:'Research | Mehdi Acho',description:'My MSc at BIUST: comparing graph networks with convolutional models on EEG inner-speech data, and the reading behind it.'},{path:'/models/',title:'The Model Notebook | Mehdi Acho',description:'My CAD and 3D printing experiments: inspect the models and explore the blueprints.'},...CAD_PAGES.map(p=>({path:p.path,title:`${p.title} | The Model Notebook | Mehdi Acho`,description:p.description}))];
  for(const page of modelPages){
   await mkdir('dist'+page.path,{recursive:true});
   await writeFile('dist'+page.path+'index.html',template.replace(/<!-- seo:start -->[\s\S]*?<!-- seo:end -->/,metadata(page)).replace('<div id="root"></div>',`<div id="root">${render(page.path)}</div>`));

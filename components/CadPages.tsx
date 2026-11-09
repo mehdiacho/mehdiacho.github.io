@@ -23,7 +23,7 @@ export default function CadPages({ path }: { path: string }) {
     <main className="bleed py-14">
       <p className="label text-accent">{entry ? 'An object from my workbench' : 'Drawings, models and the bits that do not fit yet'}</p>
       <h1 className="font-display text-[clamp(2.5rem,6vw,5.5rem)] font-bold leading-tight mt-5">{entry?.title ?? 'The model notebook'}</h1>
-      <p className="cad-intro">{entry ? entry.story?.intro ?? entry.description : 'Most of these started with something of mine that needed fixing. These pages keep the model next to the drawing, with notes on why I made it and what still needs testing.'}</p>
+      <p className="cad-intro">{entry ? entry.story?.intro ?? entry.description : 'Most of these started with something of mine that needed fixing. These pages keep the model next to the drawing, with notes on why I made it.'}</p>
       {entry ? <CadEntryPage entry={entry} others={entries.filter(e => e.id !== entry.id)} /> : <div className="cad-index">{entries.map(e => <article key={e.id}>
         <CadVisual entry={e} />
         <h2 className="font-display text-3xl mt-6">{e.title}</h2><p className="my-5 leading-relaxed">{e.story?.intro ?? e.description}</p>
