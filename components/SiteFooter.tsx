@@ -14,7 +14,7 @@ const SERVICE_PAGES = [
  * they are reachable without scrolling to the right section.
  */
 const SiteFooter: React.FC = () => (
-  <footer className="border-t-[3px] border-ink bg-paper-lift">
+  <footer data-theme="brut" className="desk-footer border-t border-rule">
     <div className="bleed grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
       <div>
         <p className="font-mark text-xl tracking-[0.12em] text-ink">MEHDI ACHO</p>

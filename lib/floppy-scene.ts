@@ -131,7 +131,7 @@ type Disc = {
 export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], events: Events) {
   await Promise.all([document.fonts.load(`700 40px ${DISPLAY}`), document.fonts.load(`500 20px ${MONO}`)]).catch(() => {});
 
-  const renderer = new WebGLRenderer({ antialias: true, powerPreference: 'low-power' });
+  const renderer = new WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
   renderer.localClippingEnabled = true;
   const canvas = renderer.domElement;
@@ -140,15 +140,15 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
   host.append(canvas);
 
   const scene = new Scene();
-  scene.background = new Color(PAPER);
   scene.fog = new Fog(PAPER, 8, 18);
   const camera = new PerspectiveCamera(34, 1, .05, 60);
   scene.add(new HemisphereLight(0xfff6e6, 0x8a7a66, 1.9));
   const key = new DirectionalLight(0xfff1dc, 2.6); key.position.set(3, 6, 5); scene.add(key);
   const rim = new DirectionalLight(0xff9a6a, 1.1); rim.position.set(-5, 2, -3); scene.add(rim);
 
-  // The ground is the section's own paper, so only the shadows show.
-  const ground = new Mesh(new PlaneGeometry(40, 40), new MeshBasicMaterial({ color: PAPER }));
+  // The canvas is transparent so the sheet's own paper (fibre, halftone)
+  // shows through. The ground only writes depth, so only the shadows show.
+  const ground = new Mesh(new PlaneGeometry(40, 40), new MeshBasicMaterial({ colorWrite: false }));
   ground.rotation.x = -Math.PI / 2; scene.add(ground);
   const shadowMap = shadowTexture();
 

@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { SectionRule } from './Drawings';
-
 export type SectionTheme = 'brut' | 'riso' | 'blueprint' | 'soft' | 'swiss' | 'ledger';
 
 /** Three ways of setting a section's head. Nothing is laid out twice. */
@@ -43,17 +41,6 @@ const Section: React.FC<SectionProps> = ({
     aria-labelledby={`${id}-heading`}
     className="section-screen scroll-mt-20"
   >
-    {/* The seam between two themes. A dimension rule on the lighter stocks,
-        a plain heavy edge where a drawn rule would be lost. */}
-    {theme === 'blueprint' || theme === 'brut' ? (
-      <div className="h-[4px] w-full bg-ink" aria-hidden="true" />
-    ) : (
-      <>
-        <SectionRule className="h-4 w-full text-ink" />
-        <div className="h-[3px] w-full bg-ink" aria-hidden="true" />
-      </>
-    )}
-
     <div className="bleed pb-24 pt-12">
       {variant === 'rail' && (
         <div className="grid gap-x-14 gap-y-9 lg:grid-cols-[160px_minmax(0,1fr)]">
