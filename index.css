@@ -580,32 +580,14 @@ body {
 .service-footer { justify-content: space-between; border-top: 3px solid var(--c-ink); border-bottom: 0; color: var(--color-ink-soft); }
 
 /* Personal introduction and model notebook. */
-.hero-personal{padding-top:2rem;padding-bottom:4rem}.hero-composition{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(240px,.7fr);gap:6vw;align-items:center;margin:3.5rem 0}
-.hero-name{font-family:var(--font-display);font-size:clamp(4rem,8.8vw,9rem);font-weight:700;line-height:.9;letter-spacing:-.045em;margin:0 0 2rem}
-.role-line{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}.role-heading{font-size:clamp(1.35rem,3.2vw,3.2rem);font-weight:700;line-height:1.4;margin:0;display:flex;gap:.28em;align-items:baseline}
-.role-window{display:inline-grid;overflow:hidden;vertical-align:bottom;color:var(--color-accent);min-width:0}
-.hero-intro{max-width:53ch;font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.75;color:var(--color-ink-soft);margin:2rem 0}.hero-explore{display:inline-block;border-bottom:2px solid var(--color-accent);padding:.6rem 0;font-size:1.05rem}.hero-note{border:1px solid var(--color-rule);border-radius:28px;padding:2rem;transform:rotate(2deg);background:var(--color-paper-lift)}.hero-note p{line-height:1.6;color:var(--color-ink-soft);margin-bottom:1.25rem}.hero-note a{text-decoration:underline;text-underline-offset:5px;font-size:.9rem}.hero-longer{border-top:1px solid var(--color-rule);padding-top:2rem}
 .inline-model{color:#172f43;background:#f4f1e8;min-width:0}.model-stage{height:clamp(260px,32vw,460px);position:relative}.model-stage img{width:100%;height:100%;object-fit:contain;display:block}.model-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid #bbc6ca;min-height:58px;font:11px/1.5 var(--font-label)}.model-tools button{flex-shrink:0;text-decoration:underline;text-underline-offset:3px;padding:8px}.model-tools button:disabled{opacity:.5}.cad-story-link{border-bottom:2px solid var(--color-accent);padding-bottom:5px}
 .cad-document{min-height:100vh;background:var(--color-paper);color:var(--color-ink)}.cad-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;padding:24px 3.2vw;border-bottom:1px solid var(--color-rule);font:12px var(--font-label)}.cad-nav a{text-decoration:underline;text-underline-offset:5px}.cad-intro{max-width:72ch;font-size:1.15rem;line-height:1.8;color:var(--color-ink-soft);margin:24px 0 36px}.cad-tabs{display:flex;gap:8px;margin-bottom:16px}.cad-tabs button{border:1px solid var(--color-rule);padding:12px 20px;font:12px var(--font-label);border-radius:6px}.cad-tabs button[aria-pressed=true]{background:var(--color-accent);color:#08233b}.cad-document .model-stage{height:clamp(340px,53vw,650px)}.blueprint-frame{width:100%;height:75vh;min-height:480px;border:1px solid var(--color-rule);background:#f7f5f0}.cad-links{display:flex;flex-wrap:wrap;gap:24px;margin:20px 0 40px;font-size:14px}.cad-links a{text-decoration:underline;text-underline-offset:5px}.cad-story{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3vw;margin:50px 0}.cad-story h2,.cad-request h2{font-size:1.7rem;font-weight:700;line-height:1.2;margin-bottom:18px}.cad-story p,.cad-request p{line-height:1.8;color:var(--color-ink-soft)}.cad-index{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3vw}.cad-index article{min-width:0}.cad-request{margin-top:70px;padding:30px 0;border-top:1px solid var(--color-rule);max-width:75ch}.cad-request a{display:inline-block;text-decoration:underline;margin-top:20px}
-@media(max-width:760px){.hero-composition{grid-template-columns:1fr;gap:40px;margin:2.5rem 0}.hero-note{transform:none;max-width:460px}.hero-name{font-size:clamp(4rem,17vw,7rem)}.role-heading{font-size:clamp(1.25rem,5.6vw,2rem)}.cad-story,.cad-index{grid-template-columns:1fr;gap:32px}.cad-tabs button{padding:12px}.cad-nav{padding:20px}.cad-document .model-stage{height:360px}}
+@media(max-width:760px){.cad-story,.cad-index{grid-template-columns:1fr;gap:32px}.cad-tabs button{padding:12px}.cad-nav{padding:20px}.cad-document .model-stage{height:360px}}
 .model-stage.drawing-only{display:grid;place-items:center;text-align:center;padding:24px;font:12px/1.6 var(--font-label)}.cad-document main>.inline-model .model-stage.drawing-only{height:auto;min-height:160px}.model-canvas{position:absolute;inset:0}.model-buttons{display:flex;flex-shrink:0}.model-canvas canvas:focus-visible{outline:3px solid #2e6f9e;outline-offset:-3px}@media(max-width:600px){.model-tools{flex-wrap:wrap}.model-buttons{margin-left:auto}}
 .privacy-preferences{padding:1.25rem clamp(1.1rem,3.2vw,4.5rem);background:#141619;color:#f4f1e8;font-size:14px;border-top:1px solid #50504a}.privacy-preferences summary{cursor:pointer}.privacy-copy{max-width:75ch;line-height:1.7;padding-top:1rem}.privacy-copy p{margin-bottom:1rem}.privacy-copy a{text-decoration:underline}.privacy-copy [role=group]{display:flex;flex-wrap:wrap;gap:12px}.privacy-copy button{padding:10px 16px;border:1px solid #c9c4b8;border-radius:6px}.privacy-copy button[aria-pressed=true]{background:#ccff00;color:#141619}
 
-/* Personal notebook: checkpoints, a rotating drum, and the side-quest deck. */
-.checkpoint-header{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:45;color:#f4f1e8}
-.checkpoint-header nav{display:flex;flex-direction:column;gap:4px;padding:10px 6px;border:1px solid #ffffff32;background:#141619ed;border-radius:30px;box-shadow:0 6px 24px #0002}
-.checkpoint-header nav a{position:relative;display:flex;align-items:center;justify-content:flex-end;width:34px;height:34px;border-radius:50%;font:10px var(--font-label)}
-.checkpoint-mark{display:grid;place-items:center;flex-shrink:0;width:34px;height:34px;border-radius:50%;color:#b7b8b1;transition:background .2s,color .2s}
-.checkpoint-header a[aria-current] .checkpoint-mark{background:#ccff00;color:#141619}.checkpoint-header a:hover .checkpoint-mark{background:#f4f1e8;color:#141619}
-.checkpoint-label{position:absolute;right:44px;white-space:nowrap;background:#141619;color:#fff;padding:8px 12px;border-radius:5px;opacity:0;pointer-events:none;transform:translateX(8px);transition:opacity .18s,transform .18s}
-.checkpoint-header a:is(:hover,:focus-visible) .checkpoint-label{opacity:1;transform:none}.checkpoint-toggle{display:none}
-.hero-personal{min-height:100svh;display:flex;flex-direction:column;padding-top:0;padding-bottom:26px}
-.hero-topline{display:flex;align-items:center;gap:24px;padding:24px 0;border-bottom:1px solid #ffffff2a}.hero-topline>.font-mark{font-size:28px}.hero-topline>p{flex:1}.hero-topline>p,.hero-topline>a{margin:0}
-.hero-composition{display:block;flex:1;margin:clamp(50px,7vw,110px) 0 48px}.hero-name{font-size:clamp(2.4rem,8.6vw,8.8rem);line-height:1.05;letter-spacing:-.055em;margin:20px 0 18px;white-space:nowrap}.hero-name>span{color:#ccff00;white-space:nowrap}
+/* Personal notebook: the side-quest deck. */
 .name-pronunciation{display:flex;align-items:center;gap:13px;color:#b7b8b1;font:12px var(--font-label);margin-bottom:32px}.name-pronunciation button{display:flex;align-items:center;gap:7px;border:1px solid #66685b;border-radius:30px;padding:7px 11px;color:#f4f1e8;min-height:36px}.name-pronunciation button:hover{border-color:#ccff00}.name-pronunciation button:disabled{opacity:.6}.pronunciation-note{font-size:10px;color:#b7b8b1}
-.role-heading{font-size:clamp(1.25rem,3.5vw,3rem);line-height:1.25;align-items:center;gap:.3em}.role-window{width:11.5em;height:1.35em;position:relative;display:inline-block;perspective:450px;overflow:hidden;color:#ccff00;vertical-align:middle;mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
-.role-cylinder{position:absolute;inset:0;transform-style:preserve-3d;transition:transform 850ms cubic-bezier(.65,0,.25,1)}.role-face{position:absolute;inset:0;display:flex;align-items:center;backface-visibility:hidden;white-space:nowrap}.role-static{display:none}
-.hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-top:40px}.hero-intro{margin:0;max-width:52ch}.hero-explore{white-space:nowrap;font-size:14px;display:flex;align-items:center;gap:22px}.hero-explore span{font-size:30px}.hero-footnote{display:flex;justify-content:space-between;gap:20px;border-top:1px solid #ffffff2a;padding-top:18px;font:10px/1.6 var(--font-label);color:#a9ada4}
 
 .quest-card-top{display:flex;justify-content:space-between;gap:8px;font:10px/1.5 var(--font-label);text-transform:uppercase;letter-spacing:.06em}.quest-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px}.quest-card-bottom h3{font-size:24px;line-height:1.02;font-weight:700;max-width:9ch;letter-spacing:-.04em}.quest-card-bottom svg{flex-shrink:0}
 .quest-caption{text-align:center;font:12px var(--font-label);margin:10px 0}
@@ -614,23 +596,9 @@ body {
 .idea-lab{margin-top:80px;border-top:2px solid var(--color-rule);padding-top:32px}.idea-lab-heading{max-width:65ch}.idea-lab-heading h3{font-size:clamp(30px,4vw,48px);font-weight:700;line-height:1.05;margin:16px 0}.idea-lab-heading>p:last-child{line-height:1.7;color:var(--color-ink-soft)}.idea-browser{display:grid;grid-template-columns:1fr 1.3fr;border:1px solid #cacac5;border-radius:12px;overflow:hidden;margin-top:32px}.idea-choices{background:#eeeee8;color:#141619}.idea-choices button{display:flex;align-items:center;gap:18px;padding:23px;text-align:left;width:100%;border-bottom:1px solid #cacac5}.idea-choices button>span:nth-child(2){flex:1}.idea-choices button>span:first-child{font:12px var(--font-label);color:#64645e}.idea-choices small{display:block;font:10px var(--font-label);margin-top:7px;color:#65655e}.idea-choices button[aria-selected=true]{background:#ccff00}.idea-browser article{padding:32px}.idea-browser h4{font-size:30px;line-height:1.12;font-weight:700;max-width:20ch;margin:16px 0}.idea-browser p,.idea-browser dd{font-size:15px;line-height:1.7}.idea-browser dt{font:10px var(--font-label);text-transform:uppercase;letter-spacing:.08em;margin:24px 0 8px;color:var(--color-red)}.idea-browser dd{margin:0}
 .research-layout{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(28px,6vw,90px)}.research-current{border:1px solid #67695f;border-radius:14px;padding:clamp(22px,3vw,45px);background:#20242a}.research-current>.label{color:#ccff00}.research-layout h3{font-size:clamp(28px,3vw,42px);font-weight:700;line-height:1.12;margin:18px 0 24px;letter-spacing:-.02em}.research-layout p{line-height:1.75;color:#c7cbbf}.research-figure{margin:28px 0;color:#ccff00}.research-figure svg{width:100%;height:auto;max-height:190px}.research-figure span{display:block;text-align:center;font:9px var(--font-label);color:#acb09f;margin-top:14px}.research-caveat{border-top:1px solid #67695f;padding-top:22px;font-size:13px}.research-questions ol{list-style:none;padding:0;counter-reset:questions}.research-questions li{border-top:1px solid #67695f;padding:22px 0}.research-questions strong{font-size:18px;font-weight:400}.research-questions li p{font-size:15px;margin-top:10px}
 .background-notes{display:grid;grid-template-columns:1fr 1.5fr;gap:40px;margin-bottom:60px}.background-notes h3{font-size:36px;font-weight:700;line-height:1.08;max-width:12ch;margin-top:20px}.background-notes p{line-height:1.8;margin-bottom:20px}.background-toolkit{margin-top:35px;border-bottom:1px solid var(--color-rule);padding-bottom:20px}.background-toolkit summary{cursor:pointer;display:flex;justify-content:space-between;font-size:20px;padding:10px 0 25px}.background-toolkit .panel{background:transparent}
-@media(max-width:1100px){.hero-bottom{align-items:flex-start;flex-direction:column;gap:22px}.research-layout{grid-template-columns:1fr 1fr}}
-@media(max-width:760px){.checkpoint-header{right:9px;top:auto;bottom:18px;transform:none}.checkpoint-toggle{display:block;width:44px;height:44px;border-radius:50%;background:#141619;color:#ccff00;border:1px solid #c6c6b5;margin-left:auto;box-shadow:0 3px 12px #0002}.checkpoint-header nav{display:none;position:absolute;right:0;bottom:54px;max-height:75svh;overflow:auto;border-radius:16px;width:180px;padding:10px}.checkpoint-header[data-expanded=true] nav{display:flex}.checkpoint-header nav a{width:auto;justify-content:space-between;height:36px}.checkpoint-label{position:static;opacity:1;transform:none;padding:5px 8px;font-size:11px;pointer-events:auto}.checkpoint-mark{width:28px;height:28px}.hero-topline{gap:16px;padding-top:20px}.hero-topline>.label{font-size:9px;line-height:1.6}.hero-topline>a:last-child{display:none}.hero-composition{margin:60px 0 45px}.hero-name{font-size:clamp(2.3rem,10vw,4.8rem);margin:24px 0 18px}.hero-composition>.label{font-size:9px}.role-heading{font-size:clamp(1.15rem,5vw,2rem)}.hero-bottom{margin-top:25px}.hero-footnote{font-size:9px}.hero-footnote span:last-child{display:none}.quest-caption{font-size:10px;line-height:1.6;margin-top:30px}.quest-screen-bar{font-size:10px;padding:12px}.quest-screen-bar button{gap:5px}.quest-notes,.research-layout,.background-notes,.idea-browser{grid-template-columns:1fr}.quest-notes{gap:20px}.idea-browser article{padding:24px}.idea-choices button{padding:17px}.background-notes{gap:15px}.research-layout{gap:32px}.pronunciation-note{font-size:9px}.project-toolbar{gap:12px}.project-toolbar button{padding:9px 12px;font-size:12px}}
-@media(prefers-reduced-motion:reduce){.role-cylinder{display:none}.role-static{display:flex;height:100%;align-items:center}.role-window{mask-image:none}.checkpoint-label,.bento img{transition:none}.role-cylinder{transition:none}}
-.role-window[data-reduced=true] .role-cylinder{display:none}.role-window[data-reduced=true] .role-static{display:flex;height:100%;align-items:center}
-/* The checkpoint rail is fixed 14px from the right and 48px wide. Above phone
-   width every full-width row, the privacy panel and the fanned card deck keep at
-   least 24px clear of it, whatever the viewport. Last in the file so it wins
-   over the section rules above. */
-@media(min-width:761px){.bleed,.privacy-preferences{padding-right:max(86px,6.5vw)}}
-@media(min-width:1700px){.bleed,.privacy-preferences{padding-right:110px}}
-
-
-/* Bigger name. Still one line; sized so "I do …" and the intro stay on the
-   first screen at laptop heights (the vh term caps it on short screens). */
-.hero-name{font-size:min(26vw,27vh,24rem);line-height:.92}
-.hero-name>.hero-hi{display:block;font-size:max(.16em,1.2rem);line-height:1;letter-spacing:-.02em;color:#f4f1e8;margin:0 0 .12em .06em}
-@media(max-width:760px){.hero-name{font-size:min(34vw,10rem)}}
+@media(max-width:1100px){.research-layout{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.quest-caption{font-size:10px;line-height:1.6;margin-top:30px}.quest-screen-bar{font-size:10px;padding:12px}.quest-screen-bar button{gap:5px}.quest-notes,.research-layout,.background-notes,.idea-browser{grid-template-columns:1fr}.quest-notes{gap:20px}.idea-browser article{padding:24px}.idea-choices button{padding:17px}.background-notes{gap:15px}.research-layout{gap:32px}.pronunciation-note{font-size:9px}.project-toolbar{gap:12px}.project-toolbar button{padding:9px 12px;font-size:12px}}
+@media(prefers-reduced-motion:reduce){.bento img{transition:none}}
 
 /* ==================================================================== *
  * The desk (2026-11-09)
@@ -723,47 +691,10 @@ footer[data-theme='brut'] { background-color: transparent; }
 }
 
 /* =====================================================================
- * The rooms: the cards at the foot of the home page, and the shell each
- * room page shares (strip, title with its coloured full stop).
+ * The rooms: the shell each room page shares (strip, title with its
+ * coloured full stop). The list of rooms itself is in the hero.
  * ==================================================================== */
-.room-cards {
-  list-style: none; margin: 18px 0 0; padding: 0;
-  display: grid; gap: 14px;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
-}
-.room-card {
-  position: relative; isolation: isolate; overflow: hidden;
-  display: grid; grid-template-rows: auto 1fr; min-height: 210px; height: 100%;
-  border-radius: 6px; text-decoration: none; color: var(--color-ink);
-  box-shadow: 0 1px 2px rgb(0 0 0 / .45), 0 24px 44px -26px rgb(0 0 0 / .9);
-  transition: translate .25s cubic-bezier(.22, 1, .36, 1);
-}
-.room-card[data-theme='brut'] { background-color: var(--c-ink-lift); outline: 1px solid #2c3037; outline-offset: -1px; }
-@media (hover: hover) { .room-card:hover { translate: 0 -4px; } }
-.room-card:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
-.room-strip {
-  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
-  font: 500 10.5px/1 var(--font-label); letter-spacing: .06em;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
-}
-.room-strip b { font-size: 17px; letter-spacing: 0; }
-.room-strip span:first-of-type { flex: 1; text-transform: uppercase; }
-.room-strip span:last-child { color: var(--color-ink-soft); }
-.room-body { display: grid; gap: 10px; align-content: end; padding: 22px 14px; position: relative; z-index: 1; }
-.room-label { font: 500 10.5px/1 var(--font-label); letter-spacing: .12em; text-transform: uppercase; color: var(--color-accent); }
-.room-title { font: 700 clamp(2rem, 3vw, 2.4rem)/.9 var(--font-display); letter-spacing: -.045em; }
-.room-title i, .room-stop { font-style: normal; color: var(--color-accent); }
-.room-line { font-size: .9rem; color: var(--color-ink-soft); }
-
-/* Each card's texture sits behind the words, bleeding off the corner. */
-.room-card::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-.room-research::after { background: var(--room-tex) right -64px bottom -70px / 240px 240px no-repeat; opacity: .42; }
-.room-work::after { background: var(--room-tex) right -70px top -30px / 200px 200px no-repeat; opacity: .38; -webkit-mask-image: linear-gradient(225deg, #000 30%, transparent 75%); mask-image: linear-gradient(225deg, #000 30%, transparent 75%); }
-.room-quests::after { background: url(/textures/halftone.png) right bottom / 115% auto no-repeat; }
-.room-ascii {
-  position: absolute; right: -40px; top: 22px; margin: 0; z-index: 0;
-  font: 400 9px/1 var(--font-label); color: var(--c-forest); opacity: .3; white-space: pre;
-}
+.room-stop { font-style: normal; color: var(--color-accent); }
 
 /* The room shell. */
 .room-topbar {
@@ -783,3 +714,61 @@ footer[data-theme='brut'] { background-color: transparent; }
   background: var(--room-tex) center / contain no-repeat; opacity: .5;
   -webkit-mask-image: linear-gradient(#000 45%, transparent 85%); mask-image: linear-gradient(#000 45%, transparent 85%);
 }
+
+/* ==================================================================== *
+ * The hero (2026-11-10)
+ *
+ * The name on the left, the site as a list on the right. No header: the
+ * list is the navigation. It stops a little short of the viewport so the
+ * top edge of the first sheet shows, which is the only scroll cue.
+ * The two canvases belong to lib/hero-drone.ts.
+ * ==================================================================== */
+.hero{position:relative;display:grid;min-height:calc(100svh - 30px)}
+.hero-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero-canvas-back{z-index:0}.hero-canvas-front{z-index:2}
+.hero-grid{position:relative;z-index:1;width:100%;max-width:1500px;margin-inline:auto;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(28px,6vw,96px);align-items:center;padding-block:clamp(28px,6vh,72px)}
+.hero-who{min-width:0}
+.hero-name{font-family:var(--font-display);font-weight:700;font-size:min(13.5vw,27vh,12.5rem);line-height:.86;letter-spacing:-.045em;margin:0;white-space:nowrap}
+.hero-name>span{display:inline-block;color:#ccff00;margin-left:-.085em}
+.hero-name>.hero-hi{display:block;font-size:max(.13em,1.05rem);line-height:1;letter-spacing:-.02em;color:#f4f1e8;margin:0 0 .25em}
+.hero .name-pronunciation{margin:clamp(14px,2.2vh,24px) 0 0}
+.hero-wave{display:inline-flex;align-items:center;gap:2px;height:12px}
+.hero-wave i{width:2px;height:4px;border-radius:1px;background:currentColor}
+.hero-intro{max-width:34ch;margin:clamp(16px,3vh,30px) 0 0;font-size:clamp(1rem,1.35vw,1.2rem);line-height:1.5;color:#b4b1a5}
+
+.hero-index{min-width:0;display:grid}
+.hero-index a{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:baseline;gap:18px;padding:clamp(9px,1.5vh,15px) 2px;border-top:1px solid #2c3037;text-decoration:none}
+.hero-index a:last-child{border-bottom:1px solid #2c3037}
+.hero-index b{font:700 clamp(1.45rem,2.5vw,2.25rem)/1.05 var(--font-display);letter-spacing:-.03em;color:#f4f1e8;transition:color .18s cubic-bezier(.22,1,.36,1)}
+.hero-index span{font-size:.92rem;color:#9a978b;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .18s}
+.hero-index a:hover b,.hero-index a:focus-visible b{color:#ccff00}
+.hero-index a:hover span,.hero-index a:focus-visible span{color:#f4f1e8}
+.hero-index a:focus-visible,.hero .name-pronunciation button:focus-visible{outline:1.5px dashed #ccff00;outline-offset:4px}
+
+@media(max-width:900px){
+  .hero{min-height:0}
+  .hero-grid{grid-template-columns:minmax(0,1fr);gap:36px;padding-block:44px 52px}
+  .hero-name{font-size:min(24vw,9rem)}
+  .hero-index span{font-size:.85rem}
+}
+@media(prefers-reduced-motion:no-preference){
+  .hero-name>span{animation:hero-rise .75s cubic-bezier(.22,1,.36,1) .08s both}
+  .hero-name>.hero-hi,.hero .name-pronunciation,.hero-intro{animation:hero-fade .6s ease-out .35s both}
+  .hero-index a{animation:hero-up .5s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i)*45ms + .45s)}
+  .name-pronunciation[data-speaking=true] .hero-wave i{animation:hero-wave .5s ease-in-out infinite alternate}
+  .name-pronunciation[data-speaking=true] .hero-wave i:nth-child(2){animation-delay:.12s}
+  .name-pronunciation[data-speaking=true] .hero-wave i:nth-child(3){animation-delay:.24s}
+  .name-pronunciation[data-speaking=true] .hero-wave i:nth-child(4){animation-delay:.08s}
+}
+@keyframes hero-rise{from{transform:translateY(.3em);opacity:0}}
+@keyframes hero-fade{from{opacity:0}}
+@keyframes hero-up{from{transform:translateY(10px);opacity:0}}
+@keyframes hero-wave{to{height:12px}}
+
+/* The whole header: a small M. that appears after the hero and leads back to it. */
+.home-mark{position:fixed;z-index:45;left:clamp(8px,1.4vw,20px);top:12px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#141619;border:1px solid #2c3037;color:#ccff00;font:700 21px/1 var(--font-display);letter-spacing:-.04em;text-decoration:none;box-shadow:0 6px 20px rgb(0 0 0 / .35);opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .2s,transform .2s cubic-bezier(.22,1,.36,1)}
+.home-mark i{font-style:normal}
+.home-mark[data-shown=true]{opacity:1;transform:none;pointer-events:auto}
+.home-mark:focus-visible{outline:2px solid #ccff00;outline-offset:3px}
+@media(max-width:760px){.home-mark{top:auto;left:auto;right:10px;bottom:16px;width:44px;height:44px}}
+@media(prefers-reduced-motion:reduce){.home-mark{transition:none}}

@@ -1,13 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { Volume2 } from 'lucide-react';
-import RoleWheel from './RoleWheel';
+import React, { useEffect, useRef, useState } from 'react';
+import { PROFILE } from '../constants';
+import { ROOMS } from './Rooms';
+
+/**
+ * The first screen: the name on the left, the whole site as a list on the
+ * right. There is no header; this list is the navigation.
+ *
+ * The drone that patrols the name is drawn by lib/hero-drone.ts on two
+ * canvases it adds itself. It is loaded after first paint and the page is
+ * complete without it, so removing it is deleting the import below.
+ */
 export default function Hero() {
+  const hero = useRef<HTMLElement>(null);
   const [supported, setSupported] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [message, setMessage] = useState('');
   useEffect(() => {
     setSupported('speechSynthesis' in window);
     return () => { if ('speechSynthesis' in window) speechSynthesis.cancel(); };
+  }, []);
+  useEffect(() => {
+    let stop: (() => void) | undefined, gone = false;
+    import('../lib/hero-drone').then(m => { if (!gone && hero.current) stop = m.mountDrone(hero.current); });
+    return () => { gone = true; stop?.(); };
   }, []);
   const pronounce = () => {
     speechSynthesis.cancel();
@@ -17,19 +32,26 @@ export default function Hero() {
     utterance.onerror = () => { setSpeaking(false); setMessage('Audio unavailable here. Pronounced MEH-dee.'); };
     setMessage(''); setSpeaking(true); speechSynthesis.speak(utterance);
   };
-  return <section id="top" data-theme="brut">
-    <div className="bleed hero-personal">
-      <div className="hero-topline"><a href="#top" className="font-mark">MA.</a><p className="label text-ink-soft">A personal notebook / Gaborone, Botswana</p><a href="#contact" className="label text-accent">Say hello ↗</a></div>
-      <div className="hero-composition">
-        <p className="label text-accent">Software, questions, and a few side quests.</p>
+  return <section id="top" data-theme="brut" className="hero" ref={hero}>
+    <div className="bleed hero-grid">
+      <div className="hero-who">
         <h1 className="hero-name"><small className="hero-hi">Hi, I’m </small><span>Mehdi.</span></h1>
-        <div className="name-pronunciation"><span>MEH-dee</span><button type="button" disabled={!supported || speaking} onClick={pronounce} aria-label="Hear Mehdi pronounced, synthetic voice" title="Synthetic pronunciation"><Volume2 size={17} aria-hidden="true" /><span>{speaking ? 'Playing…' : 'Hear it'}</span></button><span className="pronunciation-note">synthetic voice</span></div>
+        <div className="name-pronunciation" data-speaking={speaking}>
+          <span>MEH-dee</span>
+          <button type="button" disabled={!supported || speaking} onClick={pronounce} aria-label="Hear Mehdi pronounced, synthetic voice" title="Synthetic pronunciation">
+            <span className="hero-wave" aria-hidden="true"><i /><i /><i /><i /></span><span>{speaking ? 'Playing…' : 'Hear it'}</span>
+          </button>
+          <span className="pronunciation-note">synthetic voice</span>
+        </div>
         <span className="sr-only" role="status">{message}</span>
-        <RoleWheel />
-        <div className="hero-bottom"><p className="hero-intro">I write software and study how machines learn. I’m doing an MSc at BIUST; outside of that, I’m usually following an idea into a project, a model, or another question.</p><a className="hero-explore" href="#software">Take a look around <span aria-hidden="true">↘</span></a></div>
+        <p className="hero-intro">I write software and study how machines learn. I’m doing an MSc at BIUST; outside of that, I’m usually following an idea into a project, a model, or another question.</p>
       </div>
-      <div className="hero-footnote"><span>Some things work. Some are still experiments.</span><span>Scroll to get to know me ↓</span></div>
+      <nav className="hero-index" aria-label="Site">
+        {ROOMS.map((room, i) => <a key={room.key} href={room.href} data-det={room.title.toLowerCase()} style={{ '--i': i } as React.CSSProperties} {...(room.external ? { target: '_blank', rel: 'noopener' } : {})}>
+          <b>{room.title}</b><span>{room.line}</span>
+        </a>)}
+        <a href="#contact" data-det="contact" style={{ '--i': ROOMS.length } as React.CSSProperties}><b>Contact</b><span>{PROFILE.email}</span></a>
+      </nav>
     </div>
   </section>;
 }
-

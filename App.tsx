@@ -3,13 +3,13 @@ import React, { useEffect, useState, lazy, Suspense } from 'react';
 import CadPages from './components/CadPages';
 import { CAD_PAGES } from './lib/prints';
 import PrivacyPreferences from './components/PrivacyPreferences';
-import SiteHeader from './components/SiteHeader';
+import HomeMark from './components/HomeMark';
 import Hero from './components/Hero';
 import Section from './components/Section';
 import Hobbies from './components/Hobbies';
 import Research from './components/Research';
 import RoomPage from './components/RoomPage';
-import Rooms, { eegField } from './components/Rooms';
+import { eegField } from './components/Rooms';
 import Background from './components/Background';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
@@ -64,7 +64,7 @@ const Home: React.FC = () => {
         Skip to content
       </a>
 
-      <SiteHeader />
+      <HomeMark />
 
       <main>
         <Hero />
@@ -78,8 +78,6 @@ const Home: React.FC = () => {
         <Section id="hobbies" number="03" theme="riso" variant="banner" title={<>Side quests</>} standfirst="The things I get into when I follow my curiosity. Pick a disc and come a little closer.">
           <Hobbies />
         </Section>
-
-        <Rooms />
 
         <Contact />
       </main>
