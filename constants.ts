@@ -27,7 +27,7 @@ export const PROFILE = {
 export const SERVICES: Service[] = [
   { name: "Making things fit", detail: "I got into CAD and 3D printing through small things I wanted to fix. A charger plug, a key shell, the sort of part you cannot just buy on its own. The drawings and test fits are as much a part of it as the finished model.", href: "/models/", linkText: "My model notebook" },
   { name: "Building software", detail: "I build for fun and for work. Some projects start with an annoyance I want to get rid of; others turn into something bigger. There are browser tools, apps and plenty of unfinished experiments here.", href: "#software", linkText: "Things I have been building" },
-  { name: "Machine learning", detail: "My MSc work looks at EEG inner-speech data, comparing graph networks with convolutional models. It is a different kind of building: asking a question and working out how to test it.", href: "#software", linkText: "Find the research among the projects" }
+  { name: "Machine learning", detail: "My MSc work is on graph networks and EEG. It is a different kind of building: asking a question and working out how to test it.", href: "#software", linkText: "Find the research among the projects" }
 ];
 
 /**
@@ -309,7 +309,7 @@ export const TIMELINE: Experience[] = [
     role: "MSc Computer Science",
     company: "BIUST",
     period: "Feb 2025 - Present",
-    description: "Deep learning architectures. My thesis benchmarks graph networks against CNNs on EEG inner-speech data."
+    description: "Deep learning architectures."
   },
   {
     id: "E2",

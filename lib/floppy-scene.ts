@@ -7,8 +7,9 @@ import {
 /**
  * The side quests room: four 3.5" floppy discs floating in a neat row. Pick
  * one up and it flips (each its own way) to a short note on the back; insert
- * it and it slides into a disc port fixed on the right edge of the stage, and
- * its page boots up over the room.
+ * it and it is carried from where you hold it, away from you, into the drive
+ * at the right of the room: shutter first, until only its tail is left
+ * sticking out of the slot. Then its page boots up over the room.
  *
  * Everything is boxes, planes and canvas textures: no model files.
  */
@@ -20,8 +21,11 @@ type Events = { onHover(id: string | null): void; onPhase(phase: Phase, id: stri
 
 const PAPER = '#f8f0e1', INK = '#1a1410', HOT = '#ff4b12';
 const DISPLAY = 'Grotesk, Arial, sans-serif', MONO = "'Fira Code Variable', ui-monospace, monospace";
-/** The port sits left of the checkpoint rail (fixed 14px from the right, 48px wide). */
-const PORT_WIDTH = 40, PORT_RIGHT = 92;
+/**
+ * The drive is a beige box leaning back, slot up and towards you, so a disc
+ * goes in away from you and downwards and the part left out can be seen.
+ */
+const DRIVE_W = 1.2, DRIVE_H = .86, DRIVE_D = .62, DRIVE_Y = .74, DRIVE_Z = .45, DRIVE_TILT = .62, SLOT_Y = .14, TAIL = .34;
 const DISC_W = .9, DISC_H = .94, DISC_D = .032;
 
 // -- easing ---------------------------------------------------------------
@@ -100,6 +104,18 @@ function marks() {
   });
 }
 
+/** The drive's front panel. The slot, light and button are real geometry on top of it. */
+function driveFace() {
+  return paint(512, 367, g => {
+    g.fillStyle = '#ddd2ba'; g.fillRect(0, 0, 512, 367);
+    g.strokeStyle = '#1a141038'; g.lineWidth = 3; g.strokeRect(12, 12, 488, 343);
+    g.fillStyle = '#1a141026';
+    for (let y = 268; y < 340; y += 15) g.fillRect(270, y, 206, 6);
+    g.fillStyle = INK; g.font = `700 46px ${DISPLAY}`; g.fillText('A:', 36, 334);
+    g.font = `500 16px ${MONO}`; g.fillText('3.5 IN / 1.44 MB', 36, 280);
+  });
+}
+
 function shadowTexture() {
   return paint(128, 128, g => {
     const r = g.createRadialGradient(64, 64, 4, 64, 64, 62);
@@ -152,9 +168,38 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
   ground.rotation.x = -Math.PI / 2; scene.add(ground);
   const shadowMap = shadowTexture();
 
-  // Anything right of the port's mouth is cut away, so a disc vanishes into it.
-  const portClip = new Plane(new Vector3(-1, 0, 0), 100);
-  const clipping = { clippingPlanes: [portClip] };
+  // Whatever part of a disc is past the drive's front face is cut away, so a
+  // disc pushed into the slot really goes in. The plane is set in layout().
+  // The second plane keeps the cut to the drive's own width, so the row is never touched.
+  const portClip = new Plane(new Vector3(0, 0, 1), 100), sideClip = new Plane(new Vector3(-1, 0, 0), 100);
+  const clipping = { clippingPlanes: [portClip, sideClip], clipIntersection: true };
+
+  // The drive. Its front face is at local z = 0 and the slot runs along -z.
+  const drive = new Group();
+  drive.rotation.x = -DRIVE_TILT;
+  const beige = mat('#d6cab0', { roughness: .8 }), trim = mat('#b3a68a', { roughness: .8 });
+  const driveBody = new Mesh(new BoxGeometry(DRIVE_W, DRIVE_H, DRIVE_D), beige);
+  driveBody.position.z = -DRIVE_D / 2; drive.add(driveBody);
+  const panel = new Mesh(new PlaneGeometry(DRIVE_W, DRIVE_H), mat('#ffffff', { map: driveFace(), roughness: .85 }));
+  panel.position.z = .002; drive.add(panel);
+  const slotW = DISC_W + .1, slotH = .085;
+  const slotHole = new Mesh(new PlaneGeometry(slotW, slotH), new MeshBasicMaterial({ color: '#0d0b09' }));
+  slotHole.position.set(0, SLOT_Y, .004); drive.add(slotHole);
+  // A raised lip round the slot, so it has an edge that catches the light.
+  for (const [w, h, x, y] of [
+    [slotW + .09, .03, 0, SLOT_Y + slotH / 2 + .015], [slotW + .09, .03, 0, SLOT_Y - slotH / 2 - .015],
+    [.03, slotH, -slotW / 2 - .03, SLOT_Y], [.03, slotH, slotW / 2 + .03, SLOT_Y],
+  ]) {
+    const lip = new Mesh(new BoxGeometry(w, h, .05), trim); lip.position.set(x, y, .012); drive.add(lip);
+  }
+  const led = mat('#3a2c20', { emissive: new Color(HOT), emissiveIntensity: 0, roughness: .4 });
+  const ledMesh = new Mesh(new BoxGeometry(.1, .04, .03), led); ledMesh.position.set(-slotW / 2 + .07, SLOT_Y - .17, .012); drive.add(ledMesh);
+  const button = new Mesh(new BoxGeometry(.16, .075, .06), trim); button.position.set(slotW / 2 - .1, SLOT_Y - .18, .02); drive.add(button);
+  scene.add(drive);
+  const driveShadow = new Mesh(new PlaneGeometry(2.6, 2.6), new MeshBasicMaterial({ map: shadowMap, transparent: true, depthWrite: false, opacity: .7 }));
+  driveShadow.rotation.x = -Math.PI / 2; scene.add(driveShadow);
+  /** A point given in the drive's own space, in the room. */
+  const fromDrive = (x: number, y: number, z: number) => drive.localToWorld(new Vector3(x, y, z));
 
   // The discs. Local +z is the label side; the shutter is at +y.
   const bodyGeometry = new BoxGeometry(DISC_W, DISC_H, DISC_D);
@@ -193,14 +238,14 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
 
   // -- layout -------------------------------------------------------------------
   const home = { pos: new Vector3(), target: new Vector3(0, .82, 0) };
-  let spread = 1.15, width = 1, height = 1;
+  let spread = 1.15, rowCentre = 0, width = 1, height = 1;
   const DECK_Y = 1, DECK_Z = .8;
-  const port = { mouth: new Vector3(), rect: { left: 0, top: 0, width: PORT_WIDTH, height: 0 } as Rect };
+  const port = { rect: { left: 0, top: 0, width: 0, height: 0 } as Rect };
 
-  /** Where a point on screen meets the plane the row floats in. */
-  const onDeckPlane = (px: number, py: number) => {
+  /** Where a point on screen meets the upright plane at depth z. */
+  const onPlaneZ = (px: number, py: number, z: number) => {
     const ray = new Raycaster(); ray.setFromCamera(new Vector2(px / width * 2 - 1, 1 - py / height * 2), camera);
-    const t = (DECK_Z - ray.ray.origin.z) / ray.ray.direction.z;
+    const t = (z - ray.ray.origin.z) / ray.ray.direction.z;
     return ray.ray.at(t, new Vector3());
   };
   const toScreen = (v: Vector3) => { const p = v.clone().project(camera); return new Vector2((p.x + 1) / 2 * width, (1 - p.y) / 2 * height); };
@@ -211,22 +256,32 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
     const aspect = width / height;
     renderer.setSize(width, height, false);
     camera.aspect = aspect; camera.updateProjectionMatrix();
-    spread = Math.min(1.2, Math.max(1, aspect * .48));
-    home.pos.set(0, 1.5, 5.4 * Math.max(1, 1.85 / aspect));
+    home.pos.set(0, 1.5, 5.4 * Math.max(1, 2.1 / aspect));
     camera.position.copy(home.pos); camera.lookAt(home.target); camera.updateMatrixWorld();
-    // The port: a fixed slot on the right edge, as tall as a disc on screen.
-    const centre = toScreen(new Vector3(0, DECK_Y, DECK_Z));
-    const discHeight = toScreen(new Vector3(0, DECK_Y - DISC_W / 2, DECK_Z)).y - toScreen(new Vector3(0, DECK_Y + DISC_W / 2, DECK_Z)).y;
-    const left = width - PORT_RIGHT - PORT_WIDTH;
-    port.rect = { left, top: centre.y - discHeight / 2 - 14, width: PORT_WIDTH, height: discHeight + 28 };
-    port.mouth.copy(onDeckPlane(left + 6, centre.y));
-    const top = onDeckPlane(left + 6, 0), bottom = onDeckPlane(left + 6, height);
-    portClip.setFromCoplanarPoints(home.pos, top, bottom);
-    if (portClip.distanceToPoint(new Vector3(0, DECK_Y, DECK_Z)) < 0) portClip.negate();
+    // The drive stands at the right edge of the stage.
+    const near = DRIVE_H / 2 * Math.sin(DRIVE_TILT);
+    drive.position.set(onPlaneZ(width - 22, toScreen(new Vector3(0, DRIVE_Y, DRIVE_Z + near)).y, DRIVE_Z + near).x - DRIVE_W / 2, DRIVE_Y, DRIVE_Z);
+    drive.updateMatrixWorld(true);
+    driveShadow.position.set(drive.position.x, .004, DRIVE_Z - .1);
+    portClip.setFromNormalAndCoplanarPoint(new Vector3(0, 0, 1).applyQuaternion(drive.quaternion), drive.position);
+    sideClip.constant = drive.position.x - DRIVE_W / 2;
+    // Its outline on screen: the page that boots up stops short of it.
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    for (const x of [-DRIVE_W / 2, DRIVE_W / 2]) for (const y of [-DRIVE_H / 2, DRIVE_H / 2]) for (const z of [0, -DRIVE_D]) {
+      const p = toScreen(fromDrive(x, y, z));
+      minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x); minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
+    }
+    port.rect = { left: minX, top: minY, width: maxX - minX, height: maxY - minY };
+    // The row takes what is left: centred if it fits, moved over or closed up if not.
+    const rowY = toScreen(new Vector3(0, DECK_Y, DECK_Z)).y;
+    const right = onPlaneZ(minX - 30, rowY, DECK_Z).x, left = onPlaneZ(24, rowY, DECK_Z).x;
+    spread = Math.min(1.2, Math.max(.95, (right - left - DISC_W) / 3));
+    const half = 1.5 * spread + DISC_W / 2;
+    rowCentre = Math.max(left + half, Math.min(0, right - half));
     events.onLayout();
     wake();
   };
-  const deckPose = (d: Disc): Pose => ({ pos: new Vector3((d.index - 1.5) * spread, DECK_Y, DECK_Z), quat: new Quaternion().setFromEuler(new Euler(-.1, 0, 0)) });
+  const deckPose = (d: Disc): Pose => ({ pos: new Vector3(rowCentre + (d.index - 1.5) * spread, DECK_Y, DECK_Z), quat: new Quaternion().setFromEuler(new Euler(-.1, 0, 0)) });
   const facing = (pos: Vector3) => { const o = new Object3D(); o.position.copy(pos); o.lookAt(home.pos); return o.quaternion.clone(); };
   const holdPose = (): Pose => {
     const pos = new Vector3().subVectors(home.target, home.pos).normalize().multiplyScalar(2.45).add(home.pos);
@@ -268,11 +323,24 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
     };
   };
 
-  // Slot-ready pose: label to you, shutter edge pointing into the port.
+  // Lined up with the slot: label to you, shutter edge pointing away from you
+  // into the drive. `inside` leaves the tail of the disc sticking out of the
+  // slot; `click` is a touch further in, where the drive catches it.
   const slotPose = () => {
-    const pre = port.mouth.clone().add(new Vector3(-DISC_H / 2 - .06, 0, 0));
-    return { pre, inside: port.mouth.clone().add(new Vector3(DISC_H / 2 + .2, 0, 0)), quat: facing(pre).multiply(Z(-Math.PI / 2)) };
+    const depth = TAIL - DISC_H / 2;
+    return {
+      pre: fromDrive(0, SLOT_Y, DISC_H / 2 + .6), mouth: fromDrive(0, SLOT_Y, DISC_H / 2 + .03),
+      inside: fromDrive(0, SLOT_Y, depth), click: fromDrive(0, SLOT_Y, depth - .08),
+      quat: drive.quaternion.clone().multiply(X(-Math.PI / 2)).multiply(Y(Math.PI)),
+    };
   };
+  /** A disc sitting in the drive. */
+  const seat = (d: Disc) => {
+    const slot = slotPose();
+    d.group.position.copy(slot.inside); d.group.quaternion.copy(slot.quat); d.group.scale.setScalar(1);
+    d.group.visible = true; d.shadow.visible = true;
+  };
+  const seated = (d: Disc) => d === selected && (phase === 'loading' || phase === 'screen');
 
   const select = (id: string) => {
     const d = list.find(x => x.info.id === id);
@@ -292,22 +360,25 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
     if (!d || phase !== 'inspect') return;
     d.held = false; setPhase('moving');
     const fromPos = d.group.position.clone(), fromQuat = d.group.quaternion.clone(), slot = slotPose();
-    const approach = new Vector3().addVectors(fromPos, slot.pre).multiplyScalar(.5).add(new Vector3(0, .6, .3));
+    // Out of your hand: it turns shutter-first, travels away from you to the
+    // mouth of the slot, waits a breath, and is pushed home.
+    const approach = new Vector3().lerpVectors(fromPos, slot.pre, .4).add(new Vector3(0, .25, .5));
     d.tween = {
-      start: now(), duration: 1.55,
+      start: now(), duration: 2.2,
       step(u) {
-        if (u < .6) {
-          bezier(fromPos, approach, slot.pre, inOut(u / .6), d.group.position);
-          d.group.quaternion.slerpQuaternions(fromQuat, slot.quat, inOut(span(u, .05, .55)));
-          d.group.scale.setScalar(1);
-        } else {
-          const t = span(u, .66, 1);
-          d.group.position.lerpVectors(slot.pre, slot.inside, t * t * (3 - 2 * t));
-          d.group.quaternion.copy(slot.quat);
+        d.group.scale.setScalar(1);
+        if (u < .52) {
+          bezier(fromPos, approach, slot.pre, inOut(u / .52), d.group.position);
+          d.group.quaternion.slerpQuaternions(fromQuat, slot.quat, inOut(span(u, .02, .44)));
+          return;
         }
+        d.group.quaternion.copy(slot.quat);
+        if (u < .66) d.group.position.lerpVectors(slot.pre, slot.mouth, inOut(span(u, .52, .66)));
+        else if (u < .9) d.group.position.lerpVectors(slot.mouth, slot.click, inOut(span(u, .7, .9)));
+        else d.group.position.lerpVectors(slot.click, slot.inside, outBack(span(u, .9, 1)));
       },
       done() {
-        d.group.visible = false; d.shadow.visible = false; setPhase('loading');
+        seat(d); setPhase('loading');
         loading = setTimeout(() => setPhase('screen'), 950);
       },
     };
@@ -317,14 +388,15 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
     if (!d || (phase !== 'screen' && phase !== 'loading')) return;
     clearTimeout(loading);
     setPhase('moving');
-    d.group.visible = true; d.shadow.visible = true;
+    seat(d);
     const slot = slotPose(), rest = deckPose(d);
-    const lift = new Vector3().addVectors(slot.pre, rest.pos).multiplyScalar(.5).add(new Vector3(0, .9, .4));
-    d.group.position.copy(slot.inside); d.group.quaternion.copy(slot.quat); d.group.scale.setScalar(1);
+    const lift = new Vector3().addVectors(slot.pre, rest.pos).multiplyScalar(.5).add(new Vector3(0, .9, .6));
     d.tween = {
-      start: now() + .15, duration: 1.4,
+      start: now() + .15, duration: 1.6,
       step(u) {
-        if (u < .3) { d.group.position.lerpVectors(slot.inside, slot.pre, inOut(u / .3)); d.group.quaternion.copy(slot.quat); return; }
+        // Pressed in a touch, then the drive pushes the disc back out to you.
+        if (u < .1) { d.group.position.lerpVectors(slot.inside, slot.click, inOut(u / .1)); d.group.quaternion.copy(slot.quat); return; }
+        if (u < .3) { d.group.position.lerpVectors(slot.click, slot.pre, outBack(span(u, .1, .3))); d.group.quaternion.copy(slot.quat); return; }
         const t = inOut(span(u, .3, 1));
         bezier(slot.pre, lift, rest.pos, t, d.group.position);
         d.group.quaternion.slerpQuaternions(slot.quat, rest.quat, t);
@@ -336,7 +408,7 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
   const openInstant = (id: string) => {
     const d = list.find(x => x.info.id === id);
     if (!d || phase !== 'deck') return;
-    selected = d; d.group.visible = false; d.shadow.visible = false;
+    selected = d; seat(d);
     setPhase('screen');
   };
 
@@ -382,6 +454,8 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
         const hold = holdPose(), φ = d.index * 1.7;
         d.group.position.copy(hold.pos).add(new Vector3(.02 * Math.sin(t * 1.1 + φ), .03 * Math.sin(t * 1.4 + φ) + .01 * Math.sin(t * 3.1), 0));
         d.group.quaternion.copy(hold.quat).multiply(Y(Math.PI)).multiply(X(-lean.y * .22 + .04 * Math.sin(t * 1.2 + φ))).multiply(Y(lean.x * .3 + .05 * Math.sin(t * .9 + φ)));
+      } else if (seated(d)) {
+        // In the drive: it stays where the slot holds it.
       } else if (d.group.visible) {
         // The row keeps its line: one slow wave runs along it, and the discs
         // all lean the same way towards the pointer.
@@ -402,6 +476,10 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
       d.shadow.scale.setScalar(.75 + h * .3);
       (d.shadow.material as MeshBasicMaterial).opacity = Math.max(0, .7 - h * .25);
     }
+
+    // The drive light flickers while it reads and stays on once the page is up.
+    led.emissiveIntensity = phase === 'loading' ? (Math.sin(t * 38) > 0 ? 1.8 : .2) : phase === 'screen' ? 1.4 : 0;
+    button.position.z = phase === 'loading' || phase === 'screen' ? .004 : .02;
 
     const sway = phase === 'deck' || phase === 'inspect' ? 1 : 0;
     camera.position.copy(home.pos).add(new Vector3(lean.x * .25 * sway, lean.y * .12 * sway, 0));
@@ -427,7 +505,7 @@ export async function createFloppyScene(host: HTMLElement, discs: DiscInfo[], ev
     hover(id: string | null) { if (phase === 'deck') setHover(list.find(d => d.info.id === id) ?? null); },
     select, putBack, insert, eject, openInstant,
     get phase() { return phase; },
-    /** The disc port's place on the stage, in CSS pixels. */
+    /** The drive's outline on the stage, in CSS pixels. */
     portRect(): Rect { return port.rect; },
     dispose() {
       cancelAnimationFrame(frame); frame = 0; clearTimeout(loading); resize.disconnect(); seen.disconnect();

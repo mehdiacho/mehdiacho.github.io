@@ -103,7 +103,7 @@ const Home: React.FC = () => {
 
 /** The research room: everything that used to be section 02 of the home page. */
 const ResearchRoom: React.FC = () => (
-  <RoomPage name="Research" theme="brut" label="MSc / BIUST" title="Research" intro="My MSc, in one question." texture={eegField()}>
+  <RoomPage name="Research" theme="brut" label="MSc / BIUST" title="Research" intro="What I’m researching." texture={eegField()}>
     <Research />
   </RoomPage>
 );

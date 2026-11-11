@@ -44,7 +44,7 @@ export default function Hero() {
           <span className="pronunciation-note">synthetic voice</span>
         </div>
         <span className="sr-only" role="status">{message}</span>
-        <p className="hero-intro">I write software and study how machines learn. I’m doing an MSc at BIUST; outside of that, I’m usually following an idea into a project, a model, or another question.</p>
+        <p className="hero-intro">I’m a software engineer and a researcher. I build software, I do research, and a bunch of other stuff in my free time.</p>
       </div>
       <nav className="hero-index" aria-label="Site">
         {ROOMS.map((room, i) => <a key={room.key} href={room.href} data-det={room.title.toLowerCase()} style={{ '--i': i } as React.CSSProperties} {...(room.external ? { target: '_blank', rel: 'noopener' } : {})}>

@@ -138,7 +138,7 @@ function FlatDeck({ routing }: { routing: boolean }) {
 const discs = hobbies.map(({ id, name, number, kicker, color, info }) => ({ id, name, number, kicker, color, info }));
 
 /**
- * The 3D room: the discs float in a row with a disc port fixed on the right
+ * The 3D room: the discs float in a row with a disc drive standing on the right
  * edge. Pick one up to read its back, insert it, and its page boots up over
  * the room. The page itself is plain HTML, so it stays readable, selectable
  * and reachable by keyboard.
@@ -226,10 +226,7 @@ function FloppyRoom({ onReady, onFail }: { onReady(): void; onFail(): void }) {
   return <div className="floppy-room" data-ready={ready} data-phase={phase}>
     <div ref={host} className="floppy-canvas" />
     {ready && <>
-      {port && <div className="floppy-port" data-busy={drive} aria-hidden="true" style={{ left: port.left, top: port.top, width: port.width, height: port.height }}>
-        <span className="floppy-port-slot" /><span className="floppy-port-led" /><span className="floppy-port-label">A:</span>
-      </div>}
-      <p className="floppy-hint label" aria-hidden="true">{phase === 'inspect' ? 'Insert it into the port on the right' : phase === 'deck' ? 'Pick a disc to take a closer look' : ''}</p>
+      <p className="floppy-hint label" aria-hidden="true">{phase === 'inspect' ? 'Insert it into the drive on the right' : phase === 'deck' ? 'Pick a disc to take a closer look' : ''}</p>
       {phase === 'deck' && <ol className="floppy-index" aria-label="Side quest discs">{hobbies.map(h => <li key={h.id}>
         <button ref={el => { indexButtons.current[h.id] = el; }} data-hot={hover === h.id} style={{ '--quest-color': h.color } as React.CSSProperties}
           onClick={() => scene.current?.select(h.id)} onMouseEnter={() => scene.current?.hover(h.id)} onMouseLeave={() => scene.current?.hover(null)}
@@ -242,7 +239,7 @@ function FloppyRoom({ onReady, onFail }: { onReady(): void; onFail(): void }) {
         <button className="btn-hollow" onClick={() => scene.current?.putBack()}>Put it back</button>
       </div>}
       {drive && hobby && <div className="floppy-monitor" data-theme="brut" data-phase={phase} role="region" aria-labelledby="floppy-monitor-heading"
-        style={port ? { right: `calc(100% - ${port.left - 16}px)` } : undefined}>
+        style={port ? { right: `calc(100% - ${port.left - 20}px)` } : undefined}>
         <div className="floppy-monitor-bar"><span>A:\QUEST{hobby.number}.EXE</span>{phase === 'screen' && <button ref={ejectButton} onClick={() => eject()} aria-label="Eject the disc and go back to the discs">Eject ⏏</button>}</div>
         {phase === 'loading' ? <pre className="floppy-boot" aria-live="polite">{`A:\\>QUEST${hobby.number}\nReading side quest ${hobby.number}...\n[################]`}</pre> :
         <div className="floppy-monitor-body">
