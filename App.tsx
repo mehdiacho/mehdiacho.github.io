@@ -1,4 +1,5 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
+import { useDetectorKey } from './lib/detector-key';
 
 import CadPages from './components/CadPages';
 import { CAD_PAGES } from './lib/prints';
@@ -21,10 +22,9 @@ import { normalizeCode } from './lib/vault-crypto';
 /**
  * The page.
  *
- * Each section names its own theme and its own heading layout, and no two
- * next to each other share either — the ground changes under you as you go
- * down, which is the point. What the theme actually does to the colours is
- * in index.css §2.
+ * The hero and the contact block sit straight on the dark desk. Everything
+ * between them is a sheet of the same paper; the other themes belong to the
+ * room pages. What a theme does to the colours is in index.css §2.
  */
 const Home: React.FC = () => {
   // SECURE_VAULT modal. Opens from the project card or from a #vault=<token>
@@ -67,15 +67,17 @@ const Home: React.FC = () => {
       <HomeMark />
 
       <main>
-        <Hero />
-
-        <Section id="software" number="01" theme="swiss" variant="banner" title={<>Built from an idea.</>} standfirst="Software I’m making, from useful little tools to experiments that grew legs. Live projects and works in progress, with room for what comes next.">
-          <Projects />
-        </Section>
-        <Section id="about" number="02" theme="ledger" variant="rail" title={<>A bit of background.</>} standfirst="How I got here, what I care about, and what I’m learning along the way.">
+        {/* The hero stays put while the first sheet slides over it. */}
+        <div id="top" className="desk-top">
+          <Hero />
+          <Section id="software" theme="paper" variant="banner" title={<>Built from an idea.</>} standfirst="Software I’m making, from useful little tools to experiments that grew legs.">
+            <Projects />
+          </Section>
+        </div>
+        <Section id="about" theme="paper" variant="rail" title={<>A bit of background.</>} standfirst="How I got here, what I care about, and what I’m learning along the way.">
           <Background />
         </Section>
-        <Section id="hobbies" number="03" theme="riso" variant="banner" title={<>Side quests</>} standfirst="The things I get into when I follow my curiosity. Pick a disc and come a little closer.">
+        <Section id="hobbies" theme="paper" variant="banner" title={<>Side quests</>} standfirst="The things I get into when I follow my curiosity. Pick a disc and come a little closer.">
           <Hobbies />
         </Section>
 
@@ -109,6 +111,7 @@ const ResearchRoom: React.FC = () => (
 export default function App({ path = typeof window === 'undefined' ? '/' : window.location.pathname }: { path?: string }) {
   const normalized = path.endsWith('/') ? path : path + '/';
   const modelPage = normalized === '/models/' || CAD_PAGES.some(p => p.path === normalized);
+  useDetectorKey();
   const page = normalized === '/research/' ? <ResearchRoom /> : modelPage ? <CadPages path={normalized} /> : <Home />;
   return <>{page}<PrivacyPreferences /></>;
 }

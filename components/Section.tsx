@@ -1,14 +1,12 @@
 import React from 'react';
 
-export type SectionTheme = 'brut' | 'riso' | 'blueprint' | 'soft' | 'swiss' | 'ledger';
+export type SectionTheme = 'paper' | 'brut' | 'riso' | 'blueprint' | 'soft' | 'swiss' | 'ledger';
 
 /** Three ways of setting a section's head. Nothing is laid out twice. */
 export type SectionVariant = 'rail' | 'banner' | 'inline';
 
 interface SectionProps {
   id: string;
-  /** The two-digit index. Shown as a mark, not as a caption. */
-  number: string;
   title: React.ReactNode;
   /** One line under the heading. Optional — not every section needs one. */
   standfirst?: string;
@@ -28,7 +26,6 @@ interface SectionProps {
  */
 const Section: React.FC<SectionProps> = ({
   id,
-  number,
   title,
   standfirst,
   theme,
@@ -43,11 +40,7 @@ const Section: React.FC<SectionProps> = ({
   >
     <div className="bleed pb-24 pt-12">
       {variant === 'rail' && (
-        <div className="grid gap-x-14 gap-y-9 lg:grid-cols-[160px_minmax(0,1fr)]">
-          <p className="lg:sticky lg:top-24 lg:self-start">
-            <span className="numeral" aria-hidden="true">{number}</span>
-          </p>
-
+        <div>
           <div>
             <h2 id={`${id}-heading`} className="h-section max-w-[16ch] text-ink">
               {title}
@@ -66,8 +59,7 @@ const Section: React.FC<SectionProps> = ({
         <>
           <div className="grid items-end gap-x-16 gap-y-7 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
             <div>
-              <span className="numeral" aria-hidden="true">{number}</span>
-              <h2 id={`${id}-heading`} className="h-section mt-7 text-ink">
+              <h2 id={`${id}-heading`} className="h-section text-ink">
                 {title}
               </h2>
             </div>
@@ -84,7 +76,6 @@ const Section: React.FC<SectionProps> = ({
       {variant === 'inline' && (
         <>
           <div className="flex flex-wrap items-baseline gap-x-7 gap-y-4">
-            <span className="label pt-1 text-accent" aria-hidden="true">{number}</span>
             <h2 id={`${id}-heading`} className="h-section max-w-[22ch] text-ink">
               {title}
             </h2>

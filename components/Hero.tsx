@@ -32,7 +32,7 @@ export default function Hero() {
     utterance.onerror = () => { setSpeaking(false); setMessage('Audio unavailable here. Pronounced MEH-dee.'); };
     setMessage(''); setSpeaking(true); speechSynthesis.speak(utterance);
   };
-  return <section id="top" data-theme="brut" className="hero" ref={hero}>
+  return <section data-theme="brut" className="hero" ref={hero}>
     <div className="bleed hero-grid">
       <div className="hero-who">
         <h1 className="hero-name"><small className="hero-hi">Hi, I’m </small><span>Mehdi.</span></h1>

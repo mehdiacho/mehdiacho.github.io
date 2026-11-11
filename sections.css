@@ -106,8 +106,6 @@
    of its height under the heading. The scene's ground is this theme's paper,
    so the heading and the room read as one space. */
 .floppy-stage[data-mode='loading'], .floppy-stage[data-mode='room'] { position: relative; height: max(540px, calc(100svh - 330px)); margin-inline: calc(-1 * clamp(1.1rem, 3.2vw, 4.5rem)); display: grid; align-content: center; }
-@media (min-width: 761px) { .floppy-stage[data-mode='loading'], .floppy-stage[data-mode='room'] { margin-right: calc(-1 * max(86px, 6.5vw)); } }
-@media (min-width: 1700px) { .floppy-stage[data-mode='loading'], .floppy-stage[data-mode='room'] { margin-right: -110px; } }
 .floppy-room { position: absolute; inset: 0; opacity: 0; transition: opacity .6s cubic-bezier(.2,.8,.2,1); }
 .floppy-room[data-ready='true'] { opacity: 1; }
 .floppy-canvas { position: absolute; inset: 0; }

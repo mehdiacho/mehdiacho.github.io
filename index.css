@@ -636,6 +636,7 @@ footer[data-theme='brut'] { background-color: transparent; }
 }
 
 /* Paper fibre on the light sheets, layered over what each already has. */
+[data-theme='paper'],
 [data-theme='swiss'],
 [data-theme='soft'] {
   background-image: url(/textures/paper.png);
@@ -663,11 +664,6 @@ footer[data-theme='brut'] { background-color: transparent; }
     linear-gradient(to bottom, rgba(63, 210, 242, .16) 1px, transparent 1px),
     url(/textures/grain.png);
   background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px, 160px 160px;
-}
-/* Felt on the turntable mat, in place of the drawn grooves.
-   (records.css loads after this file, hence the extra class.) */
-.deck .platter {
-  background: #2b2d31 url(/textures/felt.png) 0 0 / 160px 160px;
 }
 /* The footer sits on the desk; contour lines behind the coordinates. */
 .desk-footer {
@@ -723,7 +719,7 @@ footer[data-theme='brut'] { background-color: transparent; }
  * top edge of the first sheet shows, which is the only scroll cue.
  * The two canvases belong to lib/hero-drone.ts.
  * ==================================================================== */
-.hero{position:relative;display:grid;min-height:calc(100svh - 30px)}
+.hero{position:relative;display:grid;min-height:calc(100svh - 58px)}
 .hero-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .hero-canvas-back{z-index:0}.hero-canvas-front{z-index:2}
 .hero-grid{position:relative;z-index:1;width:100%;max-width:1500px;margin-inline:auto;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(28px,6vw,96px);align-items:center;padding-block:clamp(28px,6vh,72px)}
@@ -772,3 +768,83 @@ footer[data-theme='brut'] { background-color: transparent; }
 .home-mark:focus-visible{outline:2px solid #ccff00;outline-offset:3px}
 @media(max-width:760px){.home-mark{top:auto;left:auto;right:10px;bottom:16px;width:44px;height:44px}}
 @media(prefers-reduced-motion:reduce){.home-mark{transition:none}}
+
+/* ==================================================================== *
+ * One paper (2026-11-10)
+ *
+ * Every sheet on the home page is the same stock. The other themes are
+ * for the room pages. The accent is the hot orange, darkened until small
+ * labels pass contrast on paper.
+ * ==================================================================== */
+[data-theme='paper'] {
+  --color-paper:      #f8f0e1;
+  --color-paper-lift: #fffaf0;
+  --color-ink:        #1a1410;
+  --color-ink-soft:   #5d5146;
+  --color-ink-faint:  #76695b;
+  --color-rule:       #d8c7ab;
+  --color-rule-soft:  #e9ddc8;
+  --color-accent:     #c0340a;
+  --color-accent-ink: #fffaf0;
+  --color-blue:       #c0340a;
+  --color-red:        #c0340a;
+}
+
+/* The work: one finished project per row. */
+.work-rows{list-style:none;margin:0;padding:0;border-top:2px solid var(--color-ink)}
+.work-row{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr) auto;gap:clamp(20px,3.2vw,48px);align-items:center;padding:clamp(20px,2.6vw,34px) 0;border-bottom:1px solid var(--color-rule)}
+.work-cover{aspect-ratio:21/9;overflow:hidden;border:1px solid var(--color-ink);border-radius:6px;background:var(--color-paper-lift)}
+.work-cover img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15);mix-blend-mode:multiply;transition:filter .45s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+.work-row:hover .work-cover img,.work-row:focus-within .work-cover img{filter:none;transform:scale(1.03)}
+.work-body{min-width:0}
+.work-body h3{font:700 clamp(1.7rem,3.4vw,2.7rem)/1 var(--font-display);letter-spacing:-.035em;margin:0}
+.work-body p{margin:12px 0 0;max-width:62ch;color:var(--color-ink-soft);line-height:1.6}
+.work-stack{list-style:none;display:flex;flex-wrap:wrap;gap:4px 14px;margin:14px 0 0;padding:0;font:11px/1.6 var(--font-label);letter-spacing:.06em;text-transform:uppercase;color:var(--color-ink-faint)}
+.work-links{display:flex;flex-direction:column;align-items:flex-end;gap:8px;font:600 12px/1.4 var(--font-label);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.work-links a,.work-links button{padding:9px 14px;border:1px solid var(--color-ink);border-radius:30px;transition:background-color .12s,color .12s}
+.work-links>:first-child:is(a,button){background:var(--color-ink);color:var(--color-paper)}
+.work-links :is(a,button):hover{background:var(--color-accent);border-color:var(--color-accent);color:var(--color-accent-ink)}
+.work-links span{color:var(--color-ink-soft);padding:9px 0}
+@media(max-width:1000px){
+  .work-row{grid-template-columns:minmax(0,200px) minmax(0,1fr)}
+  .work-links{grid-column:2;flex-direction:row;flex-wrap:wrap;align-items:center}
+}
+@media(max-width:620px){
+  .work-row{grid-template-columns:minmax(0,1fr)}
+  .work-links{grid-column:1}
+  .work-cover img{filter:none}
+}
+@media(hover:none){.work-cover img{filter:none}}
+@media(prefers-reduced-motion:reduce){.work-cover img{transition:none}.work-row:hover .work-cover img,.work-row:focus-within .work-cover img{transform:none}}
+
+/* The hero stays where it is and the first sheet slides up over it. Only
+   where the hero fits the screen; on a phone it scrolls like anything else. */
+@media(min-width:901px) and (min-height:620px){
+  .desk-top>.hero{position:sticky;top:0;z-index:0}
+  .desk-top>.section-screen{position:relative;z-index:1}
+  @supports (animation-timeline:view()) and (timeline-scope:--sheet){
+    @media(prefers-reduced-motion:no-preference){
+      .desk-top{timeline-scope:--sheet}
+      .desk-top>.section-screen{view-timeline:--sheet block}
+      .hero-grid,.hero-canvas{animation:hero-recede linear both;animation-timeline:--sheet;animation-range:entry 0% entry 90%}
+    }
+  }
+}
+@keyframes hero-recede{to{opacity:.12}}
+
+/* Moving between the home page and a room is a cross-fade, not a flash. */
+@view-transition{navigation:auto}
+@media(prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+
+/* Contact: one thing to press, and the drone lands on the B. */
+.contact-cta{display:grid;gap:10px;align-content:start;justify-items:start;text-decoration:none}
+.contact-cta .label{color:var(--color-accent)}
+.contact-cta b{font:700 clamp(1.5rem,3.3vw,2.9rem)/1.05 var(--font-display);letter-spacing:-.035em;overflow-wrap:anywhere;border-bottom:3px solid var(--color-accent);padding-bottom:8px;transition:color .15s}
+.contact-cta:hover b,.contact-cta:focus-visible b{color:var(--color-accent)}
+.contact-b{position:relative;display:inline-block}
+.contact-drone{position:absolute;left:53%;top:52%;width:.3em;height:auto;overflow:visible;translate:-50% -50%;opacity:0}
+.contact-drone[data-state=down]{opacity:1}
+.contact-drone[data-state=landing]{opacity:1;animation:drone-land 1.7s cubic-bezier(.22,1,.36,1) both}
+.contact-drone:not([data-state=down]) .contact-rotors ellipse{animation:rotor-spin .09s linear infinite alternate}
+@keyframes drone-land{0%{transform:translate(-1.4em,-.9em) rotate(-14deg);opacity:0}15%{opacity:1}70%{transform:translate(.03em,-.07em) rotate(3deg)}100%{transform:none}}
+@keyframes rotor-spin{to{rx:3px}}

@@ -116,7 +116,9 @@ export function mountDrone(hero: HTMLElement): () => void {
     raf = requestAnimationFrame(frame);
   };
   const update = () => {
-    const should = onScreen && !document.hidden && !reduce.matches;
+    const sheet = hero.nextElementSibling;
+    const covered = !!sheet && sheet.getBoundingClientRect().top < H * .12;
+    const should = onScreen && !covered && !document.hidden && !reduce.matches;
     if (should && !running) { running = true; last = performance.now(); raf = requestAnimationFrame(frame); }
     else if (!should && running) { running = false; cancelAnimationFrame(raf); }
     if (!should && onScreen) draw();
@@ -135,6 +137,7 @@ export function mountDrone(hero: HTMLElement): () => void {
   hero.addEventListener('pointerdown', e => { const r = hero.getBoundingClientRect(); if (Math.hypot(e.clientX - r.left - pos.x, e.clientY - r.top - pos.y) < u * 6) boost = 7; }, passive);
   nameEl.addEventListener('animationend', size, on);
   document.addEventListener('visibilitychange', update, on);
+  addEventListener('scroll', update, passive);
   reduce.addEventListener('change', () => { size(); update(); }, on);
   const ro = new ResizeObserver(size); ro.observe(hero);
   const io = new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; update(); }); io.observe(hero);
