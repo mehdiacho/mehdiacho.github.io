@@ -25,5 +25,11 @@
     "repo": "mehdiacho/gitgym",
     "build": "npm run build:portfolio",
     "updated": "2026-11-13"
+  },
+  "recur": {
+    "kind": "static",
+    "repo": "mehdiacho/recur",
+    "build": "npm run build",
+    "updated": "2026-11-13"
   }
 }
