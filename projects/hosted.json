@@ -19,5 +19,11 @@
     "status": "live: static viewer on Pages, live server on the NAS (port 8796) via the projects proxy",
     "updated": "2026-10-20",
     "build": "cd viewer && npm ci && npm run build (output viewer/dist)"
+  },
+  "gitgym": {
+    "kind": "static",
+    "repo": "mehdiacho/gitgym",
+    "build": "npm run build:portfolio",
+    "updated": "2026-11-13"
   }
 }
