@@ -114,3 +114,16 @@ export interface ToolGroup {
   items: string[];
 }
 
+
+/**
+ * An earlier version of this site, kept on purpose: Mehdi wants every published version of his
+ * work to stay viewable, like a Wayback Machine. `href` is the live copy when one is served,
+ * else the repository. See docs/PAST-VERSIONS.md.
+ */
+export interface PastVersion {
+  /** When it was built, as shown in the footer. */
+  year: string;
+  label: string;
+  href: string;
+  repo: string;
+}

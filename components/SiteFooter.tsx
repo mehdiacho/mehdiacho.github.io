@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PROFILE } from '../constants';
+import { PAST_VERSIONS, PROFILE } from '../constants';
 
 const SERVICE_PAGES = [
   { href: '/3d-modeling-botswana/', label: '3D modeling in Gaborone' },
@@ -72,6 +72,18 @@ const SiteFooter: React.FC = () => (
         </p>
       </div>
     </div>
+    <nav aria-label="Past versions of this site" className="bleed flex flex-wrap items-baseline gap-x-5 gap-y-2 border-t border-rule py-5 text-sm">
+      <h2 className="label m-0 text-ink-faint">Past versions</h2>
+      {PAST_VERSIONS.map((v) => (
+        <a
+          key={v.href}
+          href={v.href}
+          className="text-ink-soft underline decoration-rule underline-offset-4 transition-colors hover:text-blue"
+        >
+          <span className="font-label text-xs text-ink-faint">{v.year}</span> {v.label}
+        </a>
+      ))}
+    </nav>
     <div className="bleed py-5 border-t border-rule font-label text-xs">© {new Date().getFullYear()} Mehdi Acho</div>
   </footer>
 );

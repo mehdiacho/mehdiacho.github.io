@@ -1,4 +1,4 @@
-import { Project, Experience, ToolGroup, Service, Work3D } from './types';
+import { Project, Experience, ToolGroup, Service, Work3D, PastVersion } from './types';
 
 export const PROFILE = {
   name: "Mehdi Acho",
@@ -367,4 +367,17 @@ export const ABOUT: string[] = [
   "The dream is a signing bonus from a company that actually cares about mankind — or starting a business that does — and using that to invest in global change. I've lived on the short side of the stick. I know what it's like. I want to make sure one less kid has to live like that.",
   "My strength is ideas. I have too many of them. I need teams to help me execute them.",
   "Off the clock: Cyberpunk 2077, gaming with friends, and reading manhwa."
+];
+
+/**
+ * Earlier versions of this site, oldest first. Each one lives in its own repository and is
+ * served by GitHub Pages under mehdiacho.tech/<repo>/. Never delete one: add a row here when the
+ * site moves to a new repository. The full list and the rule are in docs/PAST-VERSIONS.md.
+ */
+export const PAST_VERSIONS: PastVersion[] = [
+  { year: '2023', label: 'First site', href: 'https://mehdiacho.tech/Personal.Website/', repo: 'https://github.com/mehdiacho/Personal.Website' },
+  { year: '2023', label: 'Portfolio v1', href: 'https://mehdiacho.tech/old-portfolio/', repo: 'https://github.com/mehdiacho/old-portfolio' },
+  { year: '2023', label: 'Responsive test', href: 'https://mehdiacho.tech/PortfolioResponsiveTest/', repo: 'https://github.com/mehdiacho/PortfolioResponsiveTest' },
+  { year: '2023', label: 'Bootstrap beta', href: 'https://mehdiacho.tech/PortfolioBeta/', repo: 'https://github.com/mehdiacho/PortfolioBeta' },
+  { year: '2024', label: 'Portfolio v2', href: 'https://mehdiacho.tech/mehdiacho.github.io---old/', repo: 'https://github.com/mehdiacho/mehdiacho.github.io---old' },
 ];
